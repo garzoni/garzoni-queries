@@ -37,20 +37,7 @@ OR
 
 ORDER BY DESC(COUNT (distinct ?prof))
 ```
-##### Number of master/app/guar/other mentions with more than 1 profession
-```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
- 
-SELECT ?role count (distinct ?pm)
-WHERE
-{
-{ SELECT ?role ?pm COUNT (distinct ?prof) AS ?count 
- WHERE { ?pm a common:PersonMention; grz-owl:hasProfession ?prof ; grz-owl:hasRole ?role . } 
- GROUP BY ?role ?pm }
-FILTER (?count > 1)
-}
-```
+
 
 ##### Number of master/app/guar/other mentions with more than 1 profession
 ```sparql
@@ -65,22 +52,6 @@ WHERE
  GROUP BY ?role ?pm }
 FILTER (?count > 1)
 }
-```
-
-##### Person mentions ordered according to their number of professions
-```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
- 
-SELECT ?pm ?count
-WHERE
-{
-{ SELECT ?role ?pm COUNT (distinct ?prof) AS ?count 
- WHERE { ?pm a common:PersonMention; grz-owl:hasProfession ?prof ; grz-owl:hasRole ?role . } 
- GROUP BY ?role ?pm }
-FILTER (?count > 1)
-}
-ORDER BY DESC(?count)
 ```
 
 ##### How many person mentions have how many professions (up to 7!)
@@ -98,14 +69,12 @@ WHERE
 ORDER BY ASC(?NumberOfProfessions)
 ```
 
-
-
-##### Profession couples by citation order
+##### Person mentions ordered according to their number of professions
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
  
-SELECT ?role count (distinct ?pm)
+SELECT ?pm ?count
 WHERE
 {
 { SELECT ?role ?pm COUNT (distinct ?prof) AS ?count 
@@ -113,10 +82,8 @@ WHERE
  GROUP BY ?role ?pm }
 FILTER (?count > 1)
 }
+ORDER BY DESC(?count)
 ```
-
-
-
 
 
 ##### Number of contracts per professions (ok)
