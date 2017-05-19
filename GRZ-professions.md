@@ -1,24 +1,7 @@
 
-### Garzoni economy: about professions
+## Garzoni economy: about professions
 
-##### Number of profession mentions: total, with, and without profession category:
-```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
- 
-SELECT ?totalProfMention ?profMentionWithoutCategory ?profMentionWithCategory
-WHERE 
-{ 
-{SELECT COUNT (distinct ?prof) AS ?totalProfMention 
- WHERE { ?prof a grz-owl:ProfessionMention .}}
-
-{SELECT COUNT (distinct ?profNonCategorized) AS ?profMentionWithoutCategory 
- WHERE {?profNonCategorized a grz-owl:ProfessionMention. FILTER NOT EXISTS {?profNonCategorized grz-owl:professionCategory ?cat .}}}
-
-{SELECT COUNT (distinct ?profCategorized) AS ?profMentionWithCategory 
- WHERE {?profCategorized a grz-owl:ProfessionMention; grz-owl:professionCategory ?cat .}}
-}
-```
+### Exploring professions
 
 ##### Number of profession mentions per category:
 ```sparql
@@ -37,7 +20,6 @@ OR
 
 ORDER BY DESC(COUNT (distinct ?prof))
 ```
-
 
 ##### Number of master/app/guar/other mentions with more than 1 profession
 ```sparql
@@ -85,107 +67,117 @@ FILTER (?count > 1)
 ORDER BY DESC(?count)
 ```
 
-
-##### Number of contracts per professions (ok)
+##### Number of contracts per profession category (considering master only)
 ```sparql
-SELECT ?profSF COUNT (distinct ?contract) AS ?nbContracts
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT ?profCat AS ?ProfessionCategory COUNT (distinct ?contract) AS ?NumberOfContracts
 WHERE 
 {
-  ?contract grz-owl:introduces ?master .
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession/grz-owl:standardForm ?profSF .
+  ?prof a grz-owl:ProfessionMention; grz-owl:professionCategory ?profCat; ^grz-owl:hasProfession ?master .
+  ?master grz-owl:hasRole grz-owl:Master ; core:isMentionedIn ?contract .
+  ?contract a grz-owl:Contract; sem:hasTimeStamp ?date .
 }
-GROUP BY ?profSF
-----
-WARNING! might be several prof per master, to be dealt with.
-```
-
-##### Number of contracts per profession category (remove or not time window) ok
-```sparql
-SELECT ?profCAT COUNT (distinct ?contract) AS ?nbContracts
-WHERE 
-{
-  ?contract grz-owl:introduces ?master .
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession/grz-owl:professionCategory ?profCAT .
-  ?contract sem:hasTimeStamp ?time .
-  FILTER (year(?time) > 1600 AND year(?time) < 1700)
-}
-GROUP BY ?profCAT
-----
-WARNING! might be several prof per master, to be dealt with.
+GROUP BY ?profCat
+ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
-##### The most present category, with or w/o time window
+##### Same as above with time window
 ```sparql
-SELECT ?profCAT  (COUNT (distinct ?contract) AS ?nbContracts)
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT ?profCat AS ?ProfessionCategory COUNT (distinct ?contract) AS ?NumberOfContracts
 WHERE 
 {
-  ?contract grz-owl:introduces ?master .
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession/grz-owl:professionCategory ?profCAT .
-  ?contract sem:hasTimeStamp ?time .
-  FILTER (year(?time) > 1400 AND year(?time) < 1700)
+  ?prof a grz-owl:ProfessionMention; grz-owl:professionCategory ?profCat; ^grz-owl:hasProfession ?master .
+  ?master grz-owl:hasRole grz-owl:Master ; core:isMentionedIn ?contract .
+  ?contract a grz-owl:Contract; sem:hasTimeStamp ?date .
+  BIND (year(?date) AS ?year).
+  FILTER (?year > 1651 AND ?year < 1700)
 }
-GROUP BY ?profCAT
-ORDER BY DESC (?nbContracts)
-LIMIT 1
+GROUP BY ?profCat
+ORDER BY DESC(COUNT (distinct ?contract))
 ```
-##### Display info about professions (for norm work) TO UPDATE
+
+## About profession normalisation
+
+##### Number of profession mentions: total, with,  without transcript (TR), standardForm (SF), category (CAT):
 ```sparql
-SELECT ?profWF ?profSF ?profCAT
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+ 
+SELECT ?totalProfMention ?ProfMention_TR_SF_CAT ?ProfMention_TR_SF_NoCAT ?ProfMention_TR_NoSF_NoCAT  ?ProfMention_NoTR_SF_NoCAT ?ProfMention_TR_NoSF_CAT
 WHERE 
-{
-  ?contract grz-owl:introduces ?master .
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession ?prof .
-  OPTIONAL {?prof grz-owl:standardForm ?profSF .}
-  ?prof grz-owl:writtenForm ?profWF .
-  OPTIONAL {?prof grz-owl:professionCategory ?profCAT .
-}
-```
-##### Number of professions without standard form TO UPDATE
-```sparql
-SELECT count(distinct ?prof)
-WHERE 
-{
-  ?contract grz-owl:introduces ?master .
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession ?prof .
-  FILTER NOT EXISTS {?prof grz-owl:standardForm ?profSF .}
-}
-```
-##### Number of professions without category TO UPDATE
-```sparql
-SELECT count(distinct ?prof)
-WHERE 
-{
-  ?contract grz-owl:introduces ?master .
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession ?prof .
-  FILTER NOT EXISTS {?prof grz-owl:professionCategory ?profCAT .}
+{ 
+{SELECT COUNT (distinct ?prof) AS ?totalProfMention 
+ WHERE { ?prof a grz-owl:ProfessionMention .}}
+
+{SELECT COUNT (distinct ?prof_TR_SF_CAT) AS ?ProfMention_TR_SF_CAT
+ WHERE {?prof_TR_SF_CAT a grz-owl:ProfessionMention; common:transcript ?t ; common:standardForm ?sf ; grz-owl:professionCategory ?cat .}}
+
+{SELECT COUNT (distinct ?prof_TR_SF_NoCat) AS ?ProfMention_TR_SF_NoCAT
+ WHERE {?prof_TR_SF_NoCat a grz-owl:ProfessionMention; common:transcript ?t ; common:standardForm ?sf .
+ FILTER NOT EXISTS {?prof_TR_SF_NoCat grz-owl:professionCategory ?cat .}}}
+
+{SELECT COUNT (distinct ?prof_TR_NoSF_NoCat) AS ?ProfMention_TR_NoSF_NoCAT
+ WHERE {?prof_TR_NoSF_NoCat a grz-owl:ProfessionMention; common:transcript ?t .
+ FILTER NOT EXISTS {?prof_TR_NoSF_NoCat grz-owl:professionCategory ?cat .}
+ FILTER NOT EXISTS {?prof_TR_NoSF_NoCat common:standardForm ?sf .}}}
+
+{SELECT COUNT (distinct ?prof_NoTR_SF_NoCat) AS ?ProfMention_NoTR_SF_NoCAT
+ WHERE {?prof_NoTR_SF_NoCat a grz-owl:ProfessionMention; common:standardForm ?sf .
+ FILTER NOT EXISTS {?prof_NoTR_SF_NoCat grz-owl:professionCategory ?cat .} 
+ FILTER NOT EXISTS {?prof_NoTR_SF_NoCat common:transcript ?t .}}}
+
+{SELECT COUNT (distinct ?prof_TR_NoSF_CAT) AS ?ProfMention_TR_NoSF_CAT
+ WHERE {?prof_TR_NoSF_CAT a grz-owl:ProfessionMention; common:transcript ?t; grz-owl:professionCategory ?cat .
+ FILTER NOT EXISTS {?prof_TR_NoSF_CAT  common:standardForm ?sf . }}}
 }
 ```
 
-##### Number of Masters with 2 professions
+##### Display TR/SF/CAT of all profession mentions, grouped and alphabetically orderd by transcripts
 ```sparql
-SELECT count(distinct ?master)
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT ?ProfTrancript ?ProfStandardFrom ?ProfCategory
 WHERE 
 {
-  ?master grz-owl:role/grz-owl:roleType grz-owl:master .
-  ?master grz-owl:profession ?prof1, ?prof2 .
-  FILTER (?prof1 != ?prof2)
+  ?prof a grz-owl:ProfessionMention; common:transcript ?ProfTrancript .
+  OPTIONAL {?prof common:standardForm ?ProfStandardFrom .}
+  OPTIONAL {?prof grz-owl:professionCategory ?ProfCategory .}
+}
+GROUP BY ?ProfTrancript
+ORDER BY ASC(?ProfTrancript)
+```
+
+##### Number of unique transcripts forms that do not have SF nor CAT
+```sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT COUNT (distinct ?ProfTR) AS ?NumberUniqueOrphanTR
+WHERE
+{
+ ?prof a grz-owl:ProfessionMention; common:transcript ?ProfTR .
+ FILTER NOT EXISTS {?prof grz-owl:professionCategory ?cat .}
+ FILTER NOT EXISTS {?prof common:standardForm ?sf .}
 }
 ```
 
-#### Number of distinct profession mentions from Master and Guarantor - STUPID QUERY, TO CORRECT
+##### List of unique transcripts that do not have SF nor CAT
 ```sparql
-SELECT count(distinct ?prof1)
-WHERE 
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT  distinct ?ProfTR
+ WHERE 
 {
-  ?master grz-owl:role ?role .
-  {?role grz-owl:roleType grz-owl:master } UNION {?role grz-owl:roleType grz-owl:guarantor}
-  ?master grz-owl:profession ?prof1 .
-  ?prof1 a grz-owl:ProfessionMention .
+?prof a grz-owl:ProfessionMention; common:transcript ?ProfTR .
+ FILTER NOT EXISTS {?prof grz-owl:professionCategory ?cat .}
+ FILTER NOT EXISTS {?prof common:standardForm ?sf .}
 }
+ORDER BY ASC(?ProfTR)
 ```
