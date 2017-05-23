@@ -161,9 +161,9 @@ PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 SELECT COUNT (distinct ?ProfTR) AS ?NumberUniqueOrphanTR
 WHERE
 {
- ?prof a grz-owl:ProfessionMention; common:transcript ?ProfTR .
- FILTER NOT EXISTS {?prof grz-owl:professionCategory ?cat .}
- FILTER NOT EXISTS {?prof common:standardForm ?sf .}
+	 ?prof a grz-owl:ProfessionMention; common:transcript ?ProfTR .
+	 FILTER NOT EXISTS {?prof grz-owl:professionCategory ?cat .}
+	 FILTER NOT EXISTS {?prof common:standardForm ?sf .}
 }
 ```
 
@@ -175,9 +175,72 @@ PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 SELECT  distinct ?ProfTR
  WHERE 
 {
-?prof a grz-owl:ProfessionMention; common:transcript ?ProfTR .
- FILTER NOT EXISTS {?prof grz-owl:professionCategory ?cat .}
- FILTER NOT EXISTS {?prof common:standardForm ?sf .}
+	?prof a grz-owl:ProfessionMention; common:transcript ?ProfTR .
+	 FILTER NOT EXISTS {?prof grz-owl:professionCategory ?cat .}
+	 FILTER NOT EXISTS {?prof common:standardForm ?sf .}
 }
 ORDER BY ASC(?ProfTR)
+```
+
+##### Get profession transcripts of Master and Apprentices when different (still duplicates, should do a uniq on the file)
+``` sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+ 
+SELECT ?year ?trm AS ?transcriptMaster ?tra AS ?transcriptApprentice
+WHERE
+{
+	 ?master a common:PersonMention; grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession ?profMaster ; core:isMentionedIn ?contract  . 
+	 ?app a common:PersonMention; grz-owl:hasRole grz-owl:Apprentice ; grz-owl:hasProfession ?profApp ; core:isMentionedIn ?contract.  
+	 ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date .
+	 BIND (year(?date) AS ?year)
+	 ?profMaster common:transcript ?TRMaster .
+	 ?profApp common:transcript ?TRApp .
+	 BIND (lcase(str(?TRMaster)) AS ?trm )
+	 BIND (lcase(str(?TRApp)) AS ?tra )
+	 FILTER (?trm != ?tra)
+}
+GROUP BY (?year)
+ORDER BY ASC(?year)
+```
+
+##### Get list profession categories (existing in dataset)
+```sparql
+SELECT distinct ?profcat
+WHERE {?prof grz-owl:professionCategory ?profcat .}
+```
+
+##### Get distribution of contracts per profession categories
+```sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+ 
+SELECT STR(?profcat) count (distinct ?contract)
+WHERE 
+{
+	?prof a grz-owl:ProfessionMention ; grz-owl:professionCategory ?profcat ; ^grz-owl:hasProfession ?pm.
+	?pm a common:PersonMention ; core:isMentionedIn ?contract.
+	?contract a core:Source ; sem:hasTimeStamp ?date .
+	BIND(year(?date) AS ?year)
+}
+GROUP BY (STR(?profcat))
+ORDER BY DESC(count (distinct ?contract))
+```
+
+##### Idem with time window
+```sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+ 
+SELECT  STR(?profcat) count (distinct ?contract)
+WHERE 
+{
+	?prof a grz-owl:ProfessionMention ; grz-owl:professionCategory ?profcat ; ^grz-owl:hasProfession ?pm.
+	?pm a common:PersonMention ; core:isMentionedIn ?contract.
+	?contract a core:Source ; sem:hasTimeStamp ?date .
+	BIND(year(?date) AS ?year) .
+	FILTER(?year > 1600 AND ?year < 1700)
+}
+GROUP BY (STR(?profcat))
+ORDER BY DESC(count (distinct ?contract))
 ```
