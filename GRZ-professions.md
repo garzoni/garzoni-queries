@@ -108,7 +108,7 @@ ORDER BY DESC(COUNT (distinct ?contract))
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
  
-SELECT ?totalProfMention ?ProfMention_TR_SF_CAT ?ProfMention_TR_SF_NoCAT ?ProfMention_TR_NoSF_NoCAT  ?ProfMention_NoTR_SF_NoCAT ?ProfMention_TR_NoSF_CAT
+SELECT ?totalProfMention ?ProfMention_TR_SF_CAT ?ProfMention_TR_SF_NoCAT ?ProfMention_TR_NoSF_NoCAT  ?ProfMention_Suggested_TR_SF_CAT ?ProfMention_NoTR_SF_NoCAT ?ProfMention_TR_NoSF_CAT
 WHERE 
 { 
 {SELECT COUNT (distinct ?prof) AS ?totalProfMention 
@@ -116,6 +116,9 @@ WHERE
 
 {SELECT COUNT (distinct ?prof_TR_SF_CAT) AS ?ProfMention_TR_SF_CAT
  WHERE {?prof_TR_SF_CAT a grz-owl:ProfessionMention; common:transcript ?t ; common:standardForm ?sf ; grz-owl:professionCategory ?cat .}}
+
+{SELECT COUNT (distinct ?prof_TR_SF_CAT_Sugg) AS ?ProfMention_Suggested_TR_SF_CAT
+ WHERE {?prof_TR_SF_CAT_Sugg a grz-owl:ProfessionMention; common:transcript ?t ; common:suggestedStandardForm ?sf ; grz-owl:suggestedProfessionCategory ?cat .}}
 
 {SELECT COUNT (distinct ?prof_TR_SF_NoCat) AS ?ProfMention_TR_SF_NoCAT
  WHERE {?prof_TR_SF_NoCat a grz-owl:ProfessionMention; common:transcript ?t ; common:standardForm ?sf .
