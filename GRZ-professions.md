@@ -228,8 +228,6 @@ GROUP BY (?year)
 ORDER BY ASC(?year)
 ```
 
-
-
 ##### 12. Get list profession categories (existing in dataset)
 ```sparql
 SELECT distinct ?profcat
@@ -269,4 +267,22 @@ WHERE
 }
 GROUP BY (STR(?profcat))
 ORDER BY DESC(count (distinct ?contract))
+```
+
+##### 15. Get list of transcripts (TR), standard forms (SF), profession categories, AND suggestedStandardForms and suggested profession categories
+``` sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT ?ProfTranscript ?ProfStandardFrom ?ProfCategory ?SuggestedStandardForm ?SuggestedProfCategory
+WHERE 
+{
+  ?prof a grz-owl:ProfessionMention; common:transcript ?ProfTranscript .
+  OPTIONAL {?prof common:standardForm ?ProfStandardFrom .}
+  OPTIONAL {?prof common:suggestedStandardForm ?SuggestedStandardForm .}
+  OPTIONAL {?prof grz-owl:professionCategory ?ProfCategory .}
+  OPTIONAL {?prof grz-owl:suggestedProfessionCategory ?SuggestedProfCategory .}
+}
+GROUP BY ?ProfTranscript
+ORDER BY ASC(?ProfTranscript)
 ```
