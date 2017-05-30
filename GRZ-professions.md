@@ -3,7 +3,7 @@
 
 ### Exploring professions
 
-##### Number of profession mentions per category:
+##### 01. Number of profession mentions per category:
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -21,7 +21,7 @@ OR
 ORDER BY DESC(COUNT (distinct ?prof))
 ```
 
-##### Number of master/app/guar/other mentions with more than 1 profession
+##### 02. Number of master/app/guar/other mentions with more than 1 profession
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -36,7 +36,7 @@ FILTER (?count > 1)
 }
 ```
 
-##### How many person mentions have how many professions (up to 7!)
+##### 03. How many person mentions have how many professions (up to 7!)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -51,7 +51,7 @@ WHERE
 ORDER BY ASC(?NumberOfProfessions)
 ```
 
-##### Person mentions ordered according to their number of professions
+##### 04. Person mentions ordered according to their number of professions
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -67,7 +67,7 @@ FILTER (?count > 1)
 ORDER BY DESC(?count)
 ```
 
-##### Number of contracts per profession category (considering master only)
+##### 05. Number of contracts per profession category (considering master only)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -83,7 +83,7 @@ GROUP BY ?profCat
 ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
-##### Same as above with time window
+##### 06.Same as above with time window
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -103,7 +103,7 @@ ORDER BY DESC(COUNT (distinct ?contract))
 
 ## About profession normalisation
 
-##### Number of profession mentions: total, with,  without transcript (TR), standardForm (SF), category (CAT):
+##### 07. Number of profession mentions: total, with,  without transcript (TR), standardForm (SF), category (CAT):
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -137,7 +137,7 @@ WHERE
 }
 ```
 
-##### Display TR/SF/CAT of all profession mentions, grouped and alphabetically orderd by transcripts
+##### 08. Display TR/SF/CAT of all profession mentions, grouped and alphabetically orderd by transcripts
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -153,7 +153,7 @@ GROUP BY ?ProfTrancript
 ORDER BY ASC(?ProfTrancript)
 ```
 
-##### Number of unique transcripts forms that do not have SF nor CAT
+##### 09. Number of unique transcripts forms that do not have SF nor CAT
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -167,7 +167,7 @@ WHERE
 }
 ```
 
-##### List of unique transcripts that do not have SF nor CAT
+##### 10. List of unique transcripts that do not have SF nor CAT
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -182,7 +182,7 @@ SELECT  distinct ?ProfTR
 ORDER BY ASC(?ProfTR)
 ```
 
-##### Get profession transcripts of Master and Apprentices when different (still duplicates, should do a uniq on the file)
+##### 11. Get profession transcripts of Master and Apprentices when different (still duplicates, should do a uniq on the file)
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -204,13 +204,39 @@ GROUP BY (?year)
 ORDER BY ASC(?year)
 ```
 
-##### Get list profession categories (existing in dataset)
+**With link towards dhcanvas:**
+
+``` sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+ 
+SELECT ?year ?trm AS ?transcriptMaster ?tra AS ?transcriptApprentice ?dhLink
+WHERE
+{
+	 ?master a common:PersonMention; grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession ?profMaster ; core:isMentionedIn ?contract  . 
+	 ?app a common:PersonMention; grz-owl:hasRole grz-owl:Apprentice ; grz-owl:hasProfession ?profApp ; core:isMentionedIn ?contract.  
+	 ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date ; ^edm:realizes ?page.
+         ?page a meta:Page; meta:isImagedBy/iiif-pres:service ?dhLink .
+	 BIND (year(?date) AS ?year)
+	 ?profMaster common:transcript ?TRMaster .
+	 ?profApp common:transcript ?TRApp .
+	 BIND (lcase(str(?TRMaster)) AS ?trm )
+	 BIND (lcase(str(?TRApp)) AS ?tra )
+	 FILTER (?trm != ?tra)
+}
+GROUP BY (?year)
+ORDER BY ASC(?year)
+```
+
+
+
+##### 12. Get list profession categories (existing in dataset)
 ```sparql
 SELECT distinct ?profcat
 WHERE {?prof grz-owl:professionCategory ?profcat .}
 ```
 
-##### Get distribution of contracts per profession categories
+##### 13. Get distribution of contracts per profession categories
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -227,7 +253,7 @@ GROUP BY (STR(?profcat))
 ORDER BY DESC(count (distinct ?contract))
 ```
 
-##### Idem with time window
+##### 14. Idem with time window
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
