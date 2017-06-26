@@ -1,5 +1,5 @@
 
-#### Distribution of contract per year
+#### Distribution of contracts per year
 ```sparql
 SELECT ?year COUNT (?c)
 WHERE 
