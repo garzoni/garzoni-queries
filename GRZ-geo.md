@@ -1,4 +1,4 @@
-#### For map cretaion (collab Rouen and Riccardo)
+#### For map creation (collab Rouen and Riccardo)
 
 ```sparql
 SELECT  ?apprenticeName ?transcriptGeoOrigins  ?standardGeoOrigins ?transcriptProfMaster  ?standardProfMaster ?year ?month ?day
