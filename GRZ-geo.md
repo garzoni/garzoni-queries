@@ -20,3 +20,82 @@ FILTER (?year > 1500 AND ?year < 1599)
 } 
 ORDER BY ASC(?year)
 ```
+
+#### Get all locations, with indication of what they qualify
+```sparql
+SELECT ?pl ?qualified ?trans ?standard ?labelParish ?sestiere
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  {?pl ^grz-owl:hasLocation ?x .} UNION {?pl ^grz-owl:hasGeographicalOrigin ?y .}  UNION {?pl ^grz-owl:hasResidence ?z .}
+  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:standardForm ?standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  BIND(xsd:string(IF(bound(?x), "workshopLoc", "geoOrigins")) AS ?temp) .
+  BIND(xsd:string(IF(bound(?z), "residence", "")) AS ?temp2) .
+  BIND(xsd:string(IF(?temp2 = "", ?temp, ?temp2)) AS ?qualified) .
+} 
+```
+
+#### Get all locations, with indication of what they qualify (distinct)
+```sparql
+SELECT distinct ?qualified ?trans ?standard ?labelParish ?sestiere
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  {?pl ^grz-owl:hasLocation ?x .} UNION {?pl ^grz-owl:hasGeographicalOrigin ?y .}  UNION {?pl ^grz-owl:hasResidence ?z .}
+  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:standardForm ?standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  BIND(xsd:string(IF(bound(?x), "workshopLoc", "geoOrigins")) AS ?temp) .
+  BIND(xsd:string(IF(bound(?z), "residence", "")) AS ?temp2) .
+  BIND(xsd:string(IF(?temp2 = "", ?temp, ?temp2)) AS ?qualified) .
+} 
+GROUP BY ?qualified ?trans ?standard ?labelParish ?sestiere
+```
+
+#### Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
+```sparql
+SELECT distinct  ?trans ?standard ?labelParish ?sestiere
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  ?pl ^grz-owl:hasGeographicalOrigin ?y .
+  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:standardForm ?standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+} 
+GROUP BY ?trans ?standard ?labelParish ?sestiere
+ORDER BY ASC(?standard)
+```
+
+
+#### Get locations as object of grz-owl:hasResidence (of masters mainly)
+```sparql
+SELECT distinct  ?trans ?standard ?labelParish ?sestiere
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  ?pl ^grz-owl:hasResidence ?y .
+  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:standardForm ?standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+} 
+GROUP BY ?trans ?standard ?labelParish ?sestiere
+ORDER BY ASC(?standard)
+```
+
+#### Get locations as object of grz-owl:hasLocation (of Workshops)
+```sparql
+SELECT distinct ?trans ?standard ?labelParish ?sestiere
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  ?pl ^grz-owl:hasLocation ?y .
+  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:standardForm ?standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+} 
+GROUP BY ?trans ?standard ?labelParish ?sestiere
+ORDER BY ASC(?standard)
+```
