@@ -99,3 +99,14 @@ WHERE
 GROUP BY ?trans ?standard ?labelParish ?sestiere
 ORDER BY ASC(?standard)
 ```
+#### Get distinct standardforms from geoOrigins
+```sparql
+SELECT distinct STR(?standard)
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  ?pl ^grz-owl:hasGeographicalOrigin ?y .
+  ?pl common:standardForm ?standard 
+} 
+ORDER BY ASC(?standard)
+```
