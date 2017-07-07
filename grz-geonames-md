@@ -1,0 +1,8 @@
+Graph: http://sws.geonames.org
+
+```sparql
+PREFIX gn:<http://www.geonames.org/ontology#>
+
+
+
+```
