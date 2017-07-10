@@ -138,6 +138,27 @@ ORDER BY DESC (count(distinct ?pm))
 ```
 
 
+
+##### What is the distribution of roles of person entities mentioned more than X times?
+```sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT  ?roleType COUNT (distinct ?pe)
+WHERE
+{
+	{
+	    SELECT ?pe WHERE
+	    { ?pm a common:PersonMention ; core:refersTo ?pe . }
+	    GROUP BY ?pe 
+	    HAVING (count(distinct ?pm) > 5)
+	}
+	?pe grz-owl:hasRole ?roleStatement . 
+	?roleStatement rdf:value ?roleType .
+}
+GROUP BY ?roleType 
+```
+
 ##### Get number of mentions per entities (display all entities)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
