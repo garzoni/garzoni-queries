@@ -32,6 +32,7 @@ ORDER BY ASC (?month)
 
 
 #### Distribution of contracts per day for a certain month/year
+```sparql
 SELECT ?day COUNT (?c) AS ?NbContracts
 WHERE 
 {
