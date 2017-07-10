@@ -112,7 +112,7 @@ WHERE {?contract a grz-owl:Contract .}
 ```
 
 
-#### Get all contracts before year Y:
+#### Get all contracts before year Y
 ```sparql
 SELECT COUNT (?contract)
 WHERE {
