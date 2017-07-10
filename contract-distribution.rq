@@ -1,4 +1,5 @@
 #+ summary: get information about contract distribution over time 
+#+ endpoint: http://128.178.60.47:8890/sparql
 #+ tags:
 #+   - archive
 #+   - metadata
