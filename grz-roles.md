@@ -1,7 +1,7 @@
 ### Garzoni People Search
 #### *About Roles*
 
-##### Role distribution for Person Mentions (soon entities)
+##### Role distribution for Person Mentions 
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -16,6 +16,24 @@ WHERE
   }
 }
 GROUP BY ?role ?numberOfMentions ?total
+ORDER BY desc(?percent)
+```
+
+##### Role distribution for Person Entities 
+````sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+
+SELECT ?role ?numberOfEntities (?numberOfEntities*100/?total as ?percent)
+WHERE 
+{ 
+  { SELECT COUNT (distinct ?pe) AS ?total WHERE {?pe a common:Person.} }
+
+  { SELECT ?role COUNT (distinct ?pe) AS ?numberOfEntities 
+    WHERE {?pe a common:Person; grz-owl:hasRole/rdf:value ?role .}
+  }
+}
+GROUP BY ?role ?numberOfEntities ?total
 ORDER BY desc(?percent)
 ```
 
