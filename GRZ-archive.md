@@ -93,6 +93,33 @@ GROUP BY ?reg
 ORDER BY ASC (?reg)
 ```
 
+#### Number of contracts given a time windows
+```sparql
+SELECT  COUNT (?contract)
+WHERE 
+{ 
+  ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date.
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+  FILTER (?year > ?_date1 AND ?year < ?_date2)
+}
+```
 
+#### Total number of contracts
+```sparql
+SELECT COUNT (distinct ?contract)
+WHERE {?contract a grz-owl:Contract .}
+```
+
+
+#### Get all contracts before year Y:
+```sparql
+SELECT COUNT (?contract)
+WHERE {
+  ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  FILTER (?myDate < "1623-03-15"^^xsd:dateTime)
+}
+```
 
 
