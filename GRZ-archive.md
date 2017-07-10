@@ -13,7 +13,6 @@ GROUP BY ?year
 ORDER BY ASC (?year)
 ```
 
-
 #### Distribution of contracts per month for a certain year
 ```sparql
 SELECT ?month COUNT (?c) AS ?NbContracts
@@ -29,7 +28,6 @@ WHERE
 GROUP BY ?month
 ORDER BY ASC (?month)
 ```
-
 
 #### Distribution of contracts per day for a certain month/year
 ```sparql
@@ -49,47 +47,12 @@ GROUP BY ?day
 ORDER BY ASC (?day)
 ```
 
-#### Average number of contract per year
+#### Average number of contract per year/month/day
 ```sparql
-SELECT AVG (?contractPerYear)
+SELECT AVG (?contract)
 WHERE
 {
-  SELECT COUNT (?c) AS ?contractPerYear
-  WHERE 
-  {
-    ?c a grz-owl:Contract .
-    ?c sem:hasTimeStamp ?date .
-    BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
-    BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
-  }
-GROUP BY ?year
-}
-```
-
-#### Average number of contract per month
-```sparql
-SELECT AVG (?contractPerMonth)
-WHERE
-{
-  SELECT COUNT (?c) AS ?contractPerMonth
-  WHERE 
-  {
-    ?c a grz-owl:Contract .
-    ?c sem:hasTimeStamp ?date .
-    BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
-    BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
-    BIND(IF(?myDate != "NO DATE", month(?myDate), "NODATE") AS ?month).
-  }
-  GROUP BY ?year ?month
-}
-```
-
-#### Average number of contract per day
-```sparql
-SELECT AVG (?contractPerDay)
-WHERE
-{
-  SELECT COUNT (?c) AS ?contractPerDay
+  SELECT COUNT (?c) AS ?contract
   WHERE 
   {
     ?c a grz-owl:Contract .
@@ -99,9 +62,15 @@ WHERE
     BIND(IF(?myDate != "NO DATE", month(?myDate), "NODATE") AS ?month).
     BIND(IF(?myDate != "NO DATE", day(?myDate), "NODATE") AS ?day).
   }
-  GROUP BY ?year ?month ?day
+  # for average per day:
+  # GROUP BY ?year ?month ?day
+  # for avergae per month:
+  # GROUP BY ?year ?month
+  # for average per year:
+  # GROUP BY ?year
 }
 ```
+
 #### Distribution of contracts per register 
 ```sparql
 SELECT ?reg COUNT (?contract)
@@ -127,13 +96,6 @@ WHERE
 }
 ```
 
-#### Total number of contracts
-```sparql
-SELECT COUNT (distinct ?contract)
-WHERE {?contract a grz-owl:Contract .}
-```
-
-
 #### Get all contracts before year Y
 ```sparql
 SELECT COUNT (?contract)
@@ -142,6 +104,12 @@ WHERE {
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
   FILTER (?myDate < "1623-03-15"^^xsd:dateTime)
 }
+```
+
+#### Total number of contracts
+```sparql
+SELECT COUNT (distinct ?contract)
+WHERE {?contract a grz-owl:Contract .}
 ```
 
 #### Average number of contracts per page
@@ -154,9 +122,28 @@ WHERE
   {
     ?c a grz-owl:Contract .
     ?c ^edm:realizes ?page .
+    ?page a meta:Page .
   }
   GROUP BY ?page
 }
+```
+
+#### How many pages have how many contracts
+```sparql
+SELECT ?contractPerPage count (?page) AS ?nbpage
+WHERE
+{
+  SELECT ?page COUNT (?c) AS ?contractPerPage
+  WHERE 
+  {
+    ?c a grz-owl:Contract .
+    ?c ^edm:realizes ?page .
+    ?page a meta:Page .
+  }
+  GROUP BY ?page
+  ORDER BY ASC(?page)
+}
+ORDER BY ASC(?contractPerPage)
 ```
 
 
