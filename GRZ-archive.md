@@ -68,18 +68,40 @@ GROUP BY ?year
 
 #### Average number of contract per month
 ```sparql
-SELECT COUNT (?c) AS ?contractPerMonth
-WHERE 
+SELECT AVG (?contractPerMonth)
+WHERE
 {
-  ?c a grz-owl:Contract .
-  ?c sem:hasTimeStamp ?date .
-  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
-  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
-  BIND(IF(?myDate != "NO DATE", month(?myDate), "NODATE") AS ?month).
+  SELECT COUNT (?c) AS ?contractPerMonth
+  WHERE 
+  {
+    ?c a grz-owl:Contract .
+    ?c sem:hasTimeStamp ?date .
+    BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+    BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+    BIND(IF(?myDate != "NO DATE", month(?myDate), "NODATE") AS ?month).
+  }
+  GROUP BY ?year ?month
 }
-GROUP BY ?year ?month
 ```
 
+#### Average number of contract per day
+```sparql
+SELECT AVG (?contractPerDay)
+WHERE
+{
+  SELECT COUNT (?c) AS ?contractPerDay
+  WHERE 
+  {
+    ?c a grz-owl:Contract .
+    ?c sem:hasTimeStamp ?date .
+    BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+    BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+    BIND(IF(?myDate != "NO DATE", month(?myDate), "NODATE") AS ?month).
+    BIND(IF(?myDate != "NO DATE", day(?myDate), "NODATE") AS ?day).
+  }
+  GROUP BY ?year ?month ?day
+}
+```
 #### Distribution of contracts per register 
 ```sparql
 SELECT ?reg COUNT (?contract)
@@ -119,6 +141,21 @@ WHERE {
   ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date .
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
   FILTER (?myDate < "1623-03-15"^^xsd:dateTime)
+}
+```
+
+#### Average number of contracts per page
+```sparql
+SELECT AVG (?contractPerPage)
+WHERE
+{
+  SELECT COUNT (?c) AS ?contractPerPage
+  WHERE 
+  {
+    ?c a grz-owl:Contract .
+    ?c ^edm:realizes ?page .
+  }
+  GROUP BY ?page
 }
 ```
 
