@@ -1,0 +1,19 @@
+#+ summary: get information about contract distribution over time 
+#+ tags:
+#+   - archive
+#+   - metadata
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?year COUNT (?c) AS ?NbContracts
+WHERE 
+{
+  ?c a grz-owl:Contract .
+  ?c sem:hasTimeStamp ?date .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+}
+GROUP BY ?year
+ORDER BY ASC (?year)
