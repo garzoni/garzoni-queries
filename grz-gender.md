@@ -16,7 +16,21 @@ WHERE
 GROUP BY ?gender
 ```
 
-##### 2. What is the distribution of women/men per role?
+##### 2. What is the distribution of women over time?
+```sparql
+SELECT ?year ?gender count (distinct ?pe) AS ?NbPerson
+{
+  ?pe a common:Person ; foaf:gender ?gender ;grz-owl:hasRole ?roleStmt .
+  ?roleStmt sem:hasTimeStamp ?date . 
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
+  FILTER (?gender = "female")
+}
+GROUP BY ?year ?gender
+ORDER BY ASC (?year)
+```
+
+##### 3. What is the distribution of women/men per role?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
