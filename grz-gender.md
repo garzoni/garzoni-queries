@@ -50,3 +50,16 @@ WHERE
 }
 GROUP BY ?role ?numberOfWomen ?numberOfMen ?total
 ```
+
+##### 4.Gender distribution per role (on person entities)
+```sparql
+# params: ?_role
+SELECT ?gender COUNT (distinct ?pe) AS ?NbPerson
+WHERE
+{
+  ?pe  a common:Person .
+  ?pe grz-owl:hasRole/rdf:value  grz-owl:Guarantor .
+  ?pe foaf:gender ?gender .
+}
+GROUP BY ?gender
+```
