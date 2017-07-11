@@ -124,3 +124,48 @@ WHERE
 }
 ```
 
+
+##### 5. Give me apprentices who are mentioned in more than x contracts
+```sparql
+# params: ?_nbappMentions
+SELECT ?app COUNT (distinct ?appMention) AS ?nbMentions
+WHERE
+{
+  ?app  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .
+  ?app core:referredBy ?appMention .
+  ?appMention grz-owl:hasRole grz-owl:Apprentice .
+}
+GROUP BY ?app
+HAVING  COUNT (distinct ?appMention) > 1
+ORDER BY DESC (COUNT (distinct ?appMention))
+```
+
+##### 6. Who are the apprentices mentioned in more than 1 contract with different roles?
+```sparql
+SELECT ?app COUNT (distinct ?appMention) AS ?nbMentions
+WHERE
+{
+  ?app  a common:Person ; grz-owl:hasRole/rdf:value ?role1, ?role2 .
+  ?app core:referredBy ?appMention .
+  FILTER (?role1 != ?role2)
+}
+GROUP BY ?app
+HAVING  COUNT (distinct ?appMention) > 1
+ORDER BY DESC (COUNT (distinct ?appMention))
+```
+
+###### Trying to capture combinations of roles, not working 
+```` sparql
+SELECT COUNT (distinct ?appMention) AS ?nbMentions ?roles
+WHERE
+{
+  ?app  a common:Person ; grz-owl:hasRole/rdf:value ?role1, ?role2 .
+  ?app core:referredBy ?appMention .
+  FILTER (?role1 != ?role2)
+  BIND (CONCAT(STRAFTER(STR(?role1),"#"), STRAFTER(STR(?role2), "#")) AS ?roles)
+}
+GROUP BY ?app ?roles
+HAVING  COUNT (distinct ?appMention) > 1
+ORDER BY DESC (COUNT (distinct ?appMention))
+```
+
