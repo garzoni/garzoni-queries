@@ -1,4 +1,4 @@
-#### For map creation (collab Rouen and Riccardo)
+##### For map creation (collab Rouen and Riccardo)
 
 ```sparql
 SELECT  ?apprenticeName ?transcriptGeoOrigins  ?standardGeoOrigins ?transcriptProfMaster  ?standardProfMaster ?year ?month ?day
@@ -21,7 +21,7 @@ FILTER (?year > 1500 AND ?year < 1599)
 ORDER BY ASC(?year)
 ```
 
-#### Get all locations, with indication of what they qualify
+##### Get all locations, with indication of what they qualify
 ```sparql
 SELECT ?pl ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
@@ -37,7 +37,7 @@ WHERE
 } 
 ```
 
-#### Get all locations, with indication of what they qualify (distinct)
+##### Get all locations, with indication of what they qualify (distinct)
 ```sparql
 SELECT distinct ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
@@ -54,14 +54,14 @@ WHERE
 GROUP BY ?qualified ?trans ?standard ?labelParish ?sestiere
 ```
 
-#### Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
+##### Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
 ```sparql
-SELECT distinct  ?trans ?standard ?labelParish ?sestiere
+SELECT distinct  ?transcript ?standard ?labelParish ?sestiere
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasGeographicalOrigin ?y .
-  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:transcript ?transcript }
   OPTIONAL { ?pl common:standardForm ?standard }
   OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
 } 
@@ -70,36 +70,36 @@ ORDER BY ASC(?standard)
 ```
 
 
-#### Get locations as object of grz-owl:hasResidence (of masters mainly)
+##### Get locations as object of grz-owl:hasResidence (of masters mainly)
 ```sparql
-SELECT distinct  ?trans ?standard ?labelParish ?sestiere
+SELECT distinct  ?transcript ?standard ?parish ?sestiere
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasResidence ?y .
-  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:transcript ?transcript }
   OPTIONAL { ?pl common:standardForm ?standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?parish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?trans ?standard ?labelParish ?sestiere
+GROUP BY ?trans ?standard ?parish ?sestiere
 ORDER BY ASC(?standard)
 ```
 
-#### Get locations as object of grz-owl:hasLocation (of Workshops)
+##### Get locations as object of grz-owl:hasLocation (of Workshops)
 ```sparql
-SELECT distinct ?trans ?standard ?labelParish ?sestiere
+SELECT distinct ?transcript ?standard ?parish ?sestiere
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasLocation ?y .
-  OPTIONAL { ?pl common:transcript ?trans }
+  OPTIONAL { ?pl common:transcript ?transcript }
   OPTIONAL { ?pl common:standardForm ?standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish/rdfs:label ?parish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?trans ?standard ?labelParish ?sestiere
+GROUP BY ?trans ?standard ?parish ?sestiere
 ORDER BY ASC(?standard)
 ```
-#### Get distinct standardforms from geoOrigins
+##### Get distinct standardforms from geoOrigins
 ```sparql
 SELECT distinct STR(?standard)
 WHERE 
