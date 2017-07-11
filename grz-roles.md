@@ -1,12 +1,10 @@
-### Garzoni People Search
-#### *About Roles*
 
-##### Role distribution for Person Mentions 
+##### 1. Role distribution for Person Mentions 
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
-SELECT ?role ?numberOfMentions (?numberOfMentions*100/?total as ?percent)
+SELECT STRAFTER(STR(?role), "#") AS ?role ?numberOfMentions (?numberOfMentions*100/?total as ?percent)
 WHERE 
 { 
   { SELECT COUNT (distinct ?pm) AS ?total WHERE {?pm a common:PersonMention.} }
@@ -19,40 +17,31 @@ GROUP BY ?role ?numberOfMentions ?total
 ORDER BY desc(?percent)
 ```
 
-##### Role distribution for Person Entities 
-````sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+##### 2. What is the total number of person entities having role X ?  (+ time window)
 
-SELECT ?role ?numberOfEntities (?numberOfEntities*100/?total as ?percent)
-WHERE 
-{ 
-  { SELECT COUNT (distinct ?pe) AS ?total WHERE {?pe a common:Person.} }
-
-  { SELECT ?role COUNT (distinct ?pe) AS ?numberOfEntities 
-    WHERE {?pe a common:Person; grz-owl:hasRole/rdf:value ?role .}
-  }
-}
-GROUP BY ?role ?numberOfEntities ?total
-ORDER BY desc(?percent)
+```sparql
+# param: ?_role (in this ex, apprentice)
+SELECT count (distinct ?pe) AS ?NbEntity
+WHERE
+{ ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
-##### TO BE REVISED - NOT WORKING - Role distribution for Person Entities for year Y / for time window
-```sparql
-SELECT ?roleType COUNT (distinct ?pm)
+###### Idem with time window:
+```sparql 
+SELECT ?year count (distinct ?pe) AS ?NbApprenticeEntity
+# param: ?_role (in this ex, apprentice)
 WHERE
 {
-  ?pm a core:Person .
-  ?pm grz-owl:role ?roleStatement .
-  ?roleStatement grz-owl:value ?roleType .
-  ?roleStatement sem:hasTimeStamp ?date .
-  FILTER (year(?date) = 1583)
-  [for time window: FILTER (year(?date) > 1583 AND year(?date) < 1599)]
+  ?pe a common:Person ; grz-owl:hasRole ?roleStmt.
+  ?roleStmt sem:hasTimeStamp ?date ; rdf:value grz-owl:Apprentice .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
 }
-GROUP BY ?roleType
+GROUP BY ?year
+ORDER BY ASC (?year)
 ```
 
-##### Role distribution per gender (mention for now, entities later)
+##### 3. What is the role distribution per gender (on entities)?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -61,15 +50,15 @@ SELECT ?role ?countWomen ?countMen
 WHERE
 {
   {SELECT ?role COUNT (distinct ?women) AS ?countWomen
-    WHERE {?women a common:PersonMention; foaf:gender "female"; grz-owl:hasRole ?role .}}
+    WHERE {?women a common:Person; foaf:gender "female"; grz-owl:hasRole/rdf:value ?role .}}
 
   {SELECT ?role COUNT (distinct ?men) AS ?countMen 
-    WHERE {?men a common:PersonMention; foaf:gender "male"; grz-owl:hasRole ?role .}}  
+    WHERE {?men a common:Person; foaf:gender "male"; grz-owl:hasRole/rdf:value ?role .}}  
 }
 GROUP BY ?role 
 ```
 
-#### Role distribution: all and per gender
+###### Role distribution: overview of all and per gender
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -96,42 +85,32 @@ WHERE
     WHERE {?men a common:PersonMention; foaf:gender "male"; grz-owl:hasRole ?role .}}  
 }
 GROUP BY ?role ?countMentions ?total
-ORDER BY desc(?percent)
 ```
 
+##### 4. About multiple roles:
 
-#####  TO BE REVISED - NOT WORKING -  Give me all person entities who appear as Master AND Apprentice
+###### 4.1 List all entities having double role: master and apprentice
+N.B: roles can be changed/added
 ```sparql
-SELECT ?pe 
-WHERE 
+SELECT ?pe COUNT (distinct ?pm) AS ?nbMentions
+WHERE
 {
-  SELECT ?pe ?roleType
-  WHERE 
-  {
-    {
-       ?pe  grz-owl:role ?roleStatement.        
-       ?roleStatement grz-owl:value ?role .
-       ?role grz-owl:roleType ?roleType .
-    }
-    {
-       SELECT ?pe
-       WHERE 
-       {
-              ?pe a grz-owl:Person . 
-              ?pe  grz-owl:role ?roleStatement1.
-              ?pe  grz-owl:role ?roleStatement2. 
-              ?roleStatement1  grz-owl:value ?value1.
-              ?roleStatement2  grz-owl:value ?value2 .
-              ?value1  grz-owl:roleType grz-owl:master.
-              ?value2  grz-owl:roleType grz-owl:apprentice .
-       }
-       GROUP BY ?pe 
-    }
-  }
-  GROUP BY ?roleType
+  ?pe  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; grz-owl:hasRole/rdf:value grz-owl:Master .
+  ?pe core:referredBy ?pm .
 }
-GROUP BY ?pe 
-HAVING (COUNT (distinct ?roleType) > 1)
+GROUP BY ?pe
+HAVING  COUNT (distinct ?pm) > 1
+ORDER BY DESC (COUNT (distinct ?pm))
+```
+
+###### Idem, but count number of entities having double role
+N.B: roles can be changed/added
+```sparql
+SELECT COUNT (distinct ?pe)
+WHERE
+{
+  ?pe  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; grz-owl:hasRole/rdf:value grz-owl:Master .
+}
 ```
 
 #####  TO BE REVISED - NOT WORKING - Break-down PERSON/ROLE/DATE for person entities having both Apprentice and Master roles
