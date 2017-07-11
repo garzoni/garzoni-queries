@@ -48,6 +48,7 @@ ORDER BY ASC (?age)
 N.B: not all professions have a category. This is therefore a partial view.
 
 ```sparql
+# params: ?_prof_cat
 SELECT ?age COUNT (distinct ?app) 
 WHERE
 {
@@ -63,6 +64,7 @@ ORDER BY ASC (?age)
 N.B: not all professions have a category. This is therefore a partial view.
 
 ```sparql
+# params: ?_prof_cat, ?_date_start ?_date_end
 SELECT ?age COUNT (distinct ?app) 
 WHERE
 {
@@ -90,6 +92,35 @@ WHERE
   ?app  a common:PersonMention .
   ?app grz-owl:hasRole  grz-owl:Apprentice .
   ?app foaf:age ?age .
+}
+```
+
+###### 4.2 Average age of apprentice having profession category x
+```sparql
+# params: ?_prof_cat
+SELECT AVG (?age)
+WHERE
+{
+  ?app  a common:PersonMention .
+  ?app grz-owl:hasRole  grz-owl:Apprentice ; grz-owl:hasProfession/grz-owl:professionCategory 'specchiaio' .
+  ?app foaf:age ?age .
+}
+```
+
+###### 4.3 Average age of apprentice having professsion category x in time window
+```sparql
+# params: ?_prof_cat, ?_date_start ?_date_end
+SELECT AVG (?age)
+WHERE
+{
+  ?app  a common:PersonMention .
+  ?app grz-owl:hasRole  grz-owl:Apprentice ; grz-owl:hasProfession/grz-owl:professionCategory 'specchiaio' .
+  ?app foaf:age ?age .
+  ?app core:isMentionedIn ?contract .
+  ?contract sem:hasTimeStamp ?date . 
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
+  FILTER (?year > 1530 AND ?year < 1700)
 }
 ```
 
