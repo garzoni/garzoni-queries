@@ -65,7 +65,7 @@ WHERE
   OPTIONAL { ?pl common:standardForm ?standard }
   OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?trans ?standard ?labelParish ?sestiere
+GROUP BY ?transcript ?standard ?labelParish ?sestiere
 ORDER BY ASC(?standard)
 ```
 
@@ -81,7 +81,7 @@ WHERE
   OPTIONAL { ?pl common:standardForm ?standard }
   OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?parish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?trans ?standard ?parish ?sestiere
+GROUP BY ?transcript ?standard ?parish ?sestiere
 ORDER BY ASC(?standard)
 ```
 
@@ -96,7 +96,7 @@ WHERE
   OPTIONAL { ?pl common:standardForm ?standard }
   OPTIONAL { ?pl common:inParish/rdfs:label ?parish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?trans ?standard ?parish ?sestiere
+GROUP BY ?transcript ?standard ?parish ?sestiere
 ORDER BY ASC(?standard)
 ```
 ##### Get distinct standardforms from geoOrigins
