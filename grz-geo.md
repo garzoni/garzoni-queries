@@ -56,48 +56,49 @@ GROUP BY ?qualified ?trans ?standard ?labelParish ?sestiere
 
 ##### Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
 ```sparql
-SELECT distinct  ?transcript ?standard ?labelParish ?sestiere
+SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?GeoOriginPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasGeographicalOrigin ?y .
-  OPTIONAL { ?pl common:transcript ?transcript }
-  OPTIONAL { ?pl common:standardForm ?standard }
+  OPTIONAL { ?pl common:transcript ?Transcript }
+  OPTIONAL { ?pl common:standardForm ?Standard }
   OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?transcript ?standard ?labelParish ?sestiere
-ORDER BY ASC(?standard)
+GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
+ORDER BY ASC(?Transcript)
+
 ```
 
 
 ##### Get locations as object of grz-owl:hasResidence (of masters mainly)
 ```sparql
-SELECT distinct  ?transcript ?standard ?parish ?sestiere
+SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?ResidencePlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasResidence ?y .
-  OPTIONAL { ?pl common:transcript ?transcript }
-  OPTIONAL { ?pl common:standardForm ?standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?parish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:transcript ?Transcript }
+  OPTIONAL { ?pl common:standardForm ?Standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?transcript ?standard ?parish ?sestiere
-ORDER BY ASC(?standard)
+GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
+ORDER BY ASC(?Transcript)
 ```
 
 ##### Get locations as object of grz-owl:hasLocation (of Workshops)
 ```sparql
-SELECT distinct ?transcript ?standard ?parish ?sestiere
+SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?WorkshopPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasLocation ?y .
-  OPTIONAL { ?pl common:transcript ?transcript }
-  OPTIONAL { ?pl common:standardForm ?standard }
-  OPTIONAL { ?pl common:inParish/rdfs:label ?parish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:transcript ?Transcript }
+  OPTIONAL { ?pl common:standardForm ?Standard }
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
 } 
-GROUP BY ?transcript ?standard ?parish ?sestiere
-ORDER BY ASC(?standard)
+GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
+ORDER BY ASC(?Transcript)
 ```
 ##### Get distinct standardforms from geoOrigins
 ```sparql
@@ -110,3 +111,20 @@ WHERE
 } 
 ORDER BY ASC(?standard)
 ```
+
+
+#### get Parish with their labels
+```sparql
+SELECT ?p ?lp ?alt1 ?alt2
+WHERE 
+{
+  ?p a common:Parish . 
+  ?p rdfs:label ?lp .
+  OPTIONAL {
+    ?p skos:altLabel ?alt1.
+    ?p skos:altLabel ?alt2.  
+    FILTER ( ?alt1 != ?alt2 )
+    }
+} 
+GROUP BY ?p
+ORDER BY ASC (?lp)
