@@ -1,5 +1,6 @@
+##### 1. What is the distribution of contracts per year/month/day?
 
-##### 1.1 Distribution of contracts per year
+###### 1.1 Distribution of contracts per year
 ```sparql
 SELECT ?year COUNT (?c) AS ?NbContracts
 WHERE 
@@ -13,7 +14,7 @@ GROUP BY ?year
 ORDER BY ASC (?year)
 ```
 
-##### 1.2 Distribution of contracts per month for a certain year
+###### 1.2 Distribution of contracts per month for a certain year
 ```sparql
 SELECT ?month COUNT (?c) AS ?NbContracts
 WHERE 
@@ -29,7 +30,7 @@ GROUP BY ?month
 ORDER BY ASC (?month)
 ```
 
-##### 1.3 Distribution of contracts per day for a certain month/year
+###### 1.3 Distribution of contracts per day for a certain month/year
 ```sparql
 SELECT ?day COUNT (?c) AS ?NbContracts
 WHERE 
@@ -47,7 +48,7 @@ GROUP BY ?day
 ORDER BY ASC (?day)
 ```
 
-##### 2. Average number of contract per year/month/day
+##### 2. What is the average number of contracts per year/month/day?
 ```sparql
 SELECT AVG (?contract)
 WHERE
@@ -71,7 +72,7 @@ WHERE
 }
 ```
 
-##### 3. Distribution of contracts per register 
+##### 3. What is the distribution of contracts per register? 
 ```sparql
 SELECT ?reg COUNT (?contract)
 WHERE 
@@ -84,7 +85,7 @@ GROUP BY ?reg
 ORDER BY ASC (?reg)
 ```
 
-##### 4. Number of contracts given a time windows
+##### 4. What is the number of contracts given a time window?
 ```sparql
 SELECT  COUNT (?contract)
 WHERE 
@@ -96,7 +97,7 @@ WHERE
 }
 ```
 
-##### 5. Get all contracts before year Y
+##### 5. Give me all contracts before year Y.
 ```sparql
 SELECT COUNT (?contract)
 WHERE {
@@ -106,13 +107,13 @@ WHERE {
 }
 ```
 
-##### 6. Total number of contracts
+##### 6. What is the total number of contracts?
 ```sparql
 SELECT COUNT (distinct ?contract)
 WHERE {?contract a grz-owl:Contract .}
 ```
 
-##### 7. Average number of contracts per page
+##### 7. What is the average number of contracts per page?
 ```sparql
 SELECT AVG (?contractPerPage)
 WHERE
