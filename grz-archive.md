@@ -2,7 +2,7 @@
 
 ###### 1.1 Distribution of contracts per year
 ```sparql
-SELECT ?year COUNT (?c) AS ?NbContracts
+SELECT ?year (COUNT (?c) AS ?NbContracts)
 WHERE 
 {
   ?c a grz-owl:Contract .
@@ -16,7 +16,7 @@ ORDER BY ASC (?year)
 
 ###### 1.2 Distribution of contracts per month for a certain year
 ```sparql
-SELECT ?month COUNT (?c) AS ?NbContracts
+SELECT ?month (COUNT (?c) AS ?NbContracts)
 WHERE 
 {
   ?c a grz-owl:Contract .
@@ -32,7 +32,7 @@ ORDER BY ASC (?month)
 
 ###### 1.3 Distribution of contracts per day for a certain month/year
 ```sparql
-SELECT ?day COUNT (?c) AS ?NbContracts
+SELECT ?day (COUNT (?c) AS ?NbContracts)
 WHERE 
 {
   ?c a grz-owl:Contract .
@@ -53,7 +53,7 @@ ORDER BY ASC (?day)
 SELECT AVG (?contract)
 WHERE
 {
-  SELECT COUNT (?c) AS ?contract
+  SELECT (COUNT (?c) AS ?contract)
   WHERE 
   {
     ?c a grz-owl:Contract .
@@ -74,7 +74,7 @@ WHERE
 
 ##### 3. What is the distribution of contracts per register? 
 ```sparql
-SELECT ?reg COUNT (?contract)
+SELECT ?reg (COUNT (?contract) AS ?NbContracts)
 WHERE 
 { 
   ?reg a meta:Register ; meta:hasPage ?page . 
@@ -87,7 +87,7 @@ ORDER BY ASC (?reg)
 
 ##### 4. What is the number of contracts given a time window?
 ```sparql
-SELECT  COUNT (?contract)
+SELECT  (COUNT (?contract) AS ?NbContracts)
 WHERE 
 { 
   ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date.
@@ -99,7 +99,7 @@ WHERE
 
 ##### 5. Give me all contracts before year Y.
 ```sparql
-SELECT COUNT (?contract)
+SELECT ( COUNT (?contract) AS ?NbContracts )
 WHERE {
   ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date .
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
@@ -109,16 +109,16 @@ WHERE {
 
 ##### 6. What is the total number of contracts?
 ```sparql
-SELECT COUNT (distinct ?contract)
+SELECT ( COUNT (distinct ?contract) AS ?NbContracts )
 WHERE {?contract a grz-owl:Contract .}
 ```
 
 ##### 7. What is the average number of contracts per page?
 ```sparql
-SELECT AVG (?contractPerPage)
+SELECT (AVG (?contractPerPage) AS ?AvgContractsPerPage)
 WHERE
 {
-  SELECT COUNT (?c) AS ?contractPerPage
+  SELECT (COUNT (?c) AS ?contractPerPage)
   WHERE 
   {
     ?c a grz-owl:Contract .
@@ -131,10 +131,10 @@ WHERE
 
 ##### How many pages have how many contracts
 ```sparql
-SELECT ?contractPerPage count (?page) AS ?nbpage
+SELECT ?contractPerPage (COUNT (?page) AS ?nbpage)
 WHERE
 {
-  SELECT ?page COUNT (?c) AS ?contractPerPage
+  SELECT ?page (COUNT (?c) AS ?contractPerPage)
   WHERE 
   {
     ?c a grz-owl:Contract .
