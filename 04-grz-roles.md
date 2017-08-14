@@ -1,5 +1,5 @@
 
-##### 1. Role distribution for Person Mentions 
+##### 1. What is the role distribution for person mentions 
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -17,8 +17,7 @@ GROUP BY ?role ?numberOfMentions ?total
 ORDER BY desc(?percent)
 ```
 
-##### 2. What is the total number of person entities having role X ?  (+ time window)
-
+##### 2. What is the total number of person entities having role X ? 
 ```sparql
 # param: ?_role (in this ex, apprentice)
 SELECT count (distinct ?pe) AS ?NbEntity
@@ -58,7 +57,7 @@ WHERE
 GROUP BY ?role 
 ```
 
-###### Role distribution: overview of all and per gender
+###### 4. Role distribution: Give me an overview of all and per gender
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -70,26 +69,24 @@ SELECT
 ?countMen (?countMen*100/?totalMen As ?percentMen)
 WHERE 
 { 
-  { SELECT COUNT (distinct ?pm) AS ?total WHERE {?pm a common:PersonMention.} }
-  { SELECT COUNT (distinct ?pm) AS ?totalMen WHERE {?pm a common:PersonMention; foaf:gender "male".} }
-  { SELECT COUNT (distinct ?pm) AS ?totalWomen WHERE {?pm a common:PersonMention; foaf:gender "female".} }
+  { SELECT (COUNT (distinct ?pm) AS ?total) WHERE {?pm a common:PersonMention.} }
+  { SELECT (COUNT (distinct ?pm) AS ?totalMen) WHERE {?pm a common:PersonMention; foaf:gender "male".} }
+  { SELECT (COUNT (distinct ?pm) AS ?totalWomen) WHERE {?pm a common:PersonMention; foaf:gender "female".} }
 
-  { SELECT ?role COUNT (distinct ?pm) AS ?countMentions 
+  { SELECT ?role (COUNT (distinct ?pm) AS ?countMentions) 
     WHERE {?pm a common:PersonMention; grz-owl:hasRole ?role .}
   }
 
-  {SELECT ?role COUNT (distinct ?women) AS ?countWomen
+  {SELECT ?role (COUNT (distinct ?women) AS ?countWomen)
     WHERE {?women a common:PersonMention; foaf:gender "female"; grz-owl:hasRole ?role .}}
 
-  {SELECT ?role COUNT (distinct ?men) AS ?countMen 
+  {SELECT ?role (COUNT (distinct ?men) AS ?countMen) 
     WHERE {?men a common:PersonMention; foaf:gender "male"; grz-owl:hasRole ?role .}}  
 }
 GROUP BY ?role ?countMentions ?total
 ```
-
-##### 4. About multiple roles:
-
-###### 4.1 List all entities having double role: master and apprentice
+  
+##### 5. Give me all person entities having a the double role master/apprentice.
 N.B: roles can be changed/added
 ```sparql
 SELECT ?pe COUNT (distinct ?pm) AS ?nbMentions
@@ -103,7 +100,7 @@ HAVING  COUNT (distinct ?pm) > 1
 ORDER BY DESC (COUNT (distinct ?pm))
 ```
 
-###### Idem, but count number of entities having double role
+###### 6. How many entities have a double role?
 N.B: roles can be changed/added
 ```sparql
 SELECT COUNT (distinct ?pe)
@@ -116,31 +113,29 @@ WHERE
 #####  TO BE REVISED - NOT WORKING - Break-down PERSON/ROLE/DATE for person entities having both Apprentice and Master roles
 ```sparql
 SELECT ?pe ?roleType ?year
-  WHERE 
+WHERE 
   {
     {
-       ?pe  grz-owl:role ?roleStatement.        
-       ?roleStatement grz-owl:value ?role .
-       ?role grz-owl:roleType ?roleType .
+       ?pe  grz-owl:hasRole ?roleStatement.        
+       ?roleStatement grz-owl:value ?roleType .
        ?roleStatement sem:hasTimeStamp ?date .
-       BIND (year(?date) AS ?year )
+       BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+       BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
     }
     {
 
-       SELECT ?pe
-       WHERE {?pe a grz-owl:Person . 
-              ?pe  grz-owl:role ?roleStatement1.
-              ?pe  grz-owl:role ?roleStatement2. 
-              ?roleStatement1  grz-owl:value ?value1.
-              ?roleStatement2  grz-owl:value ?value2 .
-              ?value1  grz-owl:roleType grz-owl:master.
-              ?value2  grz-owl:roleType grz-owl:apprentice .
-}
-       GROUP BY ?pe
-       
+     SELECT ?pe
+     WHERE {
+      ?pe a common:Person . 
+      ?pe  grz-owl:hasRole ?roleStatement1.
+      ?pe  grz-owl:hasRole ?roleStatement2. 
+      ?roleStatement1  rdf:value grz-owl:Apprentice .
+      ?roleStatement2  rdf:value grz-owl:Master .
+      }
+      GROUP BY ?pe   
     }
   }
-  GROUP BY ?roleType
+GROUP BY ?roleType
 ORDER BY ASC ( UCASE (str(?pe)))
 ```
 #####  TO BE REVISED - NOT WORKING - Give me the persons who appear as Master AND Apprentice AND Guarantor:
