@@ -5,8 +5,8 @@
 SELECT ?with ?without
 WHERE
 { 
-{SELECT count (?pe) AS ?with WHERE {?pe a common:Person ; foaf:gender ?gender }}
-{SELECT count (?pf) AS ?without WHERE {?pf a common:Person . FILTER NOT EXISTS {?pf foaf:gender ?gender} }}
+  {SELECT count (?pe) AS ?with WHERE {?pe a common:Person ; foaf:gender ?gender }}
+  {SELECT count (?pf) AS ?without WHERE {?pf a common:Person . FILTER NOT EXISTS {?pf foaf:gender ?gender} }}
 }
 ```
 
