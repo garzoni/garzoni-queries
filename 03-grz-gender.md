@@ -1,4 +1,6 @@
-##### 0. How many person entities have a gender information or not
+#### 03. About gender
+
+##### 1. How many person entities have a gender information or not?
 ```sparql
 SELECT ?with ?without
 WHERE
@@ -8,15 +10,15 @@ WHERE
 }
 ```
 
-##### 1. What is the total number of person entities with gender female/male?
+##### 2. What is the total number of person entities with gender female/male?
 ```sparql
-SELECT ?gender count (distinct ?pe)
+SELECT ?gender ( COUNT (distinct ?pe) AS ?NbPersonEntity )
 WHERE
 { ?pe a common:Person ; foaf:gender ?gender }
 GROUP BY ?gender
 ```
 
-##### 2. What is the distribution of women over time?
+##### 3. What is the distribution of woman entities over time?
 ```sparql
 SELECT ?year ?gender count (distinct ?pe) AS ?NbPerson
 {
@@ -30,7 +32,7 @@ GROUP BY ?year ?gender
 ORDER BY ASC (?year)
 ```
 
-##### 3. What is the distribution of women/men per role?
+##### 4.1 What is the distribution of women/men per role?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -51,7 +53,7 @@ WHERE
 GROUP BY ?role ?numberOfWomen ?numberOfMen ?total
 ```
 
-##### 4.Gender distribution per role (on person entities)
+##### 4.2. Gender distribution for a given role with time window (on person entities)
 ```sparql
 # params: ?_role
 SELECT ?gender COUNT (distinct ?pe) AS ?NbPerson
