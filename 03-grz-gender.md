@@ -55,13 +55,16 @@ GROUP BY ?role ?numberOfWomen ?numberOfMen ?total
 
 ##### 4.2. Gender distribution for a given role with time window (on person entities)
 ```sparql
-# params: ?_role
-SELECT ?gender COUNT (distinct ?pe) AS ?NbPerson
+# params: ?_role and date
+SELECT ?gender (COUNT (distinct ?pe) AS ?NbPerson)
 WHERE
 {
-  ?pe  a common:Person .
-  ?pe grz-owl:hasRole/rdf:value  grz-owl:Guarantor .
+  ?pe  a common:Person ; grz-owl:hasRole ?roleStmt .
+  ?roleStmt sem:hasTimeStamp ?date . 
+  ?roleStmt rdf:value  grz-owl:Guarantor .
   ?pe foaf:gender ?gender .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  FILTER (?myDate > "1591-03-15"^^xsd:dateTime AND ?myDate < "1598-03-15"^^xsd:dateTime)
 }
 GROUP BY ?gender
 ```
