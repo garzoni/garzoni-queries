@@ -1,4 +1,4 @@
-#### 02. About person mentions and person entities
+### 02. About person mentions and person entities
 
 ##### 1. What is the total number of person mentions?
 ```sparql
