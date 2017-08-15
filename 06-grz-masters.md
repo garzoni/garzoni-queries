@@ -1,4 +1,4 @@
-### Garzoni People Search : about Masters
+#### 06. About Masters
 
 ##### Get masters having more than 1 apprentice
 ```sparql
