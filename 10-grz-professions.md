@@ -1,9 +1,6 @@
+### 10.  About professions
 
-## Garzoni economy: about professions
-
-### Exploring professions
-
-##### 01. Number of profession mentions per category:
+##### 1. Number of profession mentions per category:
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
