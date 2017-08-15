@@ -4,7 +4,7 @@
 Please see question 1 in file 05-grz-apprentices.md and replace grz-owl:Apprentice by grz-owl:Master.
 
 ##### 2. How many masters have more than x apprentice?
-```` sparql
+```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
