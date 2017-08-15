@@ -1,6 +1,6 @@
 #### 02. About person mentions and person entities
 
-##### 01. What is the total number of person mentions?
+##### 1. What is the total number of person mentions?
 ```sparql
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
@@ -8,7 +8,7 @@ SELECT ( COUNT (distinct ?pm) AS ?NbPersMention )
 WHERE { ?pm a common:PersonMention .}
 ```
 
-##### 02. What is the total number of person entities? 
+##### 2. What is the total number of person entities? 
 ```sparql
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
@@ -16,7 +16,7 @@ SELECT ( COUNT (distinct ?pe) AS ?NbPersEntities )
 WHERE { ?pe a common:Person .}
 ```
 
-##### 03. How many person entities have how many mentions? (distribution of entity per counts of mentions)
+##### 3. How many person entities have how many mentions? (distribution of entity per counts of mentions)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -37,7 +37,7 @@ GROUP BY ?mentionCount
 ORDER BY ASC(?mentionCount)
 ```
 
-##### 04. What is the average number of mentions per person entity?
+##### 4. What is the average number of mentions per person entity?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -55,7 +55,7 @@ WHERE
 }
 ```
 
-##### 05. How many person entities have more than x mentions?
+##### 5. How many person entities have more than x mentions?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -74,7 +74,7 @@ WHERE
 }
 ```
 
-##### 06.01 Give me all mentions of person entity with id x.
+##### 6.1 Give me all mentions of person entity with id x.
 ```sparql
 SELECT ?pm
 WHERE
@@ -86,7 +86,7 @@ WHERE
 }
 ```
 
-##### 06.02 Give me all mentions of person entity with name x.
+##### 6.2 Give me all mentions of person entity with name x.
 ```sparql
 SELECT ?pm
 WHERE
@@ -98,7 +98,7 @@ WHERE
 }
 ```
 
-##### 07.01 Who are the 10 most mentioned person entities?
+##### 7.1 Who are the 10 most mentioned person entities?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -114,7 +114,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 LIMIT 10
 ```
 
-##### 07.02 Get the top-10/x most mentioned person entities with time window.
+##### 7.2 Get the top-10/x most mentioned person entities with time window.
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -134,7 +134,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 LIMIT 10
 ```
 
-##### 08. Who are the person entities mentioned more than X time?
+##### 8. Who are the person entities mentioned more than X time?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -150,7 +150,7 @@ HAVING (count(distinct ?pm) > 5)
 ORDER BY DESC (count(distinct ?pm))
 ```
 
-##### 09. What is the distribution of roles of person entities mentioned more than X times?
+##### 9. What is the distribution of roles of person entities mentioned more than X times?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
