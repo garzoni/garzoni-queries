@@ -4,14 +4,14 @@
 ##### 1. What is the total number of apprentices? (between date X and date Y? or before/after date X)
 
 ###### 1.1 Entity
-```sarql
+```sparql
 SELECT (COUNT(distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
 ###### 1.2 Entity with time window
-```sarql
+```sparql
 # params: 2 dates
 SELECT (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
