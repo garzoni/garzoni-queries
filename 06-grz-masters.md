@@ -1,30 +1,28 @@
 #### 06. About Masters
 
-##### Get masters having more than 1 apprentice
-```sparql
+##### 1. What is the total number of masters? (between date X and date Y? or before/after date X)
+Please see question 1 in file 05-grz-apprentices.md and replace grz-owl:Apprentice by grz-owl:Master.
+
+##### 2. How many masters have more than x apprentice?
+```` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
-SELECT ?master
+SELECT COUNT distinct ?master 
 WHERE  {  ?master a common:Person; common:hasApprentice ?appStatement . }
-GROUP BY ?master
+GROUP BY ?master 
 HAVING (COUNT (distinct ?appStatement) > 1)
 ```
 
-##### How many master have more than 1,2,n apprentice
+##### 3. Get the list of masters having more than 1 apprentice.
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
-SELECT count distinct (?master)
-WHERE
-{
-  SELECT ?master COUNT (distinct ?appStatement) 
-  WHERE {?master a common:Person; common:hasApprentice ?appStatement }
-  GROUP BY ?master
-  HAVING (COUNT (distinct ?appStatement) > 1)
-}
-
+SELECT ?master ?masterName
+WHERE  {  ?master a common:Person; common:hasApprentice ?appStatement ; rdfs:label ?masterName }
+GROUP BY ?master ?masterName
+HAVING (COUNT (distinct ?appStatement) > 1)
 ```
 
 ##### Get number of apprentices per masters (if > 1)
