@@ -31,7 +31,25 @@ WHERE
 GROUP BY (?payer)
 ```
 
-#### 4. In which profession the salary is payed by the master, the apprentice?
+##### 4. In which profession the salary is payed by the master, the apprentice? (using profession standard forms)
 ```sparql
+SELECT ?profSF  ?NbSalPaidByApp ?NbSalPaidByMaster
+WHERE
+{
+  {SELECT ?profSF (COUNT (distinct ?sal) AS ?NbSalPaidByApp) 
+  WHERE {
+    ?c core:hasMention ?master ; grz-owl:hasCondition ?sal .
+    ?sal a grz-owl:FinancialCondition ; grz-owl:paidBy grz-owl:ApprenticePayer.
+    ?master a common:PersonMention ; grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession/common:standardForm ?profSF .
+    } GROUP BY ?profSF }
 
+  {SELECT ?profSF (COUNT (distinct ?sal) AS ?NbSalPaidByMaster) 
+  WHERE {
+    ?c core:hasMention ?master ; grz-owl:hasCondition ?sal .
+    ?sal a grz-owl:FinancialCondition ; grz-owl:paidBy grz-owl:MasterPayer.
+    ?master a common:PersonMention ; grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession/common:standardForm ?profSF .
+    } GROUP BY ?profSF }
+}
+GROUP BY ?profSF
+ORDER BY ASC(?profSF)
 ```
