@@ -1,4 +1,4 @@
-### 08. About wages
+### 08. About salaries
 
 ##### 1. How many salaries are progressive vs. non-progressive?
 ```sparql
