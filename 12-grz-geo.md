@@ -1,4 +1,6 @@
-##### For map creation (collab Rouen and Riccardo)
+### 12. About geographical information
+
+##### 1. For map creation (collab Rouen and Riccardo)
 
 ```sparql
 SELECT  ?apprenticeName ?transcriptGeoOrigins  ?standardGeoOrigins ?transcriptProfMaster  ?standardProfMaster ?year ?month ?day
@@ -21,7 +23,7 @@ WHERE
 ORDER BY ASC(?year)
 ```
 
-##### Get all locations, with indication of what they qualify
+##### 2. Get all locations, with indication of what they qualify.
 ```sparql
 SELECT ?pl ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
@@ -37,7 +39,7 @@ WHERE
 } 
 ```
 
-##### Get all locations, with indication of what they qualify (distinct)
+##### 3. Get all locations, with indication of what they qualify (distinct)
 ```sparql
 SELECT distinct ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
@@ -54,7 +56,7 @@ WHERE
 GROUP BY ?qualified ?trans ?standard ?labelParish ?sestiere
 ```
 
-##### Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
+##### 4. Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?GeoOriginPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
@@ -71,7 +73,7 @@ ORDER BY ASC(?Transcript)
 ```
 
 
-##### Get locations as object of grz-owl:hasResidence (of masters mainly)
+##### 5. Get locations as object of grz-owl:hasResidence (of masters mainly)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?ResidencePlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
@@ -86,7 +88,7 @@ GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### Get locations as object of grz-owl:hasLocation (of Workshops)
+##### 6. Get locations as object of grz-owl:hasLocation (of Workshops)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?WorkshopPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
@@ -100,7 +102,7 @@ WHERE
 GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
-##### Get distinct standardforms from geoOrigins
+##### 7. Get distinct standardforms from geoOrigins
 ```sparql
 SELECT distinct STR(?standard)
 WHERE 
@@ -112,8 +114,7 @@ WHERE
 ORDER BY ASC(?standard)
 ```
 
-
-#### get Parish with their labels
+##### 8. Get parishes with their labels.
 ```sparql
 SELECT ?p ?lp ?alt1 ?alt2
 WHERE 
