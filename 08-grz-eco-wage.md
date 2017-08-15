@@ -53,3 +53,24 @@ WHERE
 GROUP BY ?profSF
 ORDER BY ASC(?profSF)
 ```
+
+##### 5. How many contracts have which type of financial conditions?
+```sparql
+SELECT  ?FinancialCondType COUNT (distinct ?c) AS ?NbContracts
+WHERE 
+{
+  ?c grz-owl:hasCondition ?finCond .
+  ?finCond  a grz-owl:FinancialCondition ; grz-owl:conditionType ?FinancialCondType .
+}
+GROUP BY (?FinancialCondType)
+```
+
+###### Same with constrain on profession category:
+SELECT  ?FinancialCondType COUNT (distinct ?c) AS ?NbContracts
+WHERE 
+{
+  ?c grz-owl:hasCondition ?finCond ; core:hasMention ?master .
+  ?finCond  a grz-owl:FinancialCondition ; grz-owl:conditionType ?FinancialCondType .
+  ?master grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession/grz-owl:professionCategory  "pittore" .
+}
+GROUP BY (?FinancialCondType)
