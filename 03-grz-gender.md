@@ -1,4 +1,4 @@
-#### 03. About gender
+### 03. About gender
 
 ##### 1. How many person entities have a gender information or not?
 ```sparql
