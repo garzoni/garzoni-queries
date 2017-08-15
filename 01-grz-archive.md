@@ -52,7 +52,7 @@ GROUP BY ?day
 ORDER BY ASC (?day)
 ```
 
-##### 2. What is the average number of contracts per year/month/day? (api:02_avg_contract_year_month_day)
+##### 2. What is the average number of contracts per year/month/day? (api:01_02_avg_contract_year_month_day)
 ```sparql
 SELECT AVG (?contract)
 WHERE
@@ -76,7 +76,7 @@ WHERE
 }
 ```
 
-##### 3. What is the distribution of contracts per register? (api:03_distrib_contract_register)
+##### 3. What is the distribution of contracts per register? (api:01_03_distrib_contract_register)
 ```sparql
 SELECT ?reg (COUNT (?contract) AS ?NbContracts)
 WHERE 
@@ -89,7 +89,7 @@ GROUP BY ?reg
 ORDER BY ASC (?reg)
 ```
 
-##### 4. What is the number of contracts given a time window? (api:04_nb_contract_tw)
+##### 4. What is the number of contracts given a time window? (api:01_04_nb_contract_tw)
 ```sparql
 # params: ?_date1 ?_date2
 SELECT  (COUNT (?contract) AS ?NbContracts)
@@ -102,7 +102,7 @@ WHERE
 }
 ```
 
-##### 5. Give me all contracts before year Y. (api:05_all_contracts_before_year)
+##### 5. Give me all contracts before year Y. (api:01_05_all_contracts_before_year)
 ```sparql
 # params: ?_date
 SELECT ( COUNT (?contract) AS ?NbContracts )
@@ -113,13 +113,13 @@ WHERE {
 }
 ```
 
-##### 6. What is the total number of contracts? (api:06_nb_contracts)
+##### 6. What is the total number of contracts? (api:01_06_nb_contracts)
 ```sparql
 SELECT ( COUNT (distinct ?contract) AS ?NbContracts )
 WHERE {?contract a grz-owl:Contract .}
 ```
 
-##### 7. What is the average number of contracts per page? (api:07_avg_nb_contracts_page)
+##### 7. What is the average number of contracts per page? (api:01_07_avg_nb_contracts_page)
 ```sparql
 SELECT (AVG (?contractPerPage) AS ?AvgContractsPerPage)
 WHERE
@@ -135,7 +135,7 @@ WHERE
 }
 ```
 
-##### 8. How many pages have how many contracts? (api:07_distrib_contracts_page)
+##### 8. How many pages have how many contracts? (api:01_08_distrib_contracts_page)
 ```sparql
 SELECT ?contractPerPage (COUNT (?page) AS ?nbpage)
 WHERE
