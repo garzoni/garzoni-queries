@@ -2,21 +2,48 @@
 
 ###### 1.1 Entity
 ```sarql
-SELECT count (distinct ?pe) AS ?NbApprenticeEntity
+SELECT (COUNT(distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
-###### 1.2 Mention
+###### 1.2 Entity with time window
+```sarql
+# params: 2 dates
+SELECT (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
+WHERE
+{ 
+  ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; core:referredBy/core:isMentionedIn ?contract .
+  ?contract sem:hasTimeStamp ?date .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+  FILTER (?year > 1590 AND ?year < 1598)
+}
+```
+
+###### 1.3 Mention
 ```sparql
-SELECT count (distinct ?pm) AS ?NbApprenticeMention
+SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
 { ?pm a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice .}
 ```
 
+###### 1.3 Mention with time window
+```sparql
+SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
+WHERE
+{ 
+?pm a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice ; core:isMentionedIn ?contract .
+ ?contract sem:hasTimeStamp ?date .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+  FILTER (?year > 1590 AND ?year < 1598)
+}
+```
+
 ##### 2. Number of apprentices (entity) over the years
 ```sparql
-SELECT ?year count (distinct ?pe) AS ?NbApprenticeEntity
+SELECT ?year (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 {
   ?pe a common:Person ; grz-owl:hasRole ?roleStmt.
@@ -84,7 +111,7 @@ ORDER BY ASC (?age)
 
 ##### 4. About average age of apprentices
 
-###### 4.1 Average age of apprentice (all)
+###### 4.1 Average age of apprentice (all, for ages indicated in integers)
 ```sparql
 SELECT AVG (?age)
 WHERE
@@ -124,32 +151,31 @@ WHERE
 }
 ```
 
-
 ##### 5. Give me apprentices who are mentioned in more than x contracts
 ```sparql
 # params: ?_nbappMentions
-SELECT ?app COUNT (distinct ?appMention) AS ?nbMentions
+SELECT ?app ?appName (COUNT (distinct ?appMention) AS ?nbMentions)
 WHERE
 {
-  ?app  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .
+  ?app  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; rdfs:label ?appName.
   ?app core:referredBy ?appMention .
   ?appMention grz-owl:hasRole grz-owl:Apprentice .
 }
-GROUP BY ?app
-HAVING  COUNT (distinct ?appMention) > 1
+GROUP BY ?app ?appName
+HAVING  COUNT (distinct ?appMention) > 2
 ORDER BY DESC (COUNT (distinct ?appMention))
 ```
 
 ##### 6. Who are the apprentices mentioned in more than 1 contract with different roles?
 ```sparql
-SELECT ?app COUNT (distinct ?appMention) AS ?nbMentions
+SELECT ?app ?appName (COUNT (distinct ?appMention) AS ?nbMentions)
 WHERE
 {
-  ?app  a common:Person ; grz-owl:hasRole/rdf:value ?role1, ?role2 .
+  ?app  a common:Person ; grz-owl:hasRole/rdf:value ?role1, ?role2 ; rdfs:label ?appName .
   ?app core:referredBy ?appMention .
   FILTER (?role1 != ?role2)
 }
-GROUP BY ?app
+GROUP BY ?app ?appName
 HAVING  COUNT (distinct ?appMention) > 1
 ORDER BY DESC (COUNT (distinct ?appMention))
 ```
