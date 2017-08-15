@@ -131,7 +131,7 @@ WHERE
 }
 ```
 
-##### How many pages have how many contracts
+##### 8. How many pages have how many contracts
 ```sparql
 SELECT ?contractPerPage (COUNT (?page) AS ?nbpage)
 WHERE
