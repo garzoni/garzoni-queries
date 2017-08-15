@@ -1,4 +1,4 @@
-### About profession normalisation
+### 11. About profession normalisation
 
 ##### 1. Give me information on number of profession mentions: total, with or without transcript (TR, NoTR), standardForm (SF, NoSF), category (CAT, NoCat):
 ```sparql
@@ -104,7 +104,7 @@ GROUP BY (?year)
 ORDER BY ASC(?year)
 ```
 
-**With link towards dhcanvas:**
+###### With link towards dhcanvas:
 
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
@@ -135,42 +135,7 @@ SELECT distinct ?profcat
 WHERE {?prof grz-owl:professionCategory ?profcat .}
 ```
 
-##### 7. Get distribution of contracts per profession categories
-```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
- 
-SELECT STR(?profcat) count (distinct ?contract)
-WHERE 
-{
-	?prof a grz-owl:ProfessionMention ; grz-owl:professionCategory ?profcat ; ^grz-owl:hasProfession ?pm.
-	?pm a common:PersonMention ; core:isMentionedIn ?contract.
-	?contract a core:Source ; sem:hasTimeStamp ?date .
-	BIND(year(?date) AS ?year)
-}
-GROUP BY (STR(?profcat))
-ORDER BY DESC(count (distinct ?contract))
-```
-
-##### 8. Idem with time window
-```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
- 
-SELECT  STR(?profcat) count (distinct ?contract)
-WHERE 
-{
-	?prof a grz-owl:ProfessionMention ; grz-owl:professionCategory ?profcat ; ^grz-owl:hasProfession ?pm.
-	?pm a common:PersonMention ; core:isMentionedIn ?contract.
-	?contract a core:Source ; sem:hasTimeStamp ?date .
-	BIND(year(?date) AS ?year) .
-	FILTER(?year > 1600 AND ?year < 1700)
-}
-GROUP BY (STR(?profcat))
-ORDER BY DESC(count (distinct ?contract))
-```
-
-##### 9. Get list of transcripts (TR), standard forms (SF), profession categories, AND suggestedStandardForms and suggested profession categories
+##### 7. Get list of transcripts (TR), standard forms (SF), profession categories, AND suggestedStandardForms and suggested profession categories
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
