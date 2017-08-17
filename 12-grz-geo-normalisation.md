@@ -88,7 +88,7 @@ GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 6. Get locations as object of grz-owl:hasLocation (of Workshops)
+##### 6. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?WorkshopPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
