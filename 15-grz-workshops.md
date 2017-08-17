@@ -38,7 +38,7 @@ WHERE
 ```
 
 ##### 4. How many workshops have and have *not* the information of their places?
-```spaqrl
+```sparql
 SELECT ?WorkshopWithPlaceInfo ?WorkshopWithoutPlaceInfo
 WHERE 
 { 
@@ -127,6 +127,7 @@ ORDER BY DESC (COUNT (distinct ?workshop))
 ```
 
 ##### 7. How many workshop have the indication if an insigna?
+```sparql
 SELECT ?WorkshopWithInsigna ?WorkshopWithoutInsigna
 WHERE 
 { 
@@ -138,6 +139,7 @@ WHERE
   WHERE {?ws a grz-owl:WorkshopMention . FILTER (NOT EXISTS{?ws grz-owl:insigna ?i} ) }
   }
 }
+```
 
 ##### 8. How many workshop mentions per insigna? (=> hint for workshop entities)
 ```sparql
