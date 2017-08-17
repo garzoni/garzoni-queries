@@ -51,6 +51,7 @@ ORDER BY DESC(AVG (?durInt))
 ```
 
 ##### 5. What is the average duration of a contract in profession category X per year?
+```sparql
 SELECT ?year (AVG (?durInt) AS ?AppshipDurationAvg)
 WHERE 
 {
@@ -66,6 +67,7 @@ WHERE
 }
 GROUP BY ?year
 ORDER BY ASC(?year)
+```
 
 ##### 6. How many flees are there in total ?
 ```sparql
@@ -112,4 +114,15 @@ WHERE
  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
 }
 GROUP BY ?year
+```
+
+##### 8. On which days contracts are registered?
+```sparql
+SELECT ?day (COUNT (distinct ?c)  AS ?NbContracts)
+WHERE 
+{
+ ?c a grz-owl:Contract; time:dayOfWeek ?day .
+}
+GROUP BY ?day
+ORDER BY ASC(?day)
 ```
