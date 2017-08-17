@@ -63,4 +63,14 @@ ORDER BY ?date
 
 ```
 
-
+##### 3. Total number of contract per person so far.
+```sparql
+SELECT ?Collaborator (COUNT (distinct ?c) AS ?NbContracts)
+WHERE 
+{ ?oa a oa:Annotation ; oa:motivatedBy oa:linking ; oa:hasBody ?c ; prov:wasGeneratedFrom ?activity .
+  ?activity  prov:startedAtTime ?date ; prov:wasAssociatedWith/rdfs:label ?Collaborator .
+  ?c a grz-owl:Contract . 
+}
+GROUP BY ?Collaborator 
+ORDER BY ASC(?Collaborator)
+```
