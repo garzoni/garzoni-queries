@@ -71,7 +71,7 @@ GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-###### distinct without place entity url, with lowercase
+###### lowercase distinct, without place entity url
 ```sparql
 SELECT distinct ?Transcript  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
 WHERE 
