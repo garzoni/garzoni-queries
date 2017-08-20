@@ -1,8 +1,9 @@
-Graph: http://sws.geonames.org
 
+
+##### Get geoname reference for a populated place with italian name x
+Graph: http://sws.geonames.org
 ```sparql
 PREFIX gn:<http://www.geonames.org/ontology#>
-
-
-
+SELECT ?p WHERE
+{?p gn:featureClass gn:P ; gn:alternateName "NAME"@it .}
 ```
