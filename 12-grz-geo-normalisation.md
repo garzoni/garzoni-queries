@@ -117,13 +117,8 @@ ORDER BY ASC(?Transcript)
 ```
 ##### 7. Get distinct standardforms from geoOrigins
 ```sparql
-SELECT distinct STR(?standard)
-WHERE 
-{
-  ?pl a common:PlaceMention . 
-  ?pl ^grz-owl:hasGeographicalOrigin ?y .
-  ?pl common:standardForm ?standard 
-} 
+SELECT distinct STR(?standard) AS ?p
+WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
