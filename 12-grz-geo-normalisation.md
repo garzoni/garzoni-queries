@@ -86,6 +86,20 @@ GROUP BY ?Transcript ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
 ```
 
+###### lowercase ALL, without transcript (=> for place entity creation)
+```sparql 
+SELECT ?pl ?Standard ?parish ?sestiere 
+WHERE 
+{
+  ?pl a common:PlaceMention . 
+  ?pl ^grz-owl:hasGeographicalOrigin ?y .
+  OPTIONAL { ?pl common:transcript ?tr . BIND(str(lcase(?tr)) AS ?Transcript)}
+  OPTIONAL { ?pl common:standardForm ?st . BIND(str(lcase(?st)) AS ?Standard)}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish common:inSestiere ?sestiere .}
+} 
+ORDER BY ASC(?Transcript)
+```
+
 ##### 5. Get locations as object of grz-owl:hasResidence (of masters mainly)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?ResidencePlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
