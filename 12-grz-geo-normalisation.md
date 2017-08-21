@@ -115,10 +115,26 @@ WHERE
 GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
-##### 7. Get distinct standardforms from geoOrigins
+##### 7. Get distinct standardforms 
+
+###### from geoOrigins
 ```sparql
 SELECT distinct STR(?standard) AS ?p
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?y ; common:standardForm ?standard } 
+ORDER BY ASC(?standard)
+```
+
+###### from residence
+```sparql
+SELECT distinct STR(?standard) AS ?p
+WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasResidence ?y ; common:standardForm ?standard } 
+ORDER BY ASC(?standard)
+```
+
+###### from location
+```sparql
+SELECT distinct STR(?standard) AS ?p
+WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasLocation ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
