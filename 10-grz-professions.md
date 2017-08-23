@@ -100,14 +100,21 @@ ORDER BY DESC(COUNT (distinct ?contract))
 
 ##### 7. Give me all apprentice whose profession contains the string "servir"
 ```sparql
-SELECT
+SELECT ?contract ?dhLink ?app ?appLabel  ?profTranscript ?gender ?age ?ageText ?year
 WHERE
 {
-?app a grz-owl:PersonMention ; grz-owl:hasRole:Apprentice ; core:isMentionedIn ?contract .
-?contract a grz-owl:Contract; sem:hasTimeStamp ?date .
-BIND (year(?date) AS ?year).
+	?app a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice ; 
+    	core:isMentionedIn ?contract ;grz-owl:hasName/rdfs:label ?appLabel ; 
+    	grz-owl:hasProfession ?prof ; foaf:gender ?gender .
+	OPTIONAL {?app foaf:age ?age }
+	OPTIONAL {?app grz-owl:ageText ?ageText }
+	?prof common:transcript ?profTranscript .
+	?profTranscript bif:contains "'servir*'".
+	?contract a grz-owl:Contract; sem:hasTimeStamp ?date ; ^edm:realizes ?page.
+	?page a meta:Page; meta:isImagedBy/iiif:service ?dhLink .
+	BIND (year(?date) AS ?year).
 }
-
+ORDER BY ASC(?year)
 
 
 ```
