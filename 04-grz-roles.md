@@ -1,6 +1,6 @@
 ### 04. About roles
 
-##### 1. What is the role distribution for person mentions 
+##### 01. What is the role distribution for person mentions 
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -18,7 +18,7 @@ GROUP BY ?role ?numberOfMentions ?total
 ORDER BY desc(?percent)
 ```
 
-##### 2. What is the total number of person entities having role X ? 
+##### 02. What is the total number of person entities having role X ? 
 ```sparql
 # param: ?_role (in this ex, apprentice)
 SELECT count (distinct ?pe) AS ?NbEntity
@@ -26,7 +26,7 @@ WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
-###### Idem with time window:
+##### 03. What is the total number of person entities having role X, with time window?
 ```sparql 
 # param: ?_role (in this ex, apprentice)
 SELECT ?year count (distinct ?pe) AS ?NbApprenticeEntity
@@ -41,7 +41,7 @@ GROUP BY ?year
 ORDER BY ASC (?year)
 ```
 
-##### 3. What is the role distribution per gender (on entities)?
+##### 04. What is the role distribution per gender (on entities)?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -58,7 +58,7 @@ WHERE
 GROUP BY ?role 
 ```
 
-##### 4. Role distribution: Give me an overview of all and per gender
+##### 05. Role distribution: Give me an overview of all and per gender
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -87,7 +87,7 @@ WHERE
 GROUP BY ?role ?countMentions ?total
 ```
   
-##### 5. Give me all person entities having a the double role master/apprentice.
+##### 06. Give me all person entities having a the double role master/apprentice.
 ```sparql
 # N.B: roles can be changed/added
 SELECT ?pe COUNT (distinct ?pm) AS ?nbMentions
@@ -101,7 +101,7 @@ HAVING  COUNT (distinct ?pm) > 1
 ORDER BY DESC (COUNT (distinct ?pm))
 ```
 
-##### 6. How many entities have a double role?
+##### 07. How many entities have a double role?
 ```sparql
 # N.B: roles can be changed/added
 SELECT COUNT (distinct ?pe)
@@ -111,7 +111,7 @@ WHERE
 }
 ```
 
-##### 7. Give me the details person/role/date for person entities having both apprentice and master roles
+##### 08. Give me the details person/role/date for person entities having both apprentice and master roles
 ```sparql
 # N.B.: more role can be added (e.g. guarantor)
 # For counting, replace the first line by SELECT COUNT distinct ?pe
@@ -139,7 +139,7 @@ GROUP BY ?roleType
 ORDER BY ASC (UCASE(str(?pe))) ?year
 ```
 
-##### 8. Give me the apprentices who have the same guarantor in 2 different contracts
+##### 09. Give me the apprentices who have the same guarantor in 2 different contracts
 ```sparql
 SELECT ?app ?appName ?guar ?guarName ?contract1 AS ?contract ?date1 AS ?date
 WHERE 
@@ -156,7 +156,7 @@ GROUP BY ?app ?guar ?guarName ?appName
 ORDER BY ?app
 ```
 
-##### 9. TO BE REVISED WITH PROFESSION THESAURUS - Number of guarantor per contract given a profession
+##### 10. TO BE REVISED WITH PROFESSION THESAURUS - Number of guarantor per contract given a profession
 ```sparql
 SELECT ?numberOfGuar COUNT (distinct ?app)
 WHERE
