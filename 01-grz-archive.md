@@ -31,7 +31,7 @@ GROUP BY ?month
 ORDER BY ASC (?month)
 ```
 
-###### 03. What is the distribution of contracts per day for a certain month/year? (api:01_03_distrib_contract_year_month_day)
+##### 03. What is the distribution of contracts per day for a certain month/year? (api:01_03_distrib_contract_year_month_day)
 ```sparql
 # params: ?_year ?_month
 SELECT ?day (COUNT (?c) AS ?NbContracts)
