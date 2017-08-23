@@ -98,3 +98,16 @@ GROUP BY ?profCat
 ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
+##### 7. Give me all apprentice whose profession contains the string "servir"
+```sparql
+SELECT
+WHERE
+{
+?app a grz-owl:PersonMention ; grz-owl:hasRole:Apprentice ; core:isMentionedIn ?contract .
+?contract a grz-owl:Contract; sem:hasTimeStamp ?date .
+BIND (year(?date) AS ?year).
+}
+
+
+
+```
