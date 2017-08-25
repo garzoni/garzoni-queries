@@ -24,7 +24,7 @@ WHERE
 
 ##### 2. What is the contract distribution per number of guarantor?
 ```sparql
-SELECT ?guarCount count(distinct ?contract) 
+SELECT ?guarCount COUNT(distinct ?contract) 
 WHERE 
 { 
 	SELECT ?contract count(distinct ?guar) AS ?guarCount 
@@ -43,7 +43,7 @@ ORDER BY ASC(?guarCount)
 SELECT AVG (?numberApp)
 WHERE
 {
-	SELECT COUNT (distinct ?app) AS ?numberApp 
+	SELECT (COUNT (distinct ?app) AS ?numberApp)
 	WHERE
 	{?g  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Guarantor ; common:isGuarantorOf ?app .}
 	GROUP BY ?g
@@ -55,7 +55,7 @@ WHERE
 SELECT AVG (?numberApp)
 WHERE
 {
-	SELECT COUNT (distinct ?app) AS ?numberApp 
+	SELECT (COUNT (distinct ?app) AS ?numberApp) 
 	WHERE
 	{?g  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Guarantor ; common:isGuarantorOf ?app .
          ?g core:referredBy/core:isMentionedIn ?contract .
