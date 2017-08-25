@@ -68,3 +68,8 @@ WHERE
 }
 GROUP BY ?gender
 ```
+
+##### 06. What is the distribution of women/men per profession? (needs profession) (api:03_06_distrib_men_women_per_prof)
+```sparql
+TODO
+```
