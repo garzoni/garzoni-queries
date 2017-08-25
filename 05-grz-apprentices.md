@@ -1,14 +1,14 @@
 
 ### 05. About apprentices.
 
-###### 01. What is the total number of apprentice entities?
+##### 01. What is the total number of apprentice entities?
 ```sparql
 SELECT (COUNT(distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
-###### 02. What is the total number of apprentice entities, with time window?
+##### 02. What is the total number of apprentice entities, with time window?
 ```sparql
 # params: 2 dates
 SELECT (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
@@ -22,14 +22,14 @@ WHERE
 }
 ```
 
-###### 03. What is the total number of apprentice mentions?
+##### 03. What is the total number of apprentice mentions?
 ```sparql
 SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
 { ?pm a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice .}
 ```
 
-###### 04. What is the total number of apprentice mentions, with time window?
+##### 04. What is the total number of apprentice mentions, with time window?
 ```sparql
 SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
