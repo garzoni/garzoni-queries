@@ -1,6 +1,6 @@
 ### 04. About roles
 
-##### 01. What is the role distribution for person mentions 
+##### 01. What is the role distribution for person mentions ?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -18,7 +18,7 @@ GROUP BY ?role ?numberOfMentions ?total
 ORDER BY desc(?percent)
 ```
 
-##### 02. What is the total number of person entities having role X ? 
+##### 02. What is the total number of person entities having role x ? 
 ```sparql
 # param: ?_role (in this ex, apprentice)
 SELECT count (distinct ?pe) AS ?NbEntity
@@ -139,7 +139,7 @@ GROUP BY ?roleType
 ORDER BY ASC (UCASE(str(?pe))) ?year
 ```
 
-##### 09. Give me the apprentices who have the same guarantor in 2 different contracts
+##### 09. Give me the apprentices who have the same guarantor in 2 different contracts.
 ```sparql
 SELECT ?app ?appName ?guar ?guarName ?contract1 AS ?contract ?date1 AS ?date
 WHERE 
