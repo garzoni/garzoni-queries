@@ -100,21 +100,19 @@ ORDER BY DESC(COUNT (distinct ?contract))
 
 ##### 7. Give me all apprentice whose profession contains the string "servir"
 ```sparql
-SELECT ?contract ?dhLink ?app ?appLabel  ?profTranscript ?gender ?age ?ageText ?year
+SELECT ?contract (STR(?contractUUID) AS ?contractUUID) ?DHCLink ?app ?appUUID (STR(?appLabel) AS ?appLabel)  (STR(?pt) AS ?profTranscript) (STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) ?year
 WHERE
 {
-	?app a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice ; 
+	?app a common:PersonMention ; dhc:uuid ?appUUID ; grz-owl:hasRole grz-owl:Apprentice ; 
     	core:isMentionedIn ?contract ;grz-owl:hasName/rdfs:label ?appLabel ; 
-    	grz-owl:hasProfession ?prof ; foaf:gender ?gender .
+    	grz-owl:hasProfession ?prof ; foaf:gender ?g .
 	OPTIONAL {?app foaf:age ?age }
-	OPTIONAL {?app grz-owl:ageText ?ageText }
-	?prof common:transcript ?profTranscript .
-	?profTranscript bif:contains "'servir*'".
-	?contract a grz-owl:Contract; sem:hasTimeStamp ?date ; ^edm:realizes ?page.
-	?page a meta:Page; meta:isImagedBy/iiif:service ?dhLink .
+	OPTIONAL {?app grz-owl:ageText ?at }
+	?prof common:transcript ?pt .
+	?pt bif:contains "'servir*'".
+	?contract a grz-owl:Contract; dhc:uuid ?contractUUID ; sem:hasTimeStamp ?date ; ^edm:realizes ?page.
+	?page a meta:Page; meta:isImagedBy/iiif:service ?DHCLink .
 	BIND (year(?date) AS ?year).
 }
-ORDER BY ASC(?year)
-
-
+ORDER BY ASC(?year) ?appLabel
 ```
