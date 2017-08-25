@@ -1,6 +1,6 @@
 ### 10.  About professions
 
-##### 1. How many profession mentions per profession category?
+##### 01. How many profession mentions per profession category?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -18,7 +18,7 @@ OR
 ORDER BY DESC(COUNT (distinct ?prof))
 ```
 
-##### 2. How many master/app/guar/other mentions have more than 1 profession?
+##### 02. How many master/app/guar/other mentions have more than 1 profession?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -33,7 +33,7 @@ FILTER (?count > 1)
 }
 ```
 
-##### 3. How many person mentions have how many professions? (up to 7!)
+##### 03. How many person mentions have how many professions? (up to 7!)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -48,7 +48,7 @@ WHERE
 ORDER BY ASC(?NumberOfProfessions)
 ```
 
-##### 4. Give me person mentions ordered according to their number of professions.
+##### 04. Give me person mentions ordered according to their number of professions.
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -64,7 +64,7 @@ WHERE
 ORDER BY DESC(?count)
 ```
 
-##### 5. Give me the number of contracts per profession category (considering master professions only)
+##### 05. Give me the number of contracts per profession category (considering master professions only)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -80,7 +80,7 @@ GROUP BY ?profCat
 ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
-##### 6. Same as above with time window
+##### 06. Same as above with time window
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -98,7 +98,7 @@ GROUP BY ?profCat
 ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
-##### 7. Give me all apprentice whose profession contains the string "servir"
+##### 07. Give me all apprentice whose profession contains the string "servir" (or another string)
 ```sparql
 SELECT ?contract (STR(?contractUUID) AS ?contractUUID) ?DHCLink ?app ?appUUID (STR(?appLabel) AS ?appLabel)  (STR(?pt) AS ?profTranscript) (STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) ?year
 WHERE
