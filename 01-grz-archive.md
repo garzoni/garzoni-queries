@@ -87,7 +87,7 @@ GROUP BY ?reg
 ORDER BY ASC (?reg)
 ```
 
-##### 06. What is the number of contracts given a time window? (api:01_06_nb_contract_tw)
+##### 06. What is the total number of contracts between date x and date y? or before/after date x? (api:01_06_nb_contract_tw)
 ```sparql
 # params: ?_date1 ?_date2
 SELECT  (COUNT (?contract) AS ?NbContracts)
@@ -100,7 +100,7 @@ WHERE
 }
 ```
 
-##### 07. Give me all contracts before year Y. (api:01_07_all_contracts_before_year)
+##### 07. Give me all contracts before year x. (api:01_07_all_contracts_before_year)
 ```sparql
 # params: ?_date
 SELECT ( COUNT (?contract) AS ?NbContracts )
