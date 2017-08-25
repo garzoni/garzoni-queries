@@ -1,9 +1,9 @@
 #### 06. About Masters
 
-##### 1. What is the total number of masters? (between date X and date Y? or before/after date X)
+##### 01. What is the total number of masters? (between date X and date Y? or before/after date X)
 Please see question 1 in file 05-grz-apprentices.md and replace grz-owl:Apprentice by grz-owl:Master.
 
-##### 2. How many masters have more than x apprentice?
+##### 02. How many masters have more than x apprentice?
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -14,7 +14,7 @@ GROUP BY ?master
 HAVING (COUNT (distinct ?appStatement) > 1)
 ```
 
-##### 3. Get the list of masters having more than x apprentice.
+##### 03. Get the list of masters having more than x apprentice.
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -25,7 +25,7 @@ GROUP BY ?master ?masterName
 HAVING (COUNT (distinct ?appStatement) > 1)
 ORDER BY DESC(?numberApp)
 ```
-###### With a time window 
+###### 04. Get the list of masters having more than x apprentice, with time window 
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -42,7 +42,7 @@ HAVING (COUNT (distinct ?appStatement) > 1)
 ORDER BY DESC(?numberApp)
 ```
 
-##### 4. How many apprentice do masters have on average in their careers?
+##### 05. How many apprentice do masters have on average in their careers?
 ```sparql
 SELECT AVG (?numberApp)
 WHERE
@@ -60,7 +60,7 @@ GROUP BY ?master
 HAVING (COUNT (distinct ?appStatement) > 1)
 ```
 
-###### With a time window, add:   
+##### 07. How many apprentice do masters have on average in their careers, with time window and given a certain profession category?
 
 ```sparql
 ?appStatement sem:hasBeginTimeStamp ?date .
@@ -110,7 +110,7 @@ GROUP BY ?numberApp
 ORDER BY ASC (?numberApp)
 ```
 
-##### 5. How many masters have how many apprentices?
+##### 08. How many masters have how many apprentices?
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#> 
@@ -130,18 +130,35 @@ WHERE
 ORDER BY ASC (?numberApp)
 ```
 
-###### To add a time window, add this in the innermost SELECT:
+###### 09. How many masters have how many apprentices, with time window ?To add a time window, add this in the innermost SELECT:
+``` sparql
+PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
+PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#> 
 
+SELECT  ?numberApp ( COUNT (distinct ?master) AS ?NbMasters)
+WHERE
+{
+  SELECT ?master ?numberApp
+  WHERE
+  {
+    SELECT ?master COUNT (distinct ?appStatement) AS ?numberApp
+    WHERE {
+      ?master a common:Person; common:hasApprentice ?appStatement. 
+      ? appStatement sem:hasBeginTimeStamp ?date .
+      FILTER (year(?date) > 1600 AND year(?date) < 1700) }
+      GROUP BY ?master
+  }
+  GROUP BY ?numberApp
+}
+ORDER BY ASC (?numberApp)
 ```
-? appStatement sem:hasBeginTimeStamp ?date .
-FILTER (year(?date) > 1600 AND year(?date) < 1700)
+
+###### 10. How many masters have how many apprentices, with time window and a specific profession category. 
+```sparql
+TODO
 ```
 
-###### TODO: add filter by profession category
-
-
-##### 6. Given a master, give the timeline of his students' enrolement.
-###### with master's URL
+##### 11. Given a master with URL x, give the timeline of his students' enrolment.
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -157,7 +174,7 @@ GROUP BY ?app
 ORDER BY ASC(?date)
 ```
 
-###### with master's name
+###### 12. Given a master with name x, give the timeline of his students' enrolment.
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
