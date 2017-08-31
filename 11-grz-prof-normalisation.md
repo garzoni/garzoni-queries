@@ -1,6 +1,6 @@
 ### 11. About profession normalisation
 
-##### 1. Give me information on number of profession mentions: total, with or without transcript (TR, NoTR), standardForm (SF, NoSF), category (CAT, NoCat):
+##### 01. Give me information on number of profession mentions: total, with or without transcript (TR, NoTR), standardForm (SF, NoSF), category (CAT, NoCat) (api:11_01_info_prof_mention_numbers)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -37,7 +37,7 @@ WHERE
 }
 ```
 
-##### 2. Display TR/SF/CAT of all profession mentions, grouped and alphabetically ordered by transcripts
+##### 02. Display TR/SF/CAT of all profession mentions, grouped and alphabetically ordered by transcripts (api:11_02_tr_sf_cat_prof_mentions)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -53,7 +53,7 @@ GROUP BY ?ProfTrancript
 ORDER BY ASC(?ProfTrancript)
 ```
 
-##### 3. Give me the number of unique transcripts that do not have SF nor CAT.
+##### 03. Give me the number of unique transcripts that do not have SF nor CAT. (api:11_03_nb_profTrans_NOsf_NOcat)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -67,7 +67,7 @@ WHERE
 }
 ```
 
-##### 4. Give me the list of unique transcripts that do not have SF nor CAT.
+##### 04. Give me the list of unique transcripts that do not have SF nor CAT. (api:11_04_profTrans_NOsf_NOcat)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -82,7 +82,7 @@ SELECT  distinct ?ProfTR
 ORDER BY ASC(?ProfTR)
 ```
 
-##### 5. Give me the profession transcripts of Master and Apprentices when different (there are still duplicates, if one desires only unique across master and app prof,  should do a uniq on the file)
+##### 05. Give me the profession transcripts of Master and Apprentices when different (there are still duplicates, if one desires only unique across master and app prof,  should do a uniq on the file) (api:11_05_diff_profTrans_of_master_and_app)
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -104,7 +104,7 @@ GROUP BY (?year)
 ORDER BY ASC(?year)
 ```
 
-###### With link towards dhcanvas:
+##### 06. With link towards dhcanvas. (api:11_05_diff_profTrans_of_master_and_app_withDHCLink)
 
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
@@ -129,13 +129,13 @@ GROUP BY (?year)
 ORDER BY ASC(?year)
 ```
 
-##### 6. Get the list of profession categories (existing in dataset)
+##### 07. Get the list of profession categories (existing in dataset) (api:11_07_profCat)
 ```sparql
 SELECT distinct ?profcat
 WHERE {?prof grz-owl:professionCategory ?profcat .}
 ```
 
-##### 7. Get list of transcripts (TR), standard forms (SF), profession categories, AND suggestedStandardForms and suggested profession categories
+##### 08. Get list of transcripts (TR), standard forms (SF), profession categories, AND suggestedStandardForms and suggested profession categories (api:11_05_prof_tr_sf_cat_suggestedSF)
 ``` sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>

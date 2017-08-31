@@ -23,7 +23,7 @@ WHERE
 ORDER BY ASC(?year)
 ```
 
-##### 02. Get all locations, with indication of what they qualify.
+##### 02. Get all locations, with indication of what they qualify. (api:12_02_loc_with_targets)
 ```sparql
 SELECT ?pl ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
@@ -39,7 +39,7 @@ WHERE
 } 
 ```
 
-##### 03. Get all locations, with indication of what they qualify (distinct)
+##### 03. Get all locations, with indication of what they qualify (distinct). (api:12_03_loc_with_distinct_targets)
 ```sparql
 SELECT distinct ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
@@ -56,7 +56,7 @@ WHERE
 GROUP BY ?qualified ?trans ?standard ?labelParish ?sestiere
 ```
 
-##### 04. Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly)
+##### 04. Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly) (api:12_04_loc_geoOrigins)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?GeoOriginPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
@@ -71,7 +71,7 @@ GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 05. Get locations as object of grz-owl:geographicalOrigins, with lowercase distinct transcript and standard form and without place entity url.
+##### 05. Get locations as object of grz-owl:geographicalOrigins, with lowercase distinct transcript and standard form and without place entity url. (api:12_05_loc_geoOrigins_distinct)
 ```sparql
 SELECT distinct ?TranscriptGeoOrigin  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
 WHERE 
@@ -86,7 +86,8 @@ GROUP BY ?TranscriptGeoOrigin ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
 ```
 
-###### 06. Get locations as object of grz-owl:geographicalOrigins, with lowercase distinct standard form and without transcript (=> for place entity creation)
+##### 06. Get locations as object of grz-owl:geographicalOrigins, with lowercase distinct standard form and without transcript (=> for place entity creation) (api:12_06_loc_geoOrigins_distinct_noTrans)
+
 ```sparql 
 SELECT ?pl ?Standard ?parish ?sestiere 
 WHERE 
@@ -100,7 +101,7 @@ WHERE
 ORDER BY ASC(?Transcript)
 ```
 
-##### 07. Get locations as object of grz-owl:hasResidence (of masters mainly)
+##### 07. Get locations as object of grz-owl:hasResidence (of masters mainly) (api:12_07_loc_residence)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?ResidencePlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
@@ -115,7 +116,7 @@ GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 08. Get locations as object of grz-owl:hasResidence (of masters mainly), with lowercase distinct transcripts and standard forms and without place entity urls.
+##### 08. Get locations as object of grz-owl:hasResidence (of masters mainly), with lowercase distinct transcripts and standard forms and without place entity urls. (api:12_08_loc_residence_distinct)
 ```sparql
 SELECT distinct ?TranscriptResidence  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
 WHERE 
@@ -130,7 +131,7 @@ GROUP BY ?TranscriptResidence ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 09. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions)
+##### 09. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions) (api:12_09_loc_location)
 ```sparql
 SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?WorkshopPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
 WHERE 
@@ -146,7 +147,7 @@ ORDER BY ASC(?Transcript)
 ```
 
 
-##### 10. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions), with lowercase distinct transcripts and standard forms and without place entity urls.
+##### 10. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions), with lowercase distinct transcripts and standard forms and without place entity urls. (api:12_10_loc_location_distinct)
 ```sparql
 SELECT distinct ?TranscriptLocation  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
 WHERE 
@@ -162,28 +163,28 @@ ORDER BY ASC(?Transcript)
 ```
 
 
-##### 11. Get distinct standardforms from geoOrigins property.
+##### 11. Get distinct standardforms from geoOrigins property. (api:12_11_geoOrigins_distinct_sf)
 ```sparql
 SELECT distinct STR(?standard) AS ?p
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
-###### 12. Get distinct standardforms from residence property.
+##### 12. Get distinct standardforms from residence property. (api:12_12_residence_distinct_sf)
 ```sparql
 SELECT distinct STR(?standard) AS ?p
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasResidence ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
-###### 13. Get distinct standardforms from location property.
+##### 13. Get distinct standardforms from location property. (api:12_13_location_distinct_sf)
 ```sparql
 SELECT distinct STR(?standard) AS ?p
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasLocation ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
-##### 14. Get parishes with their labels.
+##### 14. Get parishes with their labels. (api:12_14_parishes)
 ```sparql
 SELECT ?p ?lp ?alt1 ?alt2
 WHERE 
@@ -198,3 +199,4 @@ WHERE
 } 
 GROUP BY ?p
 ORDER BY ASC (?lp)
+```

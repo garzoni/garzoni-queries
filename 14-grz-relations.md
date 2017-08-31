@@ -1,11 +1,17 @@
 ### 14. About person relations.
 
-##### 1. Give me all persons having a relation with person x.
+##### 01. Give me all persons having a relation with person x. (api:14_01_)
+```sparql
 
-##### 2. Find all persons and their connection (foaf:knows) between minYear and maxYear
+```
+
+##### 02. Find all persons and their connection (foaf:knows) between minYear and maxYear
+```sparql
+
+```
 
 
-##### 3. Get relations and their respective occurrence number
+##### 03. Get relations and their respective occurrence number (api:14_03_about_rel)
 ```sparql
 PREFIX wikiba: <http://wikiba.se/ontology#>
 

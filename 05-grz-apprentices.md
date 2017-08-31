@@ -1,14 +1,15 @@
 
 ### 05. About apprentices.
 
-##### 01. What is the total number of apprentice entities?
+##### 01. What is the total number of apprentice entities? (api:05_01_nb_app_entities)
+
 ```sparql
 SELECT (COUNT(distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
-##### 02. What is the total number of apprentice entities, with time window?
+##### 02. What is the total number of apprentice entities, with time window? (api:05_02_nb_app_entities_withTW)
 ```sparql
 # params: 2 dates
 SELECT (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
@@ -22,14 +23,14 @@ WHERE
 }
 ```
 
-##### 03. What is the total number of apprentice mentions?
+##### 03. What is the total number of apprentice mentions? (api:05_03_nb_app_mentions)
 ```sparql
 SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
 { ?pm a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice .}
 ```
 
-##### 04. What is the total number of apprentice mentions, with time window?
+##### 04. What is the total number of apprentice mentions, with time window? (api:05_04_nb_app_mentions_withTW)
 ```sparql
 SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
@@ -42,7 +43,7 @@ WHERE
 }
 ```
 
-##### 05. Get the number of apprentices (entity) over the years.
+##### 05. Get the number of apprentices (entity) over the years. (api:05_05_distrib_app_per_year)
 ```sparql
 SELECT ?year (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
@@ -56,7 +57,7 @@ GROUP BY ?year
 ORDER BY ASC (?year)
 ```
 
-###### 06. What is the distribution of apprentices' ages over the years (based on mentions)?
+##### 06. What is the distribution of apprentices' ages over the years (based on mentions)? (api:05_05_distrib_app_ages_per_year)
 ```sparql
 SELECT ?age COUNT (distinct ?app) 
 WHERE
@@ -69,7 +70,7 @@ GROUP BY ?age
 ORDER BY ASC (?age)
 ```
 
-###### 07. What is the distribution of apprentices' ages over the years, with a certain profession category (based on mentions)?
+##### 07. What is the distribution of apprentices' ages over the years, with a certain profession category (based on mentions)? (api:05_07_distrib_app_ages_per_year_with_prof_x)
 N.B: not all professions have a category. This is therefore a partial view.
 ```sparql
 # params: ?_prof_cat
@@ -84,7 +85,8 @@ WHERE
 GROUP BY ?age
 ORDER BY ASC (?age)
 ```
-###### 08. Same as query 07, with time window.
+
+##### 08. Same as query 07, with time window. (api:05_08_distrib_app_ages_per_year_with_prof_x_withTW)
 ```sparql
 # params: ?_prof_cat, ?_date_start ?_date_end
 SELECT ?age COUNT (distinct ?app) 
@@ -104,7 +106,7 @@ GROUP BY ?age
 ORDER BY ASC (?age)
 ```
 
-###### 09. What is the average age of apprentices (all, for ages indicated in integers)?
+##### 09. What is the average age of apprentices (all, for ages indicated in integers)? (api:05_09_avg_app_age)
 ```sparql
 SELECT AVG (?age)
 WHERE
@@ -115,7 +117,7 @@ WHERE
 }
 ```
 
-###### 10. What is the average age of apprentices having profession category x?
+##### 10. What is the average age of apprentices having profession category x? (api:05_10_avg_app_age_with_prof_x)
 ```sparql
 # params: ?_prof_cat
 SELECT AVG (?age)
@@ -127,7 +129,7 @@ WHERE
 }
 ```
 
-###### 11. What is the average age of apprentices having profession category x, with time window?
+##### 11. What is the average age of apprentices having profession category x, with time window? (api:05_11_avg_app_age_with_prof_x_withTW)
 ```sparql
 # params: ?_prof_cat, ?_date_start ?_date_end
 SELECT AVG (?age)
@@ -144,7 +146,7 @@ WHERE
 }
 ```
 
-##### 12. Get the apprentices who are mentioned in more than x contracts.
+##### 12. Get the apprentices who are mentioned in more than x contracts. (api:05_12_app_with_several_mentions)
 ```sparql
 # params: ?_nbappMentions
 SELECT ?app ?appName (COUNT (distinct ?appMention) AS ?nbMentions)
@@ -159,7 +161,7 @@ HAVING  COUNT (distinct ?appMention) > 2
 ORDER BY DESC (COUNT (distinct ?appMention))
 ```
 
-##### 13. Who are the apprentices mentioned in more than 1 contract with different roles?
+##### 13. Who are the apprentices mentioned in more than 1 contract with different roles? (api:05_12_app_with_several_mentions_with_several_roles)
 ```sparql
 SELECT ?app ?appName (COUNT (distinct ?appMention) AS ?nbMentions)
 WHERE

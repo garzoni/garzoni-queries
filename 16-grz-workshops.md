@@ -1,12 +1,12 @@
 ### 16. About workshops
 
-##### 1. How many workshops are there in the DB? (= mentions of)
+##### 01. How many workshops are there in the DB? (= mentions of) (api:16_01_nb_workshops)
 ```sparql
 SELECT COUNT (distinct ?ws) 
 WHERE { ?ws a grz-owl:WorkshopMention } 
 ```
 
-##### 2. Who has a workshop?
+##### 02. Who has a workshop? (api:16_02_workshop_owner_roles)
 ```sparql
 SELECT ?role (COUNT (distinct ?pm) AS ?PersonMentionWithWorkshop)
 WHERE 
@@ -18,7 +18,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
  
   ```
 
-##### 3. How many masters are associated with a workshop or *not*?
+##### 03. How many masters are associated with a workshop or *not*? (api:16_03_nb_master_with_workshop)
 ```sparql
 SELECT ?MasterWithWorkshop ?MasterWithoutWorkshop
 WHERE 
@@ -37,7 +37,7 @@ WHERE
 } 
 ```
 
-##### 4. How many workshops have and have *not* the information of their places?
+##### 04. How many workshops have and have *not* the information of their places? (api:16_03_nb_workshop_with_place)
 ```sparql
 SELECT ?WorkshopWithPlaceInfo ?WorkshopWithoutPlaceInfo
 WHERE 
