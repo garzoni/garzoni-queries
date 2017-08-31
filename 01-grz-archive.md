@@ -150,5 +150,14 @@ WHERE
 }
 ORDER BY ASC(?contractPerPage)
 ```
+##### 11. Give me some information about the registers? (api:10_11_info_register)
+```sparql
+SELECT ?reg STR(?label) AS ?label ?start ?end STR(?pageNb) AS ?pageNb
+WHERE 
+{ 
+  ?reg a meta:Register ; sem:hasBeginTimeStamp  ?start ;  sem:hasEndTimeStamp ?end ; rdfs:label ?label ; dhc:pageCount ?pageNb .
+}
+ORDER BY ?reg
+```
 
 
