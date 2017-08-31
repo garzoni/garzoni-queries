@@ -101,19 +101,43 @@ ORDER BY DESC(COUNT (distinct ?contract))
 
 ##### 07. Give me all apprentices whose profession contains the string "servir" (or another string) (api:10_07_app_withProf_withString)
 ```sparql
-SELECT ?contract (STR(?contractUUID) AS ?contractUUID) ?DHCLink ?app ?appUUID (STR(?appLabel) AS ?appLabel)  (STR(?pt) AS ?profTranscript) (STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) ?year
+SELECT (STR(?contractUUID) AS ?contractUUID) (STR(?appUUID) AS ?appUUID) ?DHCLink 
+(?app AS ?appLODVIEW) (STR(?appLabel) AS ?appLabel) (GROUP_CONCAT(?otherProfTR;separator=" // ") as ?appProfTranscripts) 
+(STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) (STR(?appGeoOriginTranscript) AS ?appGeoOriginTranscript) 
+(STR(?appGeoOriginStandardForm) AS ?appGeoOriginStandardForm ) (STR(?ptMaster) AS ?profMasterTranscript) 
+(STR(?ptsf) AS ?profMasterStandardForm) ?year STR(?date) AS ?fullDate
 WHERE
 {
-	?app a common:PersonMention ; dhc:uuid ?appUUID ; grz-owl:hasRole grz-owl:Apprentice ; 
-    	core:isMentionedIn ?contract ;grz-owl:hasName/rdfs:label ?appLabel ; 
-    	grz-owl:hasProfession ?prof ; foaf:gender ?g .
+	# info app
+	?app dhc:uuid ?appUUID ; core:isMentionedIn ?contract ; grz-owl:hasName/rdfs:label ?appLabel .
+        OPTIONAL {?app foaf:gender ?g .}
 	OPTIONAL {?app foaf:age ?age }
 	OPTIONAL {?app grz-owl:ageText ?at }
-	?prof common:transcript ?pt .
-	?pt bif:contains "'servir*'".
-	?contract a grz-owl:Contract; dhc:uuid ?contractUUID ; sem:hasTimeStamp ?date ; ^edm:realizes ?page.
+        OPTIONAL {?app grz-owl:hasGeographicalOrigin ?appGeoOrigin.
+                 ?appGeoOrigin common:transcript ?appGeoOriginTranscript .
+                 OPTIONAL {?appGeoOrigin common:standardForm ?appGeoOriginStandardForm} }
+         
+	# get other professions
+        OPTIONAL {?app grz-owl:hasProfession ?otherProf .
+	?otherProf common:transcript ?otherProfTR .}
+         
+        
+	# info contract
+	?contract a grz-owl:Contract; dhc:uuid ?contractUUID ; sem:hasTimeStamp ?date ; ^edm:realizes ?page ; core:hasMention ?master .
 	?page a meta:Page; meta:isImagedBy/iiif:service ?DHCLink .
 	BIND (year(?date) AS ?year).
+
+        # info master 
+        ?master grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession ?profMaster .
+        ?profMaster common:transcript ?ptMaster .
+        OPTIONAL { ?profMaster common:standardForm ?ptsf.}
+	
+	# nested query to select app with "servir"
+	{SELECT ?app  ?profTR
+	WHERE {?app a common:PersonMention ;  grz-owl:hasRole grz-owl:Apprentice ;  grz-owl:hasProfession ?prof.
+		?prof common:transcript ?profTR .
+		?profTR bif:contains "'servir*'".}
+	}
 }
-ORDER BY ASC(?year) ?appLabel
+ORDER BY ASC(?date) ?appLabel
 ```
