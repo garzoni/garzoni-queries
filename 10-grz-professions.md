@@ -99,8 +99,11 @@ ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
 ##### 07. Give me all apprentice whose profession contains the string "servir" (or another string)
-```sparql
-SELECT (STR(?contractUUID) AS ?contractUUID) (STR(?appUUID) AS ?appUUID) ?DHCLink (?app AS ?appLODVIEW) (STR(?appLabel) AS ?appLabel) (GROUP_CONCAT(?otherProfTR;separator=" // ") as ?appProfTranscripts) (STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) (STR(?appGeoOriginTranscript) AS ?appGeoOriginTranscript) (STR(?appGeoOriginStandardForm) AS ?appGeoOriginStandardForm ) (STR(?ptMaster) AS ?profMasterTranscript) (STR(?ptsf) AS ?profMasterStandardForm) ?year STR(?date) AS ?fullDate
+```sparqlSELECT (STR(?contractUUID) AS ?contractUUID) (STR(?appUUID) AS ?appUUID) ?DHCLink 
+(?app AS ?appLODVIEW) (STR(?appLabel) AS ?appLabel) (GROUP_CONCAT(?otherProfTR;separator=" // ") as ?appProfTranscripts) 
+(STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) (STR(?appGeoOriginTranscript) AS ?appGeoOriginTranscript) 
+(STR(?appGeoOriginStandardForm) AS ?appGeoOriginStandardForm ) (STR(?ptMaster) AS ?profMasterTranscript) 
+(STR(?ptsf) AS ?profMasterStandardForm) ?year STR(?date) AS ?fullDate
 WHERE
 {
 	# info app
@@ -134,5 +137,5 @@ WHERE
 		?profTR bif:contains "'servir*'".}
 	}
 }
-ORDER BY ASC(?year) ?appLabel
+ORDER BY ASC(?date) ?appLabel
 ```
