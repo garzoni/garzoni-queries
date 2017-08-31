@@ -99,7 +99,8 @@ ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
 ##### 07. Give me all apprentice whose profession contains the string "servir" (or another string)
-```sparqlSELECT (STR(?contractUUID) AS ?contractUUID) (STR(?appUUID) AS ?appUUID) ?DHCLink 
+```sparql
+SELECT (STR(?contractUUID) AS ?contractUUID) (STR(?appUUID) AS ?appUUID) ?DHCLink 
 (?app AS ?appLODVIEW) (STR(?appLabel) AS ?appLabel) (GROUP_CONCAT(?otherProfTR;separator=" // ") as ?appProfTranscripts) 
 (STR(?g) AS ?gender) ?age (STR(?at) AS ?ageText) (STR(?appGeoOriginTranscript) AS ?appGeoOriginTranscript) 
 (STR(?appGeoOriginStandardForm) AS ?appGeoOriginStandardForm ) (STR(?ptMaster) AS ?profMasterTranscript) 
