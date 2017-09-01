@@ -168,7 +168,7 @@ WHERE
 }
 ```
 
-##### 10. How many pages have how many contracts? (api:10_10_distrib_contracts_page)
+##### 10. How many pages have how many contracts? (api:01_10_distrib_contracts_page)
 ```sparql
 #+ tags:
 #+   - number
