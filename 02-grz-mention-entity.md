@@ -23,8 +23,6 @@ WHERE { ?pe a common:Person .}
 #+ tags:
 #+   - table
 #+   - mentions
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
 SELECT ( COUNT (distinct ?pe) AS ?NbPersonEntities) ?mentionCount
 WHERE
@@ -32,8 +30,7 @@ WHERE
 	SELECT ?pe (COUNT (distinct ?pm)  AS ?mentionCount)
 	WHERE
 	{
-	    ?pm core:refersTo ?pe .
-	    ?pm a common:PersonMention .
+	    ?pm a common:PersonMention ; core:refersTo ?pe .
 	    ?pe a common:Person .
 	}
 	GROUP BY ?pe
@@ -47,8 +44,6 @@ ORDER BY ASC(?mentionCount)
 #+ tags:
 #+   - number
 #+   - mentions
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
 SELECT (AVG (?mentionCount) AS ?AvgPersonMention)
 WHERE
@@ -175,9 +170,6 @@ ORDER BY DESC (count(distinct ?pm))
 #+	- mentions
 #+ params: ?_times
 
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
-
 SELECT  ?roleType COUNT (distinct ?pe)
 WHERE
 {
@@ -197,7 +189,6 @@ GROUP BY ?roleType
 #+ tags:
 #+	- table
 #+	- mentions
-
 
 SELECT ?pe COUNT (distinct ?pm)
 WHERE
