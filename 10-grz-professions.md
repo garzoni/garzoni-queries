@@ -1,6 +1,6 @@
 ### 10.  About professions
 
-##### 01. How many profession mentions per profession category? (api:10_01_distrib_nbProf_per_profCat)
+##### 01. How many profession mentions per profession category? (api:10_prof_01_distrib_nbProf_per_profCat)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -18,7 +18,7 @@ OR
 ORDER BY DESC(COUNT (distinct ?prof))
 ```
 
-##### 02. How many master/app/guar/other mentions have more than 1 profession? (api:10_02_nbPers_with_role_x_with_several_prof)
+##### 02. How many master/app/guar/other mentions have more than 1 profession? (api:10_prof_02_nbPers_with_role_x_with_several_prof)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -33,7 +33,7 @@ FILTER (?count > 1)
 }
 ```
 
-##### 03. How many person mentions have how many professions? (up to 7!) (api:10_03_nbPers_several_prof)
+##### 03. How many person mentions have how many professions? (up to 7!) (api:10_prof_03_nbPers_several_prof)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -48,7 +48,7 @@ WHERE
 ORDER BY ASC(?NumberOfProfessions)
 ```
 
-##### 04. Give me person mentions ordered according to their number of professions. (api:10_04_pers_several_prof)
+##### 04. Give me person mentions ordered according to their number of professions. (api:10_prof_04_pers_several_prof)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -64,7 +64,7 @@ WHERE
 ORDER BY DESC(?count)
 ```
 
-##### 05. Give me the number of contracts per profession category (considering master professions only) (api:10_05_nbContract_per_profCat)
+##### 05. Give me the number of contracts per profession category (considering master professions only) (api:10_prof_05_nbContract_per_profCat)
 
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
@@ -81,7 +81,7 @@ GROUP BY ?profCat
 ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
-##### 06. Same as above with time window (api:10_06_nbContract_per_profCat_withTW)
+##### 06. Same as above with time window (api:10_prof_06_nbContract_per_profCat_withTW)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -99,7 +99,7 @@ GROUP BY ?profCat
 ORDER BY DESC(COUNT (distinct ?contract))
 ```
 
-##### 07. Give me all apprentices whose profession contains the string "servir" (or another string) (api:10_07_app_withProf_withString)
+##### 07. Give me all apprentices whose profession contains the string "servir" (or another string) (api:10_prof_07_app_withProf_withString)
 ```sparql
 SELECT (STR(?contractUUID) AS ?contractUUID) (STR(?appUUID) AS ?appUUID) ?DHCLink 
 (?app AS ?appLODVIEW) (STR(?appLabel) AS ?appLabel) (GROUP_CONCAT(?otherProfTR;separator=" // ") as ?appProfTranscripts) 

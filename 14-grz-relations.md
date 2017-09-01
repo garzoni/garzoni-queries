@@ -1,6 +1,6 @@
 ### 14. About person relations.
 
-##### 01. Give me all persons having a relation with person x. (api:14_01_)
+##### 01. Give me all persons having a relation with person x. (api:14_rel_01_)
 ```sparql
 
 ```
@@ -11,7 +11,7 @@
 ```
 
 
-##### 03. Get relations and their respective occurrence number (api:14_03_about_rel)
+##### 03. Get relations and their respective occurrence number (api:14_rel_03_about_rel)
 ```sparql
 PREFIX wikiba: <http://wikiba.se/ontology#>
 

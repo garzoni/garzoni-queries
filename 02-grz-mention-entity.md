@@ -1,6 +1,6 @@
 ### 02. About person mentions and person entities
 
-##### 01. What is the total number of person mentions? (api:02_01_pm_total)
+##### 01. What is the total number of person mentions? (api:02_mentions_01_pm_total)
 ```sparql
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
@@ -8,7 +8,7 @@ SELECT ( COUNT (distinct ?pm) AS ?NbPersMention )
 WHERE { ?pm a common:PersonMention .}
 ```
 
-##### 02. What is the total number of person entities? (api:02_02_pe_total)
+##### 02. What is the total number of person entities? (api:02_mentions_02_pe_total)
 ```sparql
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
 
@@ -16,7 +16,7 @@ SELECT ( COUNT (distinct ?pe) AS ?NbPersEntities )
 WHERE { ?pe a common:Person .}
 ```
 
-##### 03. How many person entities have how many mentions? (api:02_03_pe_pm_proportions)
+##### 03. How many person entities have how many mentions? (api:02_mentions_03_pe_pm_proportions)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -37,7 +37,7 @@ GROUP BY ?mentionCount
 ORDER BY ASC(?mentionCount)
 ```
 
-##### 04. What is the average number of mentions per person entity? (api:02_04_avg_pm_per_pe)
+##### 04. What is the average number of mentions per person entity? (api:02_mentions_04_avg_pm_per_pe)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -55,7 +55,7 @@ WHERE
 }
 ```
 
-##### 05. How many person entities have more than x mentions? (api:02_05_count_pe_with_more_x_mentions)
+##### 05. How many person entities have more than x mentions? (api:02_mentions_05_count_pe_with_more_x_mentions)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -74,7 +74,7 @@ WHERE
 }
 ```
 
-##### 06.  Give me all mentions of person entity with id x. (api:02_06_get_pm_of_pe_with_id)
+##### 06.  Give me all mentions of person entity with id x. (api:02_mentions_06_get_pm_of_pe_with_id)
 ```sparql
 SELECT ?pm
 WHERE
@@ -86,7 +86,7 @@ WHERE
 }
 ```
 
-##### 07. Give me all mentions of person entity with name x. (api:02_07_get_pm_of_pe_with_name)
+##### 07. Give me all mentions of person entity with name x. (api:02_mentions_07_get_pm_of_pe_with_name)
 ```sparql
 SELECT ?pm
 WHERE
@@ -98,7 +98,7 @@ WHERE
 }
 ```
 
-##### 08. Who are the 10 most mentioned person entities? (api:02_08_get_10_most_mentioned_pe)
+##### 08. Who are the 10 most mentioned person entities? (api:02_mentions_08_get_10_most_mentioned_pe)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -114,7 +114,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 LIMIT 10
 ```
 
-##### 09. Get the top-10/x most mentioned person entities with time window. (api:02_09_get_10_most_mentioned_pe_withTW)
+##### 09. Get the top-10/x most mentioned person entities with time window. (api:02_mentions_09_get_10_most_mentioned_pe_withTW)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -134,7 +134,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 LIMIT 10
 ```
 
-##### 10. Who are the person entities mentioned more than X time? (api:02_10_get_pe_mentioned_more_than)
+##### 10. Who are the person entities mentioned more than X time? (api:02_mentions_10_get_pe_mentioned_more_than)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -150,7 +150,7 @@ HAVING (count(distinct ?pm) > 5)
 ORDER BY DESC (count(distinct ?pm))
 ```
 
-##### 11. What is the distribution of roles of person entities mentioned more than X times? (api:02_11_get_role_distrib_of_pe_mentioned_more_than)
+##### 11. What is the distribution of roles of person entities mentioned more than X times? (api:02_mentions_11_get_role_distrib_of_pe_mentioned_more_than)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -170,7 +170,7 @@ WHERE
 GROUP BY ?roleType 
 ```
 
-##### 12. Get number of mentions per entity (api:02_12_get_nb_pm_per_pe)
+##### 12. Get number of mentions per entity (api:02_mentions_12_get_nb_pm_per_pe)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>

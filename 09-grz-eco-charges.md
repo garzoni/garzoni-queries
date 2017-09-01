@@ -1,6 +1,6 @@
 ### 09. About charges
 
-##### 1. What kind of charges is there and with which frequency? (api:09_01_charges_with_freq)
+##### 1. What kind of charges is there and with which frequency? (api:09_charge_01_charges_with_freq)
 ```sparql
 SELECT (str(?tr) AS ?Charge) ( COUNT (?ch) AS ?NbCharge ) 
 WHERE 
@@ -12,7 +12,7 @@ GROUP BY (str(?tr))
 ORDER BY DESC ( COUNT (?ch))
 ```
 
-##### 2. How many charge have a location or not? (api:09_02_charges_with_loc)
+##### 2. How many charge have a location or not? (api:09_charge_02_charges_with_loc)
 ```sparql
 SELECT ?NbChargeWithoutLoc ?NbChargeWithLoc
 WHERE
@@ -27,7 +27,7 @@ WHERE{ ?chargeWith  a grz-owl:ChargeMention ; grz-owl:hasLocation ?location }}
 }
 ```
 
-##### 3. Overview of the locations of charges (api:09_03_charge_overview)
+##### 3. Overview of the locations of charges (api:09_charge_03_charge_overview)
 ```sparql
 SELECT STR(?chargeTranscript) AS ?chargeTranscript STR(?locationTranscript) AS ?locationTranscript ?parish ?sestriere
 WHERE
@@ -41,7 +41,7 @@ WHERE
 }
 ```
 
-##### 4. What is the role of the persons having a charge? (api:09_04_role_of_pers_with_charge)
+##### 4. What is the role of the persons having a charge? (api:09_charge_04_role_of_pers_with_charge)
 ```sparql
 SELECT ?role (COUNT (distinct ?charge) AS ?NbPersonWithCharge )
 WHERE
@@ -54,7 +54,7 @@ WHERE
 GROUP BY (?role)
 ```
 
-##### 5. Give me information about ‘worksFor’ property. (api:09_05_info_worksFor)
+##### 5. Give me information about ‘worksFor’ property. (api:09_charge_05_info_worksFor)
 ```sparql
 SELECT  str(?p2) AS ?WorkFor (COUNT (?p1) AS ?NbPersonMentions)
 WHERE 

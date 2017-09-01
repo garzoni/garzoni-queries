@@ -1,6 +1,6 @@
 ### 04. About roles
 
-##### 01. What is the role distribution for person mentions? (api:04_01_role_distrib_per_pm)
+##### 01. What is the role distribution for person mentions? (api:04_roles_01_role_distrib_per_pm)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -18,7 +18,7 @@ GROUP BY ?role ?numberOfMentions ?total
 ORDER BY desc(?percent)
 ```
 
-##### 02. What is the total number of person entities having role x ? (api:04_02_nb_pe_with_role_x)
+##### 02. What is the total number of person entities having role x ? (api:04_roles_02_nb_pe_with_role_x)
 ```sparql
 # param: ?_role (in this ex, apprentice)
 SELECT count (distinct ?pe) AS ?NbEntity
@@ -26,7 +26,7 @@ WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
 ```
 
-##### 03. What is the total number of person entities having role x, with time window? (api:04_03_nb_pe_with_role_x_witTW)
+##### 03. What is the total number of person entities having role x, with time window? (api:04_roles_03_nb_pe_with_role_x_witTW)
 ```sparql 
 # param: ?_role (in this ex, apprentice)
 SELECT ?year count (distinct ?pe) AS ?NbApprenticeEntity
@@ -41,7 +41,7 @@ GROUP BY ?year
 ORDER BY ASC (?year)
 ```
 
-##### 04. What is the role distribution per gender (on entities)? (api:04_04_role_distrib_per_gender)
+##### 04. What is the role distribution per gender (on entities)? (api:04_roles_04_role_distrib_per_gender)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -58,7 +58,7 @@ WHERE
 GROUP BY ?role 
 ```
 
-##### 05. Role distribution: Give me an overview of all and per gender (api:04_05_role_distrib_overview)
+##### 05. Role distribution: Give me an overview of all and per gender (api:04_roles_05_role_distrib_overview)
 ```sparql
 PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
 PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
@@ -87,7 +87,7 @@ WHERE
 GROUP BY ?role ?countMentions ?total
 ```
   
-##### 06. Give me all person entities having a the double role master/apprentice. (api:04_06_pe_with_doubleRole)
+##### 06. Give me all person entities having a the double role master/apprentice. (api:04_roles_06_pe_with_doubleRole)
 ```sparql
 # N.B: roles can be changed/added
 SELECT ?pe COUNT (distinct ?pm) AS ?nbMentions
@@ -101,7 +101,7 @@ HAVING  COUNT (distinct ?pm) > 1
 ORDER BY DESC (COUNT (distinct ?pm))
 ```
 
-##### 07. How many entities have a double role? (api:04_07_nb_pe_with_doubleRole)
+##### 07. How many entities have a double role? (api:04_roles_07_nb_pe_with_doubleRole)
 ```sparql
 # N.B: roles can be changed/added
 SELECT COUNT (distinct ?pe)
@@ -111,7 +111,7 @@ WHERE
 }
 ```
 
-##### 08. Give me the details person/role/date for person entities having both apprentice and master roles. (api:04_08_details_pe_with_doubleRole)
+##### 08. Give me the details person/role/date for person entities having both apprentice and master roles. (api:04_roles_08_details_pe_with_doubleRole)
 ```sparql
 # N.B.: more role can be added (e.g. guarantor)
 # For counting, replace the first line by SELECT COUNT distinct ?pe
@@ -139,7 +139,7 @@ GROUP BY ?roleType
 ORDER BY ASC (UCASE(str(?pe))) ?year
 ```
 
-##### 09. Give me the apprentices who have the same guarantor in 2 different contracts. (api:04_09_app_with_sameGuar_across_contracts)
+##### 09. Give me the apprentices who have the same guarantor in 2 different contracts. (api:04_roles_09_app_with_sameGuar_across_contracts)
 
 ```sparql
 SELECT ?app ?appName ?guar ?guarName ?contract1 AS ?contract ?date1 AS ?date
@@ -157,7 +157,7 @@ GROUP BY ?app ?guar ?guarName ?appName
 ORDER BY ?app
 ```
 
-##### 10. TO BE REVISED WITH PROFESSION THESAURUS - Number of guarantor per contract given a profession. (api:04_10_nb_guar_per_contract_with_prof_x)
+##### 10. TO BE REVISED WITH PROFESSION THESAURUS - Number of guarantor per contract given a profession. (api:04_roles_10_nb_guar_per_contract_with_prof_x)
 
 ```sparql
 SELECT ?numberOfGuar COUNT (distinct ?app)
