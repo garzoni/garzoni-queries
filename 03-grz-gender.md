@@ -2,6 +2,9 @@
 
 ##### 01. How many person entities have a gender information or not? (api:03_gender_01_nb_pe_with_genderInfo)
 ```sparql
+#+ tags:
+#+   - gender
+
 SELECT ?with ?without
 WHERE
 { 
@@ -12,17 +15,23 @@ WHERE
 
 ##### 02. What is the total number of person entities with gender female/male? (api:03_gender_02_nb_pe_with_gender)
 ```sparql
+#+ tags:
+#+   - gender
+
 SELECT ?gender ( COUNT (distinct ?pe) AS ?NbPersonEntity )
 WHERE
 { ?pe a common:Person ; foaf:gender ?gender }
 GROUP BY ?gender
 ```
 
-##### 03. What is the distribution of woman entities over time? (api:03_gender_03_women_distrib_per_year)
+##### 03. What is the distribution of woman person entities over time? (api:03_gender_03_women_distrib_per_year)
 ```sparql
+#+ tags:
+#+   - gender
+
 SELECT ?year ?gender count (distinct ?pe) AS ?NbPerson
 {
-  ?pe a common:Person ; foaf:gender ?gender ;grz-owl:hasRole ?roleStmt .
+  ?pe a common:Person ; foaf:gender ?gender ; grz-owl:hasRole ?roleStmt .
   ?roleStmt sem:hasTimeStamp ?date . 
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
   BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
@@ -34,8 +43,8 @@ ORDER BY ASC (?year)
 
 ##### 04. What is the distribution of women/men per role? (api:03_gender_04_women_men_per_role)
 ```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+#+ tags:
+#+   - gender
 
 SELECT ?role ?numberOfWomen (?numberOfWomen*100/?total as ?percentWomen) ?numberOfMen (?numberOfMen*100/?total as ?percentMen)
 WHERE 
@@ -53,9 +62,12 @@ WHERE
 GROUP BY ?role ?numberOfWomen ?numberOfMen ?total
 ```
 
-##### 05. Gender distribution for a given role with time window - on person entities (api:03_gender_05_gender_distrib_for_role_withTW)
+##### 05. What is the gender distribution for a given role and within a given time window (on person entities) ? (api:03_gender_05_gender_distrib_for_role_withTW)
 ```sparql
+#+ tags:
+#+   - gender
 # params: ?_role and date
+
 SELECT ?gender (COUNT (distinct ?pe) AS ?NbPerson)
 WHERE
 {
@@ -69,7 +81,10 @@ WHERE
 GROUP BY ?gender
 ```
 
-##### 06. What is the distribution of women/men per profession? (needs profession) (api:03_gender_06_distrib_men_women_per_prof)
+##### 06. What is the distribution of women/men per profession? (needs profession categories) (api:03_gender_06_distrib_men_women_per_prof)
 ```sparql
+#+ tags:
+#+   - gender
+
 TODO
 ```
