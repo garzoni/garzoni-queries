@@ -27,4 +27,26 @@ WHERE {
 } 
 GROUP BY ?ple ?parish ?sestiere ?label ?geoNameREF 
 ORDER BY DESC(COUNT (?plm))
+
+
+
+SELECT ?ple ?parish ?sestiere ?label ?geoNameREF COUNT (?plm)
+WHERE {
+  ?ple a common:Place ; core:referredBy ?plm .
+?ple common:inParish ?parish ; common:inSestiere ?sestiere .
+  OPTIONAL {?ple grz-owl:suggestedGeonames ?geoNameREF}
+  OPTIONAL {?ple rdfs:label ?label}
+} 
+GROUP BY ?ple ?parish ?sestiere ?label ?geoNameREF 
+ORDER BY DESC(COUNT (?plm))
+
+
+SELECT ?sf ?parish ?sestiere 
+WHERE {
+  ?plm a common:PlaceMention ; common:inParish ?parish ; common:inSestiere ?sestiere  .
+  OPTIONAL { ?plm common:standardForm ?sf }
+} 
+group by ?parish ?sestiere ?sf
+order by ?parish
+
 ```
