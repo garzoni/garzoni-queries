@@ -4,6 +4,9 @@
 ##### 01. What is the total number of apprentice entities? (api:05_app_01_nb_app_entities)
 
 ```sparql
+#+ tags:
+#+   - apprentices
+
 SELECT (COUNT(distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 { ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
@@ -11,7 +14,10 @@ WHERE
 
 ##### 02. What is the total number of apprentice entities, with time window? (api:05_app_02_nb_app_entities_withTW)
 ```sparql
-# params: 2 dates
+#+ tags:
+#+   - apprentices
+#+ params: ?_date1 ?_date2
+
 SELECT (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 { 
@@ -25,6 +31,9 @@ WHERE
 
 ##### 03. What is the total number of apprentice mentions? (api:05_app_03_nb_app_mentions)
 ```sparql
+#+ tags:
+#+   - apprentices
+
 SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
 { ?pm a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice .}
@@ -32,6 +41,9 @@ WHERE
 
 ##### 04. What is the total number of apprentice mentions, with time window? (api:05_app_04_nb_app_mentions_withTW)
 ```sparql
+#+ tags:
+#+   - apprentices
+
 SELECT (COUNT (distinct ?pm) AS ?NbApprenticeMention)
 WHERE
 { 
@@ -45,6 +57,9 @@ WHERE
 
 ##### 05. Get the number of apprentices (entity) over the years. (api:05_app_05_distrib_app_per_year)
 ```sparql
+#+ tags:
+#+   - apprentices
+
 SELECT ?year (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 {
