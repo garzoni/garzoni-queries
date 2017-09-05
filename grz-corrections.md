@@ -34,5 +34,21 @@ WHERE {
 ```
 
 
-
+##### 04. Contracts with strange years
+```sparql
+SELECT ?year ?DHCLink ?masterLabel
+WHERE 
+{
+  ?c a grz-owl:Contract ; sem:hasTimeStamp ?date .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
+  ?c ^edm:realizes ?page ; core:hasMention ?master .
+	?page a meta:Page; meta:isImagedBy/iiif:service ?DHCLink .
+  OPTIONAL {?c core:hasMention ?pm . 
+  ?pm grz-owl:hasRole grz-owl:Master ; grz-owl:hasName/rdfs:label ?masterLabel . }
+  VALUES ?year {'584' '1466' '1853' '1958' '2014' '2653' 'NODATE'}
+}
+group by ?DHCLink
+ORDER BY ASC (?year)
+```
 
