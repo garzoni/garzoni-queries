@@ -110,12 +110,11 @@ ORDER BY ASC (?age)
 ```
 
 ##### 08. What is the distribution of apprentices per age (based on mentions), with a certain profession category? (api:05_app_08_distrib_app_ages_with_profX)
-N.B: not all professions have a category. This is therefore a partial view.
-
 ```sparql
 #+ tags:
 #+   - apprentices
 #+ params: ?_prof_cat
+# N.B: not all professions have a category. This is therefore a partial view.
 
 SELECT ?age COUNT (distinct ?app) 
 WHERE
@@ -181,7 +180,7 @@ WHERE
 }
 ```
 
-##### 12. What is the average age of apprentices having profession category x, with time window? (api:05_app_12_avg_app_age_with_profX_withTW)
+##### 12. What is the average age of apprentices having profession category x, with time window?(api:05_app_12_avg_app_age_with_profX_withTW)
 ```sparql
 #+ tags:
 #+   - apprentices
