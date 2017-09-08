@@ -88,7 +88,7 @@ GROUP BY ?age
 ORDER BY ASC (?age)
 ```
 
-##### 07. What is the distriution of apprentices per age (based on mentions), with time window? (api:05_app_07_distrib_app_ages_withTW)
+##### 07. What is the distribution of apprentices per age (based on mentions), with time window? (api:05_app_07_distrib_app_ages_withTW)
 ```sparql
 #+ tags:
 #+   - apprentices
@@ -236,7 +236,7 @@ HAVING  COUNT (distinct ?appMention) > 1
 ORDER BY DESC (COUNT (distinct ?appMention))
 ```
 
-###### 15. Give me the possible apprentice combinations of roles with their frequency (currently not working, to be revised) (api:05_15_app_role_combinations)
+##### 15. Give me the possible apprentice combinations of roles with their frequency (currently not working, to be revised) (api:05_15_app_role_combinations)
 ```` sparql
 #+ tags:
 #+   - apprentices
