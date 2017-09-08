@@ -180,7 +180,7 @@ WHERE
 }
 ```
 
-##### 12. What is the average age of apprentices having profession category x, with time window?(api:05_app_12_avg_app_age_with_profX_withTW)
+##### 12. What is the average age of apprentices having profession category x, with time window? (api:05_app_12_avg_app_age_with_profX_withTW)
 ```sparql
 #+ tags:
 #+   - apprentices
