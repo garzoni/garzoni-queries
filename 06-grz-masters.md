@@ -5,8 +5,8 @@ Please see question 1 in file 05-grz-apprentices.md and replace grz-owl:Apprenti
 
 ##### 02. How many masters have more than x apprentice? (api:06_masters_02_nb_masters_with_several_app)
 ```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+#+ tags:
+#+   - masters
 
 SELECT COUNT distinct ?master 
 WHERE  {  ?master a common:Person; common:hasApprentice ?appStatement . }
@@ -16,8 +16,8 @@ HAVING (COUNT (distinct ?appStatement) > 1)
 
 ##### 03. Get the list of masters having more than x apprentice. (api:06_masters_03_masters_with_several_app)
 ```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+#+ tags:
+#+   - masters
 
 SELECT ?master ?masterName COUNT (distinct ?appStatement) AS ?numberApp
 WHERE  {  ?master a common:Person; common:hasApprentice ?appStatement ; rdfs:label ?masterName }
@@ -28,8 +28,8 @@ ORDER BY DESC(?numberApp)
 
 ##### 04. Get the list of masters having more than x apprentice, with time window  (api:06_masters_04_nb_masters_with_several_app_withTW)
 ```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+#+ tags:
+#+   - masters
 
 SELECT ?master ?masterName COUNT (distinct ?appStatement) AS ?numberApp
 WHERE  
@@ -45,6 +45,9 @@ ORDER BY DESC(?numberApp)
 
 ##### 05. How many apprentice do masters have on average in their careers? (api:06_masters_05_avg_nbApp_in_master_careers)
 ```sparql
+#+ tags:
+#+   - masters
+
 SELECT AVG (?numberApp)
 WHERE
 {
@@ -64,12 +67,18 @@ HAVING (COUNT (distinct ?appStatement) > 1)
 ##### 07. How many apprentice do masters have on average in their careers, with time window and given a certain profession category? (api:06_masters_05_avg_nbApp_in_master_careers_with_prof_x_withTW)
 
 ```sparql
+#+ tags:
+#+   - masters
+
 ?appStatement sem:hasBeginTimeStamp ?date .
 FILTER (year(?date) > 1600 AND year(?date) < 1740)
 ```
 
 ###### TO UPDATE WHEN PROF THESAURUS READY - according to profession category 
 ```sparql
+#+ tags:
+#+   - masters
+
 SELECT AVG (?numberApp)
 WHERE
 {
@@ -86,7 +95,11 @@ WHERE
 ```
 
 #####  TO UPDATE Distribution of number of apprentice(s) per master given a time windows and a profession category: (half ok, param implem)
+
 ```sparql
+#+ tags:
+#+   - masters
+
 SELECT  ?numberApp COUNT (distinct ?master)
 WHERE
 {
@@ -113,8 +126,8 @@ ORDER BY ASC (?numberApp)
 
 ##### 08. How many masters have how many apprentices? (api:06_masters_08_nbApp_per_master)
 ``` sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#> 
+#+ tags:
+#+   - masters
 
 SELECT  ?numberApp ( COUNT (distinct ?master) AS ?NbMasters)
 WHERE
@@ -133,8 +146,8 @@ ORDER BY ASC (?numberApp)
 
 ##### 09. How many masters have how many apprentices, with time window ? (api:06_masters_09_nbApp_per_master_withTW)
 ``` sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#> 
+#+ tags:
+#+   - masters
 
 SELECT  ?numberApp ( COUNT (distinct ?master) AS ?NbMasters)
 WHERE
@@ -156,8 +169,8 @@ ORDER BY ASC (?numberApp)
 
 ##### 11. Given a master with URL x, give the timeline of his students' enrolment. (api:06_masters_11_app_timeline_for_master_with_URL_x)
 ```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+#+ tags:
+#+   - masters
 
 SELECT ?app ?date
 WHERE
@@ -172,8 +185,8 @@ ORDER BY ASC(?date)
 
 ##### 12. Given a master with name x, give the timeline of his students' enrolment. (api:06_masters_12_app_timeline_for_master_with_name_x)
 ```sparql
-PREFIX core: <http://vocab.dhlab.epfl.ch/data-core#>
-PREFIX common: <http://vocab.dhlab.epfl.ch/data-common#>
+#+ tags:
+#+   - masters
 
 SELECT ?app ?date
 WHERE
