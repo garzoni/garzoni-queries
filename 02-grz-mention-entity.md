@@ -121,7 +121,7 @@ LIMIT 10
 ```sparql
 #+ tags:
 #+	- mentions
-#+ params: ?_topX
+#+ params: ?_topX ?_date_start ?_date_end
 
 SELECT ?pe ( COUNT (distinct ?pm) AS ?NbMentions )
 WHERE
@@ -131,10 +131,11 @@ WHERE
      ?pm core:isMentionedIn ?c .
      ?c sem:hasTimeStamp ?date .
      BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
-     FILTER (?myDate < "1653-03-15"^^xsd:dateTime AND ?myDate > "1630-03-15"^^xsd:dateTime)
+     FILTER (?myDate < '1653-03-15'^^xsd:dateTime)
+     FILTER (?myDate > '1630-03-15'^^xsd:dateTime)
 }
-GROUP BY ?pe
-ORDER BY DESC (COUNT (distinct ?pm))
+GROUP BY (?pe)
+ORDER BY DESC(?NbMentions)
 LIMIT ?_topX
 ```
 
@@ -161,7 +162,7 @@ ORDER BY DESC (count(distinct ?pm))
 #+	- mentions
 #+ params: ?_times
 
-SELECT  ?roleType COUNT (distinct ?pe)
+SELECT  ?roleType (COUNT (distinct ?pe) AS ?NbPe)
 WHERE
 {
 	{
@@ -180,7 +181,7 @@ GROUP BY ?roleType
 #+ tags:
 #+	- mentions
 
-SELECT ?pe COUNT (distinct ?pm)
+SELECT ?pe (COUNT (distinct ?pm) AS ?NbPm )
 WHERE
 {
     ?pm core:refersTo ?pe .
