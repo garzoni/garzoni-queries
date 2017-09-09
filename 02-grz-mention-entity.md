@@ -61,7 +61,7 @@ WHERE
 #+ tags:
 #+   - mentions
 
-SELECT (COUNT (distinct ?pe))
+SELECT (COUNT (distinct ?pe) AS ?NbPe)
 WHERE
 {
    SELECT ?pe
