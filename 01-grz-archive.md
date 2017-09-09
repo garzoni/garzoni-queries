@@ -67,7 +67,7 @@ ORDER BY ASC (?day)
 #+   - archive
 #+ params: ?_year 
 
-SELECT AVG (?contract)
+SELECT (AVG (?contract) AS ?AvgContractNb )
 WHERE
 {
   SELECT (COUNT (?c) AS ?contract)
