@@ -7,7 +7,7 @@
 
 SELECT ?with ?without
 WHERE
-{ 
+{
   {SELECT count (?pe) AS ?with WHERE {?pe a common:Person ; foaf:gender ?gender }}
   {SELECT count (?pf) AS ?without WHERE {?pf a common:Person . FILTER NOT EXISTS {?pf foaf:gender ?gender} }}
 }
@@ -29,11 +29,11 @@ GROUP BY ?gender
 #+ tags:
 #+   - gender
 
-SELECT ?year ?gender count (distinct ?pe) AS ?NbPerson
+SELECT ?year ?gender (COUNT (distinct ?pe) AS ?NbPerson)
 {
   ?pe a common:Person ; foaf:gender ?gender ; grz-owl:hasRole ?roleStmt .
-  ?roleStmt sem:hasTimeStamp ?date . 
-  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  ?roleStmt sem:hasTimeStamp ?date .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
   BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
   FILTER (?gender = "female")
 }
@@ -46,17 +46,17 @@ ORDER BY ASC (?year)
 #+ tags:
 #+   - gender
 
-SELECT ?role ?numberOfWomen (?numberOfWomen*100/?total as ?percentWomen) ?numberOfMen (?numberOfMen*100/?total as ?percentMen)
-WHERE 
-{ 
+SELECT ?role ?numberOfWomen (?numberOfWomen*100/?total AS ?percentWomen) ?numberOfMen (?numberOfMen*100/?total AS ?percentMen)
+WHERE
+{
   { SELECT COUNT (distinct ?pe) AS ?total WHERE {?pe a common:Person. ?pe foaf:gender ?gender} }
 
-  { SELECT ?role COUNT (distinct ?women) AS ?numberOfWomen 
-    WHERE {?women a common:Person; grz-owl:hasRole/rdf:value ?role . ?women foaf:gender "female"}   
+  { SELECT ?role (COUNT (distinct ?women) AS ?numberOfWomen )
+    WHERE {?women a common:Person; grz-owl:hasRole/rdf:value ?role . ?women foaf:gender "female"}
   }
 
-  { SELECT ?role COUNT (distinct ?men) AS ?numberOfMen 
-    WHERE {?men a common:Person; grz-owl:hasRole/rdf:value ?role . ?men foaf:gender "male"}   
+  { SELECT ?role (COUNT (distinct ?men) AS ?numberOfMen )
+    WHERE {?men a common:Person; grz-owl:hasRole/rdf:value ?role . ?men foaf:gender "male"}
   }
 }
 GROUP BY ?role ?numberOfWomen ?numberOfMen ?total
@@ -66,17 +66,18 @@ GROUP BY ?role ?numberOfWomen ?numberOfMen ?total
 ```sparql
 #+ tags:
 #+   - gender
-# params: ?_role and date
+# params: ?_role ?_date_start ?_date_end
 
 SELECT ?gender (COUNT (distinct ?pe) AS ?NbPerson)
 WHERE
 {
   ?pe  a common:Person ; grz-owl:hasRole ?roleStmt .
-  ?roleStmt sem:hasTimeStamp ?date . 
+  ?roleStmt sem:hasTimeStamp ?date .
   ?roleStmt rdf:value  grz-owl:Guarantor .
   ?pe foaf:gender ?gender .
-  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
-  FILTER (?myDate > "1591-03-15"^^xsd:dateTime AND ?myDate < "1598-03-15"^^xsd:dateTime)
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
+  FILTER (?myDate > "1591-03-15"^^xsd:dateTime)
+  FILTER (?myDate < "1598-03-15"^^xsd:dateTime)
 }
 GROUP BY ?gender
 ```
