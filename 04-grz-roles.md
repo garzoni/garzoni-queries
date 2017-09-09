@@ -5,7 +5,7 @@
 #+ tags:
 #+   - roles
 
-SELECT STRAFTER(STR(?role), "#") AS ?role ?numberOfMentions (?numberOfMentions*100/?total AS ?percent)
+SELECT (STRAFTER(STR(?role), "#") AS ?role) ?numberOfMentions (?numberOfMentions*100/?total AS ?percent)
 WHERE
 {
   { SELECT (COUNT (distinct ?pm) AS ?total) WHERE {?pm a common:PersonMention.} }
@@ -26,7 +26,7 @@ ORDER BY DESC(?percent)
 
 SELECT (COUNT (distinct ?pe) AS ?NbEntity)
 WHERE
-{ ?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
+{ ?pe a common:Person ; grz-owl:hasRole ?role . ?role rdf:value grz-owl:Apprentice .}
 ```
 
 ##### 03. What is the total number of person entities having role x, with time window? (api:04_roles_03_nb_pe_with_role_x_withTW)
@@ -105,12 +105,12 @@ GROUP BY ?role ?countMentions ?total
 SELECT ?pe (COUNT (distinct ?pm) AS ?nbMentions)
 WHERE
 {
-  ?pe  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; grz-owl:hasRole/rdf:value grz-owl:Master .
+  ?pe  a common:Person ; grz-owl:hasRole ?role. ?role rdf:value grz-owl:Apprentice ; rdf:value grz-owl:Master .
   ?pe core:referredBy ?pm .
 }
 GROUP BY ?pe
-HAVING  COUNT (distinct ?pm) > 1
-ORDER BY DESC (COUNT (distinct ?pm))
+HAVING(?nbMentions > 1)
+ORDER BY DESC (?nbMentions)
 ```
 
 ##### 07. How many entities have different roles? (api:04_roles_07_nb_pe_with_doubleRole)
@@ -124,7 +124,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 SELECT (COUNT (distinct ?pe) AS ?NbPe)
 WHERE
 {
-  ?pe  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; grz-owl:hasRole/rdf:value grz-owl:Master .
+  ?pe  a common:Person ; grz-owl:hasRole ?role . ?role rdf:value grz-owl:Apprentice ; rdf:value grz-owl:Master .
 }
 ```
 
@@ -148,7 +148,7 @@ WHERE
     {
 
      SELECT ?pe
-     WHERE {?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Master ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
+     WHERE {?pe a common:Person ; grz-owl:hasRole ?role . ?roel rdf:value grz-owl:Master ; rdf:value grz-owl:Apprentice .}
       GROUP BY ?pe
      }
   }
@@ -161,16 +161,19 @@ ORDER BY ASC (UCASE(str(?pe))) ?year
 #+ tags:
 #+   - roles
 
-SELECT ?app ?appName ?guar ?guarName (?contract1 AS ?contract) ?date1 AS ?date
+SELECT ?app ?appName ?guar ?guarName (?contract1 AS ?contract) (?date1 AS ?date)
 WHERE
 {
-  ?guar a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Guarantor ; rdfs:label ?guarName .
-  ?app a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice  ; rdfs:label ?appName .
-  ?app common:hasGuarantor/rdf:value ?guar .
-  ?app core:referredBy/core:isMentionedIn ?contract1 , ?contract2 .
+  ?guar a common:Person ; grz-owl:hasRole ?role ; rdfs:label ?guarName . ?role rdf:value grz-owl:Guarantor  .
+  ?app a common:Person ; grz-owl:hasRole ?role ; rdfs:label ?appName. ?role rdf:value grz-owl:Apprentice   .
+  ?app common:hasGuarantor ?rel. ?rel rdf:value ?guar .
+  ?app core:referredBy ?ment1, ?ment2 .
+  ?ment1 core:isMentionedIn ?contract1  .
+  ?ment2 core:isMentionedIn ?contract2 .
   ?contract1 sem:hasTimeStamp ?date1 .
   ?contract2 sem:hasTimeStamp ?date2 .
   FILTER (?contract1 != ?contract2)
+  FILTER (?ment1 != ?ment2)
 }
 GROUP BY ?app ?guar ?guarName ?appName
 ORDER BY ?app
@@ -190,9 +193,9 @@ WHERE
     ?guar a grz-owl:Person .
     ?app a grz-owl:Person .
     ?master a grz-owl:Person .
-    ?guar  grz-owl:role/grz-owl:value/grz-owl:roleType grz-owl:guarantor .
-    ?master  grz-owl:role/grz-owl:value/grz-owl:roleType grz-owl:master .
-    ?app  grz-owl:role/grz-owl:value/grz-owl:roleType grz-owl:apprentice .
+    ?guar  grz-owl:role ?role . ?role rdfs:value grz-owl:Guarantor .
+    ?master  grz-owl:role ?role . ?role rdfs:value  grz-owl:Master .
+    ?app  grz-owl:role ?role . ?role rdfs:value  grz-owl:Apprentice .
     ?app grz-owl:has_master/grz-owl:value ?master .
     ?app grz-owl:has_guarantor/grz-owl:value ?guar .
     ?master grz-owl:profession/grz-owl:value/grz-owl:professionCategory "stampa" .
