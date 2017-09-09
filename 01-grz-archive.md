@@ -136,8 +136,8 @@ SELECT (COUNT (?contract) AS ?NbContracts)
 WHERE {
   ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date .
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
-  #FILTER (?myDate < ?_date^^xsd:dateTime)
-  FILTER (?myDate < ?_date)
+  FILTER (?myDate < '1698'^^xsd:dateTime)
+  #FILTER (?myDate < ?_date)
 }
 ```
 
