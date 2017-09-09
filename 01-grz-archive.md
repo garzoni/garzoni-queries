@@ -85,7 +85,7 @@ WHERE
   # for avergae per month:
   # GROUP BY ?year ?month
   # for average per year:
-  # GROUP BY ?year
+  GROUP BY ?year
 }
 ```
 
