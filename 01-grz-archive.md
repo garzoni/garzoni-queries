@@ -198,7 +198,7 @@ ORDER BY ASC(?contractPerPage)
 #+   - table
 #+   - archive
 
-SELECT ?reg STR(?label) AS ?label ?start ?end STR(?pageNb) AS ?pageNb
+SELECT ?reg (STR(?label) AS ?label) ?start ?end (STR(?pageNb) AS ?pageNb)
 WHERE 
 { ?reg a meta:Register ; sem:hasBeginTimeStamp  ?start ;  sem:hasEndTimeStamp ?end ; rdfs:label ?label ; dhc:pageCount ?pageNb .}
 ORDER BY ?reg
