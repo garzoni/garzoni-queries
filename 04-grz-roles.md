@@ -5,24 +5,24 @@
 #+ tags:
 #+   - roles
 
-SELECT STRAFTER(STR(?role), "#") AS ?role ?numberOfMentions (?numberOfMentions*100/?total as ?percent)
-WHERE 
-{ 
+SELECT STRAFTER(STR(?role), "#") AS ?role ?numberOfMentions (?numberOfMentions*100/?total AS ?percent)
+WHERE
+{
   { SELECT (COUNT (distinct ?pm) AS ?total) WHERE {?pm a common:PersonMention.} }
 
-  { SELECT ?role (COUNT (distinct ?pm) AS ?numberOfMentions) 
+  { SELECT ?role (COUNT (distinct ?pm) AS ?numberOfMentions)
     WHERE {?pm a common:PersonMention; grz-owl:hasRole ?role .}
   }
 }
 GROUP BY ?role ?numberOfMentions ?total
-ORDER BY desc(?percent)
+ORDER BY DESC(?percent)
 ```
 
 ##### 02. What is the total number of person entities having role x ? (api:04_roles_02_nb_pe_with_role_x)
 ```sparql
 #+ tags:
 #+   - roles
-# param: ?_role (in this ex, apprentice)
+# param: ?_role
 
 SELECT (COUNT (distinct ?pe) AS ?NbEntity)
 WHERE
@@ -30,19 +30,20 @@ WHERE
 ```
 
 ##### 03. What is the total number of person entities having role x, with time window? (api:04_roles_03_nb_pe_with_role_x_withTW)
-```sparql 
+```sparql
 #+ tags:
 #+   - roles
-# param: ?_date1 ?_date2 ?_role (in this ex, apprentice)
+# param: ?_date_start ?_date_end ?_role
 
 SELECT ?year (COUNT (distinct ?pe) AS ?NbApprenticeEntity)
 WHERE
 {
   ?pe a common:Person ; grz-owl:hasRole ?roleStmt.
   ?roleStmt sem:hasTimeStamp ?date ; rdf:value grz-owl:Apprentice .
-  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
   BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
-   FILTER (?year > ?_date1 AND ?year < ?_date2)
+   FILTER (?year > ?_date_start)
+   FILTER (?year < ?_date_end)
 }
 GROUP BY ?year
 ORDER BY ASC (?year)
@@ -60,9 +61,9 @@ WHERE
     WHERE {?women a common:Person; foaf:gender "female"; grz-owl:hasRole/rdf:value ?role .}}
 
   {SELECT ?role (COUNT (distinct ?men) AS ?countMen)
-    WHERE {?men a common:Person; foaf:gender "male"; grz-owl:hasRole/rdf:value ?role .}}  
+    WHERE {?men a common:Person; foaf:gender "male"; grz-owl:hasRole/rdf:value ?role .}}
 }
-GROUP BY ?role 
+GROUP BY ?role
 ```
 
 ##### 05. Role distribution: Give me an overview of all and per gender (api:04_roles_05_role_distrib_overview)
@@ -70,29 +71,29 @@ GROUP BY ?role
 #+ tags:
 #+   - roles
 
-SELECT 
-?role 
-?countMentions (?countMentions*100/?total AS ?percentAll) 
+SELECT
+?role
+?countMentions (?countMentions*100/?total AS ?percentAll)
 ?countWomen (?countWomen*100/?totalWomen AS ?percentWomenReRole)
 ?countMen (?countMen*100/?totalMen As ?percentMenReRole)
-WHERE 
-{ 
+WHERE
+{
   { SELECT (COUNT (distinct ?pm) AS ?total) WHERE {?pm a common:PersonMention ; foaf:gender ?g. } }
   { SELECT (COUNT (distinct ?pm) AS ?totalMen) WHERE {?pm a common:PersonMention; foaf:gender "male".} }
   { SELECT (COUNT (distinct ?pm) AS ?totalWomen) WHERE {?pm a common:PersonMention; foaf:gender "female".} }
 
-  { SELECT ?role (COUNT (distinct ?pm) AS ?countMentions) 
+  { SELECT ?role (COUNT (distinct ?pm) AS ?countMentions)
     WHERE {?pm a common:PersonMention; grz-owl:hasRole ?role .}}
 
   {SELECT ?role (COUNT (distinct ?women) AS ?countWomen)
     WHERE {?women a common:PersonMention; foaf:gender "female"; grz-owl:hasRole ?role .}}
 
-  {SELECT ?role (COUNT (distinct ?men) AS ?countMen) 
-    WHERE {?men a common:PersonMention; foaf:gender "male"; grz-owl:hasRole ?role .}}  
+  {SELECT ?role (COUNT (distinct ?men) AS ?countMen)
+    WHERE {?men a common:PersonMention; foaf:gender "male"; grz-owl:hasRole ?role .}}
 }
 GROUP BY ?role ?countMentions ?total
 ```
-  
+
 ##### 06. Give me all person entities who had 2 different roles (e.g. master & apprentice). (api:04_roles_06_pe_with_doubleRole)
 ```sparql
 #+ tags:
@@ -101,7 +102,7 @@ GROUP BY ?role ?countMentions ?total
 
 # N.B: roles can be changed/added and more information can be asked about the person entity.
 
-SELECT ?pe COUNT (distinct ?pm) AS ?nbMentions
+SELECT ?pe (COUNT (distinct ?pm) AS ?nbMentions)
 WHERE
 {
   ?pe  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; grz-owl:hasRole/rdf:value grz-owl:Master .
@@ -120,7 +121,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 
 # N.B: roles can be changed/added
 
-SELECT COUNT (distinct ?pe)
+SELECT (COUNT (distinct ?pe) AS ?NbPe)
 WHERE
 {
   ?pe  a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice ; grz-owl:hasRole/rdf:value grz-owl:Master .
@@ -136,19 +137,19 @@ WHERE
 # For counting, replace the first line by SELECT COUNT distinct ?pe
 
 SELECT ?pe ?peName ?roleType ?year
-WHERE 
+WHERE
   {
     {
-       ?pe  grz-owl:hasRole ?roleStatement; rdfs:label ?peName .      
+       ?pe  grz-owl:hasRole ?roleStatement; rdfs:label ?peName .
        ?roleStatement rdf:value ?roleType ; sem:hasTimeStamp ?date .
-       BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
+       BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
        BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
     }
     {
 
      SELECT ?pe
      WHERE {?pe a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Master ; grz-owl:hasRole/rdf:value grz-owl:Apprentice .}
-      GROUP BY ?pe   
+      GROUP BY ?pe
      }
   }
 GROUP BY ?roleType
@@ -160,8 +161,8 @@ ORDER BY ASC (UCASE(str(?pe))) ?year
 #+ tags:
 #+   - roles
 
-SELECT ?app ?appName ?guar ?guarName ?contract1 AS ?contract ?date1 AS ?date
-WHERE 
+SELECT ?app ?appName ?guar ?guarName (?contract1 AS ?contract) ?date1 AS ?date
+WHERE
 {
   ?guar a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Guarantor ; rdfs:label ?guarName .
   ?app a common:Person ; grz-owl:hasRole/rdf:value grz-owl:Apprentice  ; rdfs:label ?appName .
@@ -180,13 +181,13 @@ ORDER BY ?app
 #+ tags:
 #+   - roles
 
-SELECT ?numberOfGuar COUNT (distinct ?app)
+SELECT ?numberOfGuar (COUNT (distinct ?app) AS ?NbApp)
 WHERE
 {
-  SELECT ?app COUNT (distinct ?guar) AS ?numberOfGuar
-  WHERE 
+  SELECT ?app (COUNT (distinct ?guar) AS ?numberOfGuar)
+  WHERE
   {
-    ?guar a grz-owl:Person . 
+    ?guar a grz-owl:Person .
     ?app a grz-owl:Person .
     ?master a grz-owl:Person .
     ?guar  grz-owl:role/grz-owl:value/grz-owl:roleType grz-owl:guarantor .
