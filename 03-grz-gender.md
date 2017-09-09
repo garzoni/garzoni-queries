@@ -49,7 +49,7 @@ ORDER BY ASC (?year)
 SELECT ?role ?numberOfWomen (?numberOfWomen*100/?total AS ?percentWomen) ?numberOfMen (?numberOfMen*100/?total AS ?percentMen)
 WHERE
 {
-  { SELECT COUNT (distinct ?pe) AS ?total WHERE {?pe a common:Person. ?pe foaf:gender ?gender} }
+  { SELECT (COUNT (distinct ?pe) AS ?total) WHERE {?pe a common:Person. ?pe foaf:gender ?gender} }
 
   { SELECT ?role (COUNT (distinct ?women) AS ?numberOfWomen )
     WHERE {?women a common:Person; grz-owl:hasRole/rdf:value ?role . ?women foaf:gender "female"}
