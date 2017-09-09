@@ -1,7 +1,11 @@
 #### 06. About Masters
 
-##### 01. What is the total number of masters? (between date X and date Y? or before/after date X)
-Please see question 1 in file 05-grz-apprentices.md and replace grz-owl:Apprentice by grz-owl:Master.
+##### 01. What is the total number of masters? (api:05_app_01_nb_master_entities)
+```sparql
+SELECT (COUNT(distinct ?pe) AS ?NbMasterEntity)
+WHERE
+{ ?pe a common:Person ; grz-owl:hasRole ?r . ?r rdf:value grz-owl:Master .}
+```
 
 ##### 02. How many masters have more than x apprentice? (api:06_masters_02_nb_masters_with_several_app)
 ```sparql
@@ -60,6 +64,7 @@ WHERE
   GROUP BY ?master
 }
 ```
+
 ##### 06. How many apprentice do masters with more than one apprentice have on average in their careers? (api:06_masters_06_avg_nbApp_in_master_careers_more_app)
 ```sparql
 #+ tags:
@@ -85,7 +90,7 @@ WHERE
 SELECT (AVG (?numberApp) AS ?AvgNbApp)
 WHERE
 {
-  SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
+  {SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
   WHERE {
     ?master a common:Person; common:hasApprentice ?appStatement .
     ?appStatement sem:hasBeginTimeStamp ?date .
@@ -97,42 +102,12 @@ WHERE
     FILTER (?year > ?_date_start)
     FILTER (?year < ?_date_end)
     }
-  GROUP BY ?master
+  GROUP BY ?master}
 }
-```
-
-#####  TO UPDATE Distribution of number of apprentice(s) per master given a time windows and a profession category: (half ok, param implem)
-
-```sparql
-#+ tags:
-#+   - masters
-
-SELECT  ?numberApp COUNT (distinct ?master)
-WHERE
-{
-  SELECT ?master ?numberApp
-  WHERE
-  {
-    SELECT ?master (COUNT (distinct ?app) AS ?numberApp)
-    WHERE
-    {
-      ?master a grz-owl:Person .
-      ?master grz-owl:hasApprentice ?appStatement .
-      ?appStatement rdf:value ?app .
-      ?appStatement sem:hasBeginTimeStamp ?date .
-      ?master grz-owl:hasProfession/rdf:value ?lexEntryProf .
-      ?lexEntryProf grz-owl:professionCategory "stampa" .
-      FILTER (year(?date) > 1600 AND year(?date) < 1640)
-    }
-    GROUP BY ?master
-  }
-GROUP BY ?numberApp
-}
-ORDER BY ASC (?numberApp)
 ```
 
 ##### 08. How many masters have how many apprentices? (api:06_masters_08_nbApp_per_master)
-``` sparql
+```sparql
 #+ tags:
 #+   - masters
 
@@ -152,7 +127,7 @@ ORDER BY ASC (?numberApp)
 ```
 
 ##### 09. How many masters have how many apprentices, with time window ? (api:06_masters_09_nbApp_per_master_withTW)
-``` sparql
+```sparql
 #+ tags:
 #+   - masters
 #+ params:  ?_date_start ?_date_end
@@ -166,7 +141,7 @@ WHERE
     SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
     WHERE {
       ?master a common:Person; common:hasApprentice ?appStatement.
-      ? appStatement sem:hasBeginTimeStamp ?date .
+      ?appStatement sem:hasBeginTimeStamp ?date .
       FILTER (year(?date) > 1600)
       FILTER (year(?date) < 1700)
       }
