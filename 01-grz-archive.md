@@ -79,6 +79,10 @@ WHERE
     BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
     BIND(IF(?myDate != "NO DATE", month(?myDate), "NODATE") AS ?month).
     BIND(IF(?myDate != "NO DATE", day(?myDate), "NODATE") AS ?day).
+    # needed if avg over months of a specific year
+    # FILTER (?year = ?_year)
+    # needed if avg over days of a specific year and month
+    # FILTER (?month = ?_month)
   }
   # for average per day:
   # GROUP BY ?year ?month ?day
