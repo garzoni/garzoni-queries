@@ -8,10 +8,10 @@ Please see question 1 in file 05-grz-apprentices.md and replace grz-owl:Apprenti
 #+ tags:
 #+   - masters
 
-SELECT COUNT distinct ?master 
+SELECT (COUNT (distinct ?master) AS ?NbMaster)
 WHERE  {  ?master a common:Person; common:hasApprentice ?appStatement . }
-GROUP BY ?master 
-HAVING (COUNT (distinct ?appStatement) > 1)
+GROUP BY ?master
+HAVING(?NbMaster > 1)
 ```
 
 ##### 03. Get the list of masters having more than x apprentice. (api:06_masters_03_masters_with_several_app)
@@ -19,10 +19,10 @@ HAVING (COUNT (distinct ?appStatement) > 1)
 #+ tags:
 #+   - masters
 
-SELECT ?master ?masterName COUNT (distinct ?appStatement) AS ?numberApp
+SELECT ?master ?masterName (COUNT (distinct ?appStatement) AS ?numberApp)
 WHERE  {  ?master a common:Person; common:hasApprentice ?appStatement ; rdfs:label ?masterName }
 GROUP BY ?master ?masterName
-HAVING (COUNT (distinct ?appStatement) > 1)
+HAVING(?numberApp > 1)
 ORDER BY DESC(?numberApp)
 ```
 
@@ -30,16 +30,20 @@ ORDER BY DESC(?numberApp)
 ```sparql
 #+ tags:
 #+   - masters
+#+ params:  ?_date_start ?_date_end
 
-SELECT ?master ?masterName COUNT (distinct ?appStatement) AS ?numberApp
-WHERE  
-{  
+SELECT ?master ?masterName (COUNT (distinct ?appStatement) AS ?numberApp)
+WHERE
+{
   ?master a common:Person; common:hasApprentice ?appStatement ; rdfs:label ?masterName .
   ?appStatement sem:hasBeginTimeStamp ?date .
-  FILTER (year(?date) > 1600 AND year(?date) < 1610)
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
+  BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
+  FILTER (?year > ?_date_start)
+  FILTER (?year < ?_date_end)
 }
 GROUP BY ?master ?masterName
-HAVING (COUNT (distinct ?appStatement) > 1)
+HAVING(?numberApp > 1)
 ORDER BY DESC(?numberApp)
 ```
 
@@ -48,48 +52,51 @@ ORDER BY DESC(?numberApp)
 #+ tags:
 #+   - masters
 
-SELECT AVG (?numberApp)
+SELECT (AVG (?numberApp) AS ?AvgNbApp)
 WHERE
 {
-  SELECT ?master COUNT (distinct ?appStatement) AS ?numberApp
+  SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
   WHERE {?master a common:Person; common:hasApprentice ?appStatement }
   GROUP BY ?master
 }
 ```
-
-###### To consider only masters with more than 1 app, add:   
-
-```sparql
-GROUP BY ?master   
-HAVING (COUNT (distinct ?appStatement) > 1)
-```
-
-##### 07. How many apprentice do masters have on average in their careers, with time window and given a certain profession category? (api:06_masters_05_avg_nbApp_in_master_careers_with_prof_x_withTW)
-
+##### 06. How many apprentice do masters with more than one apprentice have on average in their careers? (api:06_masters_06_avg_nbApp_in_master_careers_more_app)
 ```sparql
 #+ tags:
 #+   - masters
 
-?appStatement sem:hasBeginTimeStamp ?date .
-FILTER (year(?date) > 1600 AND year(?date) < 1740)
-```
-
-###### TO UPDATE WHEN PROF THESAURUS READY - according to profession category 
-```sparql
-#+ tags:
-#+   - masters
-
-SELECT AVG (?numberApp)
+SELECT (AVG (?numberApp) AS ?AvgNbApp)
 WHERE
 {
-  SELECT ?master (COUNT (distinct ?stmt) AS ?numberApp)
-  WHERE 
-  {
-    ?master grz-owl:hasApprentice ?stmt .
-    ?master grz-owl:hasProfession/rdf:value ?prof .
+  SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
+  WHERE {?master a common:Person; common:hasApprentice ?appStatement }
+  GROUP BY ?master
+  HAVING(?numberApp > 1)
+}
+```
+
+##### 07. How many apprentice do masters have on average in their careers, with time window and given a certain profession category? (api:06_masters_07_avg_nbApp_in_master_careers_with_prof_x_withTW)
+
+```sparql
+#+ tags:
+#+   - masters
+#+ params:  ?_date_start ?_date_end ?_prof_cat
+
+SELECT (AVG (?numberApp) AS ?AvgNbApp)
+WHERE
+{
+  SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
+  WHERE {
+    ?master a common:Person; common:hasApprentice ?appStatement .
+    ?appStatement sem:hasBeginTimeStamp ?date .
+    BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
+    BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year)
+    ?master grz-owl:hasProfession ?profStatement .
+    ?profStatement rdf:value ?prof .
     ?prof grz-owl:professionCategory "stampa" .
-    ?master grz-owl:hasProfession/rdf:value ?prof .
-  }
+    FILTER (?year > ?_date_start)
+    FILTER (?year < ?_date_end)
+    }
   GROUP BY ?master
 }
 ```
@@ -109,7 +116,7 @@ WHERE
     SELECT ?master (COUNT (distinct ?app) AS ?numberApp)
     WHERE
     {
-      ?master a grz-owl:Person . 
+      ?master a grz-owl:Person .
       ?master grz-owl:hasApprentice ?appStatement .
       ?appStatement rdf:value ?app .
       ?appStatement sem:hasBeginTimeStamp ?date .
@@ -135,7 +142,7 @@ WHERE
   SELECT ?master ?numberApp
   WHERE
   {
-    SELECT ?master COUNT (distinct ?appStatement) AS ?numberApp
+    SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
     WHERE {?master a common:Person; common:hasApprentice ?appStatement }
     GROUP BY ?master
   }
@@ -148,6 +155,7 @@ ORDER BY ASC (?numberApp)
 ``` sparql
 #+ tags:
 #+   - masters
+#+ params:  ?_date_start ?_date_end
 
 SELECT  ?numberApp ( COUNT (distinct ?master) AS ?NbMasters)
 WHERE
@@ -155,11 +163,13 @@ WHERE
   SELECT ?master ?numberApp
   WHERE
   {
-    SELECT ?master COUNT (distinct ?appStatement) AS ?numberApp
+    SELECT ?master (COUNT (distinct ?appStatement) AS ?numberApp)
     WHERE {
-      ?master a common:Person; common:hasApprentice ?appStatement. 
+      ?master a common:Person; common:hasApprentice ?appStatement.
       ? appStatement sem:hasBeginTimeStamp ?date .
-      FILTER (year(?date) > 1600 AND year(?date) < 1700) }
+      FILTER (year(?date) > 1600)
+      FILTER (year(?date) < 1700)
+      }
       GROUP BY ?master
   }
   GROUP BY ?numberApp
@@ -167,7 +177,7 @@ WHERE
 ORDER BY ASC (?numberApp)
 ```
 
-##### 11. Given a master with URL x, give the timeline of his students' enrolment. (api:06_masters_11_app_timeline_for_master_with_URL_x)
+##### 10. Given a master with URL x, give the timeline of his students' enrolment. (api:06_masters_10_app_timeline_for_master_with_URL_x)
 ```sparql
 #+ tags:
 #+   - masters
@@ -183,7 +193,7 @@ GROUP BY ?app
 ORDER BY ASC(?date)
 ```
 
-##### 12. Given a master with name x, give the timeline of his students' enrolment. (api:06_masters_12_app_timeline_for_master_with_name_x)
+##### 11. Given a master with name x, give the timeline of his students' enrolment. (api:06_masters_11_app_timeline_for_master_with_name_x)
 ```sparql
 #+ tags:
 #+   - masters
