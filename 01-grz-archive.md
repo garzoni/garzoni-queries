@@ -120,7 +120,8 @@ WHERE
   ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date.
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
   BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year) 
-  FILTER (?year > ?_date1 AND ?year < ?_date2)
+  FILTER (?year > ?_date1)
+  FILTER (?year < ?_date2)
 }
 ```
 
