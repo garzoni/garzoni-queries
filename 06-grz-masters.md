@@ -1,6 +1,6 @@
 #### 06. About Masters
 
-##### 01. What is the total number of masters? (api:05_app_01_nb_master_entities)
+##### 01. What is the total number of masters? (api:06_masters_01_nb_master_entities)
 ```sparql
 SELECT (COUNT(distinct ?pe) AS ?NbMasterEntity)
 WHERE
