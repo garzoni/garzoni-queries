@@ -197,7 +197,7 @@ WHERE { ?pl a common:PlaceMention ; common:standardForm ?standard . ?y grz-owl:h
 ORDER BY ASC(?standard)
 ```
 
-##### 13. Get all parishes with their labels. (api:13_geoNorm_14_parishes)
+##### 13. Get all parishes with their labels. (api:12_geoNorm_13_parishes)
 ```sparql
 #+ tags:
 #+   - location normalisation
