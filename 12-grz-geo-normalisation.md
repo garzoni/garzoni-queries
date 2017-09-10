@@ -92,6 +92,7 @@ WHERE
 ORDER BY ASC(?Transcript)
 ```
 
+
 ##### 06. Get locations as object of grz-owl:hasResidence (i.e. of masters mainly) (api:12_geoNorm_06_loc_residence)
 ```sparql
 #+ tags:
