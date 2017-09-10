@@ -83,7 +83,7 @@ ORDER BY ASC(?ProfTR)
 ```
 
 ##### 05. Give me the profession transcripts of Master and Apprentices when different (still duplicates, for unique across master and app profd, should do a uniq on the results) (api:11_profNorm_05_diff_profTrans_of_master_and_app)
-``` sparql
+```sparql
 #+ tags:
 #+   - profession normalisation 
  
@@ -105,7 +105,7 @@ ORDER BY ASC(?year)
 ```
 
 ##### 06. With link towards DHCanvas. (api:11_profNorm_06_diff_profTrans_of_master_and_app_withDHCLink)
-``` sparql
+```sparql
 #+ tags:
 #+   - profession normalisation 
  
@@ -137,7 +137,7 @@ WHERE {?prof grz-owl:professionCategory ?profcat .}
 ```
 
 ##### 08. Get the list of transcripts (TR), standard forms (SF), profession categories, AND suggestedStandardForms and suggested profession categories (api:11_profNorm_08_prof_tr_sf_cat_suggestedSF_suggestedCat)
-``` sparql
+```sparql
 #+ tags:
 #+   - profession normalisation 
 
@@ -153,3 +153,4 @@ WHERE
 GROUP BY ?ProfTranscript
 ORDER BY ASC(?ProfTranscript)
 ```
+
