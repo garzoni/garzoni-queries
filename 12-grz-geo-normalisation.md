@@ -123,7 +123,7 @@ WHERE
   ?pl ^grz-owl:hasResidence ?y .
   OPTIONAL { ?pl common:transcript ?tr . BIND(str(lcase(?tr)) AS ?TranscriptResidence)}
   OPTIONAL { ?pl common:standardForm ?st . BIND(str(lcase(?st)) AS ?Standard)}
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?srdfs:label ?labelSestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?labelSestiere .}
 } 
 GROUP BY ?TranscriptResidence ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
