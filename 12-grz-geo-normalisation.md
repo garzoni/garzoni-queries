@@ -1,6 +1,6 @@
 ### 12. About geographical information
 
-##### 01. For map creation (collab Rouen and Riccardo)
+##### 01. IGNORE For map creation (collab Rouen and Riccardo)
 
 ```sparql
 SELECT  ?apprenticeName ?transcriptGeoOrigins  ?standardGeoOrigins ?transcriptProfMaster  ?standardProfMaster ?year ?month ?day
@@ -23,8 +23,11 @@ WHERE
 ORDER BY ASC(?year)
 ```
 
-##### 02. Get all locations, with indication of what they qualify. (api:12_geoNorm_02_loc_with_targets)
+##### 01. Get all locations, with indication of what they qualify. (api:12_geoNorm_01_loc_with_targets)
 ```sparql
+#+ tags:
+#+   - location normalisation
+
 SELECT ?pl ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
 {
@@ -39,8 +42,11 @@ WHERE
 } 
 ```
 
-##### 03. Get all locations, with indication of what they qualify (distinct). (api:12_geoNorm_03_loc_with_distinct_targets)
+##### 02. Get distinct locations, with indication of what they qualify. (api:12_geoNorm_02_loc_with_distinct_targets)
 ```sparql
+#+ tags:
+#+   - location normalisation
+
 SELECT distinct ?qualified ?trans ?standard ?labelParish ?sestiere
 WHERE 
 {
@@ -48,7 +54,7 @@ WHERE
   {?pl ^grz-owl:hasLocation ?x .} UNION {?pl ^grz-owl:hasGeographicalOrigin ?y .}  UNION {?pl ^grz-owl:hasResidence ?z .}
   OPTIONAL { ?pl common:transcript ?trans }
   OPTIONAL { ?pl common:standardForm ?standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?sestiere .}
   BIND(xsd:string(IF(bound(?x), "workshopLoc", "geoOrigins")) AS ?temp) .
   BIND(xsd:string(IF(bound(?z), "residence", "")) AS ?temp2) .
   BIND(xsd:string(IF(?temp2 = "", ?temp, ?temp2)) AS ?qualified) .
@@ -56,39 +62,47 @@ WHERE
 GROUP BY ?qualified ?trans ?standard ?labelParish ?sestiere
 ```
 
-##### 04. Get locations as object of grz-owl:geographicalOrigins (of apprentice mainly) (api:12_geoNorm_04_loc_geoOrigins)
+##### 03. Get locations as object of grz-owl:geographicalOrigins (i.e. of apprentice mainly) (api:12_geoNorm_03_loc_geoOrigins)
 ```sparql
-SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?GeoOriginPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct (STRAFTER(STR(?pl), "garzoni/") AS ?GeoOriginPlaceEntity) ?Transcript ?Standard (STR(?labelParish) AS ?ParishLabel) (STR(?sestiere) AS ?SestiereLabel)
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasGeographicalOrigin ?y .
   OPTIONAL { ?pl common:transcript ?Transcript }
   OPTIONAL { ?pl common:standardForm ?Standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?sestiere .}
 } 
 GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 05. Get locations as object of grz-owl:geographicalOrigins, with lowercase distinct transcript and standard form and without place entity url. (api:12_geoNorm_05_loc_geoOrigins_distinct)
+##### 04. Get locations as object of grz-owl:geographicalOrigins, with distinct lowercase transcripts and standard forms, and without place entity url. (api:12_geoNorm_04_loc_geoOrigins_distinct)
 ```sparql
-SELECT distinct ?TranscriptGeoOrigin  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct ?TranscriptGeoOrigin  ?Standard (STR(?labelParish) AS ?labelParish) (STR(?labelSestiere) AS ?labelSestiere)
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasGeographicalOrigin ?y .
   OPTIONAL { ?pl common:transcript ?tr . BIND(str(lcase(?tr)) AS ?TranscriptGeoOrigin)}
   OPTIONAL { ?pl common:standardForm ?st . BIND(str(lcase(?st)) AS ?Standard)}
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?labelSestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?labelSestiere .}
 } 
 GROUP BY ?TranscriptGeoOrigin ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 06. Get locations as object of grz-owl:geographicalOrigins, with lowercase distinct standard form and without transcript (=> for place entity creation) (api:12_geoNorm_06_loc_geoOrigins_distinct_noTrans)
-
+##### 05. Get locations as object of grz-owl:geographicalOrigins, with distinct lowercase standard forms and without transcripts (for place entity creation) (api:12_geoNorm_05_loc_geoOrigins_distinct_noTrans)
 ```sparql 
+#+ tags:
+#+   - location normalisation
+
 SELECT ?pl ?Standard ?parish ?sestiere 
 WHERE 
 {
@@ -101,91 +115,115 @@ WHERE
 ORDER BY ASC(?Transcript)
 ```
 
-##### 07. Get locations as object of grz-owl:hasResidence (of masters mainly) (api:12_geoNorm_07_loc_residence)
+##### 06. Get locations as object of grz-owl:hasResidence (i.e. of masters mainly) (api:12_geoNorm_06_loc_residence)
 ```sparql
-SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?ResidencePlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct (STRAFTER(STR(?pl), "garzoni/") AS ?ResidencePlaceEntity) ?Transcript ?Standard (STR(?labelParish) AS ?ParishLabel) (STR(?sestiere) AS ?SestiereLabel)
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasResidence ?y .
   OPTIONAL { ?pl common:transcript ?Transcript }
   OPTIONAL { ?pl common:standardForm ?Standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?sestiere .}
 } 
 GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 08. Get locations as object of grz-owl:hasResidence (of masters mainly), with lowercase distinct transcripts and standard forms and without place entity urls. (api:12_geoNorm_08_loc_residence_distinct)
+##### 07. Get locations as object of grz-owl:hasResidence (of masters mainly), with distinct lowercase transcripts and standard forms, and without place entity urls. (api:12_geoNorm_07_loc_residence_distinct)
 ```sparql
-SELECT distinct ?TranscriptResidence  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct ?TranscriptResidence  ?Standard (STR(?labelParish) AS ?labelParish) (STR(?labelSestiere) AS ?labelSestiere)
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasResidence ?y .
   OPTIONAL { ?pl common:transcript ?tr . BIND(str(lcase(?tr)) AS ?TranscriptResidence)}
   OPTIONAL { ?pl common:standardForm ?st . BIND(str(lcase(?st)) AS ?Standard)}
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?labelSestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?srdfs:label ?labelSestiere .}
 } 
 GROUP BY ?TranscriptResidence ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
 ```
 
-##### 09. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions) (api:12_geoNorm_09_loc_location)
+##### 08. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions) (api:12_geoNorm_08_loc_location)
 ```sparql
-SELECT distinct STRAFTER(STR(?pl), "garzoni/") AS ?WorkshopPlaceEntity ?Transcript ?Standard STR(?labelParish) AS ?ParishLabel STR(?sestiere) AS ?SestiereLabel
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct (STRAFTER(STR(?pl), "garzoni/") AS ?WorkshopPlaceEntity) ?Transcript ?Standard (STR(?labelParish) AS ?ParishLabel) (STR(?sestiere) AS ?SestiereLabel)
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasLocation ?y .
   OPTIONAL { ?pl common:transcript ?Transcript }
   OPTIONAL { ?pl common:standardForm ?Standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?sestiere .}
 } 
 GROUP BY ?Transcript ?Standard ?labelParish ?sestiere
 ORDER BY ASC(?Transcript)
 ```
 
 
-##### 10. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions), with lowercase distinct transcripts and standard forms and without place entity urls. (api:12_geoNorm_10_loc_location_distinct)
+##### 09. Get locations as object of grz-owl:hasLocation (of Workshop Mentions and Charge Mentions), with lowercase distinct transcripts and standard forms and without place entity urls. (api:12_geoNorm_09_loc_location_distinct)
 ```sparql
-SELECT distinct ?TranscriptLocation  ?Standard STR(?labelParish) AS ?labelParish STR(?labelSestiere) AS ?labelSestiere
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct ?TranscriptLocation ?Standard (STR(?labelParish) AS ?labelParish) (STR(?labelSestiere) AS ?labelSestiere)
 WHERE 
 {
   ?pl a common:PlaceMention . 
   ?pl ^grz-owl:hasLocation ?y .
   OPTIONAL { ?pl common:transcript ?tr . BIND(str(lcase(?tr)) AS ?TranscriptLocation)}
   OPTIONAL { ?pl common:standardForm ?st . BIND(str(lcase(?st)) AS ?Standard)}
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?labelSestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?labelSestiere .}
 } 
 GROUP BY ?TranscriptLocation ?Standard ?labelParish ?labelSestiere
 ORDER BY ASC(?Transcript)
 ```
 
 
-##### 11. Get distinct standardforms from geoOrigins property. (api:12_geoNorm_11_geoOrigins_distinct_sf)
+##### 10. Get distinct standardforms from geoOrigins property. (api:12_geoNorm_10_geoOrigins_distinct_sf)
 ```sparql
-SELECT distinct STR(?standard) AS ?p
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct (STR(?standard) AS ?p)
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
-##### 12. Get distinct standardforms from residence property. (api:12_geoNorm_12_residence_distinct_sf)
+##### 11. Get distinct standardforms from residence property. (api:12_geoNorm_11_residence_distinct_sf)
 ```sparql
-SELECT distinct STR(?standard) AS ?p
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct (STR(?standard) AS ?p)
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasResidence ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
-##### 13. Get distinct standardforms from location property. (api:12_geoNorm_13_location_distinct_sf)
+##### 12. Get distinct standardforms from location property. (api:12_geoNorm_12_location_distinct_sf)
 ```sparql
-SELECT distinct STR(?standard) AS ?p
+#+ tags:
+#+   - location normalisation
+
+SELECT distinct (STR(?standard) AS ?p)
 WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasLocation ?y ; common:standardForm ?standard } 
 ORDER BY ASC(?standard)
 ```
 
-##### 14. Get parishes with their labels. (api:12_geoNorm_14_parishes)
+##### 13. Get all parishes with their labels. (api:13_geoNorm_14_parishes)
 ```sparql
+#+ tags:
+#+   - location normalisation
+
 SELECT ?p ?lp ?alt1 ?alt2
 WHERE 
 {
