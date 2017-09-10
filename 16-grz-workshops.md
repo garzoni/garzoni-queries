@@ -130,7 +130,7 @@ WHERE
 {
   ?workshop a grz-owl:WorkshopMention .
   ?workshop grz-owl:hasLocation/common:inParish ?parish . 
-  ?parish rdfs:label ?labelParish ; common:inSestiere/rdfs:label ?labelSestiere .
+  ?parish rdfs:label ?labelParish ; common:inSestiere ?s . ?s rdfs:label ?labelSestiere .
 }
 GROUP BY ?labelParish ?labelSestiere
 ORDER BY DESC (COUNT (distinct ?workshop))
