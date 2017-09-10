@@ -76,7 +76,7 @@ ORDER BY ASC(?Transcript)
 ```
 
 ##### 05. Get locations as object of grz-owl:geographicalOrigins, with distinct lowercase standard forms and without transcripts (for place entity creation) (api:12_geoNorm_05_loc_geoOrigins_distinct_noTrans)
-```sparql 
+```sparql
 #+ tags:
 #+   - location normalisation
 
