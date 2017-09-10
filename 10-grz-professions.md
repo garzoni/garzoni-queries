@@ -19,7 +19,7 @@ ORDER BY ASC(?cat)
 #+ tags:
 #+   - professions 
  
-SELECT ?role (COUNT (distinct ?pm) ?NbPm)
+SELECT ?role (COUNT (distinct ?pm) AS ?NbPm)
 WHERE
 {
 	{ SELECT ?role ?pm (COUNT (distinct ?prof) AS ?count)
@@ -65,7 +65,7 @@ ORDER BY DESC(?count)
 #+ tags:
 #+   - professions 
 
-SELECT ?profCat AS ?ProfessionCategory (COUNT (distinct ?contract) AS ?NumberOfContracts)
+SELECT (?profCat AS ?ProfessionCategory) (COUNT (distinct ?contract) AS ?NumberOfContracts)
 WHERE 
 {
   ?prof a grz-owl:ProfessionMention; grz-owl:professionCategory ?profCat; ^grz-owl:hasProfession ?master .
@@ -82,7 +82,7 @@ ORDER BY DESC(?NumberOfContracts)
 #+   - professions 
 #+ params: ?_date_start ?_date_end
 
-SELECT ?profCat AS ?ProfessionCategory (COUNT (distinct ?contract) AS ?NumberOfContracts)
+SELECT (?profCat AS ?ProfessionCategory) (COUNT (distinct ?contract) AS ?NumberOfContracts)
 WHERE 
 {
   ?prof a grz-owl:ProfessionMention; grz-owl:professionCategory ?profCat; ^grz-owl:hasProfession ?master .
