@@ -71,7 +71,7 @@ ORDER BY ASC(?profSF)
 #+ tags:
 #+   - salaries
 
-SELECT  ?FinancialCondType COUNT (distinct ?c) AS ?NbContracts
+SELECT  ?FinancialCondType (COUNT (distinct ?c) AS ?NbContracts)
 WHERE 
 {
   ?c grz-owl:hasCondition ?finCond .
