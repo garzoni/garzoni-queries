@@ -1,4 +1,4 @@
-#####  IGNORE TO UPDATE Distribution of number of apprentice(s) per master given a time windows and a profession category: (half ok, param implem)
+#####  TO UPDATE Distribution of number of apprentice(s) per master given a time windows and a profession category: (half ok, param implem)
 
 ```sparql
 #+ tags:
@@ -29,7 +29,6 @@ ORDER BY ASC (?numberApp)
 ```
 
 #### For map creation (collab Rouen and Riccardo)
-
 ```sparql
 SELECT  ?apprenticeName ?transcriptGeoOrigins  ?standardGeoOrigins ?transcriptProfMaster  ?standardProfMaster ?year ?month ?day
 WHERE 
@@ -49,4 +48,15 @@ WHERE
   FILTER (?year > 1500 AND ?year < 1599)
 } 
 ORDER BY ASC(?year)
+```
+
+#### About place entities
+```sparql
+SELECT ?sf ?parish ?sestiere 
+WHERE {
+  ?plm a common:PlaceMention ; common:inParish ?parish ; common:inSestiere ?sestiere  .
+  OPTIONAL { ?plm common:standardForm ?sf }
+} 
+group by ?parish ?sestiere ?sf
+order by ?parish
 ```
