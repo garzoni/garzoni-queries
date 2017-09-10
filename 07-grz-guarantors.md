@@ -29,10 +29,10 @@ WHERE
 #+ tags:
 #+   - guarantors
 
-SELECT ?guarCount (COUNT(distinct ?contract) AS ?NbContract)
+SELECT ?guarCount (COUNT (distinct ?contract) AS ?NbContract)
 WHERE 
 { 
-	SELECT ?contract count(distinct ?guar) AS ?guarCount 
+	SELECT ?contract (COUNT (distinct ?guar) AS ?guarCount)
 	WHERE 
 	{ 
 	    ?contract a grz-owl:Contract ; core:hasMention ?guar . 
