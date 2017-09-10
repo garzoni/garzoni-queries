@@ -54,11 +54,11 @@ WHERE
 SELECT ?WorkshopWithPlaceInfo ?WorkshopWithoutPlaceInfo
 WHERE 
 { 
-  {SELECT COUNT (distinct ?ws) AS ?WorkshopWithPlaceInfo 
+  {SELECT (COUNT (distinct ?ws) AS ?WorkshopWithPlaceInfo) 
   WHERE {?ws a grz-owl:WorkshopMention ; grz-owl:hasLocation ?pl} 
   }
   
-  {SELECT COUNT (distinct ?ws) AS ?WorkshopWithoutPlaceInfo 
+  {SELECT (COUNT (distinct ?ws) AS ?WorkshopWithoutPlaceInfo )
   WHERE {?ws a grz-owl:WorkshopMention . FILTER (NOT EXISTS{?ws grz-owl:hasLocation ?pl} ) }
   }
 }
@@ -92,7 +92,7 @@ WHERE
     ?master core:isMentionedIn/sem:hasTimeStamp ?myDate .
     BIND(IF(?myDate = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?myDate) ) AS ?date)
     BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
-    FILTER (?year > 1550
+    FILTER (?year > 1550)
     FILTER (?year < 1598)
     FILTER (NOT EXISTS{?ws grz-owl:hasLocation ?pl} ) }
   }
@@ -105,7 +105,7 @@ WHERE
 #+   - workshop
 # N.B. : to filter by date add:  FILTER (?myDate < "1653-03-15"^^xsd:dateTime AND ?myDate > "1630-03-15"^^xsd:dateTime)
 
-SELECT ?workshop  (STR(?i) AS ?insigna) ?locTranscript ?locStandard STR(?labelParish) AS ?parishLabel STR(?labelSestiere) AS ?pestiereLabel ?date
+SELECT ?workshop  (STR(?i) AS ?insigna) ?locTranscript ?locStandard (STR(?labelParish) AS ?parishLabel) (STR(?labelSestiere) AS ?pestiereLabel) ?date
 WHERE 
 {
   ?pl a common:PlaceMention . 
