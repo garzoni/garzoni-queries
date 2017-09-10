@@ -1,42 +1,52 @@
 ### 15. About events
 
-##### 1. How many events of which type are there ?
+##### 1. How many event mentions of which type are there ? (api:15_event_01_nb_event_per_type)
 ```sparql
-SELECT ?EventType COUNT (distinct ?e) AS ?NbEvents
+#+ tags:
+#+   - events
+
+SELECT ?EventType (COUNT (distinct ?e) AS ?NbEvents)
 WHERE 
-{
- ?e sem:eventType ?EventType .
-}
+{ ?e a common:EventMention ; sem:eventType ?EventType .}
 GROUP BY ?EventType
 ```
 
-##### 2. How many apprenticeships have which duration (in number of months)?
+##### 2. How many apprenticeships have which duration (in number of months)? (api:15_event_02_distrib_appship_per_duration)
 ```sparql
-SELECT ?dur COUNT (distinct?appship)
+#+ tags:
+#+   - events
+
+SELECT ?DurationMonth (COUNT (distinct?appship) AS ?NbAppShip)
 WHERE 
 {
-?appship sem:eventType grz-owl:Apprenticeship ; common:duration  ?dur . 
-BIND(xsd:integer(?dur) AS ?durInt)
+ ?appship sem:eventType grz-owl:Apprenticeship ; common:duration  ?dur . 
+ BIND(xsd:integer(?dur) AS ?DurationMonth)
 } 
-GROUP BY ?dur
-ORDER BY ?dur
+GROUP BY ?durInt
+ORDER BY ?durInt
 ```
 
-##### 3. What is the average duration of an apprenticeship?
-N.B.: excluding weird durations
+##### 3. What is the average duration of an apprenticeship? (api:15_event_03_appship_avg_duration)
 ```sparql
-SELECT AVG (?durInt)
+#+ tags:
+#+   - events
+# N.B.: excluding weird durations
+
+SELECT (AVG (?durInt) AS ?AvgAppshipDuration )
 WHERE 
 {
-?appship sem:eventType grz-owl:Apprenticeship ; common:duration  ?dur . 
-BIND(xsd:integer(?dur) AS ?durInt)
- FILTER (( ?durInt < 300 ) )
+  ?appship sem:eventType grz-owl:Apprenticeship ; common:duration  ?dur . 
+  BIND(xsd:integer(?dur) AS ?durInt)
+  FILTER (( ?durInt < 300 ) )
 } 
 ```
 
-##### 4. What is the average duration of an apprenticeship per profession category ?
+##### 4. What is the average duration of an apprenticeship per profession category ? (api:15_event_04_appship_avg_duration_profCat)
 ```sparql
-SELECT ?profCat AVG (?durInt)
+#+ tags:
+#+   - events
+
+SELECT ?profCat (AVG (?durInt) AS ?AvgAppshipDuration )
 WHERE 
 {
   ?appship sem:eventType grz-owl:Apprenticeship ; common:duration  ?dur ; core:isMentionedIn ?contract .
@@ -50,14 +60,18 @@ GROUP BY ?profCat
 ORDER BY DESC(AVG (?durInt))
 ```
 
-##### 5. What is the average duration of a contract in profession category X per year?
+##### 5. What is the average duration of a contract in profession category X per year? (api:15_event_05_appship_avg_duration_profCatX)
 ```sparql
+#+ tags:
+#+   - events
+#+ params: ?_profCategory
+
 SELECT ?year (AVG (?durInt) AS ?AppshipDurationAvg)
 WHERE 
 {
   ?appship sem:eventType grz-owl:Apprenticeship ; common:duration  ?dur ; core:isMentionedIn ?contract .
   ?contract sem:hasTimeStamp ?date ; core:hasMention ?pm.
-  ?pm grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession/grz-owl:professionCategory 'mercante' .
+  ?pm grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession ?p . ?p grz-owl:professionCategory 'mercante' .
 
   BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate) 
   BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?year).
@@ -69,15 +83,11 @@ GROUP BY ?year
 ORDER BY ASC(?year)
 ```
 
-##### 6. How many flees are there in total ?
+###### 6. How many flees are there, with and without denunciation date? (api:15_event_06_nb_flee_with_wo_denun)
 ```sparql
-SELECT COUNT (distinct ?e) AS ?NbFlees
-WHERE 
-{?e sem:eventType grz-owl:Flee .}
-```
+#+ tags:
+#+   - events
 
-###### With and without denunciation date
-```sparql
 SELECT ?FleeWithDenunciationDate ?FleeWithoutDenunciationDate
 WHERE 
 {
@@ -89,9 +99,12 @@ WHERE
 }
 ```
 
-##### 7. How many flees are there per year ?
+##### 7. How many flees are there per year ? (api:15_event_07_nb_flee_perYear)
 ```sparql
+#+ tags:
+#+   - events
 # PB WITH DATE
+
 SELECT ?year (COUNT (distinct ?e)  AS ?NbFlees)
 WHERE 
 {
@@ -102,10 +115,14 @@ WHERE
 GROUP BY ?year
 ```
 
-
-##### 7. How many breaches of contract are there per year ?
+##### 8. How many breaches of contract are there per year ? (api:15_event_08_nb_breaches_perYear)
+#+ tags:
+#+   - events
 ```sparql
+#+ tags:
+#+   - events
 # PB WITH DATE
+
 SELECT ?year (COUNT (distinct ?e)  AS ?NbFlees)
 WHERE 
 {
@@ -116,23 +133,15 @@ WHERE
 GROUP BY ?year
 ```
 
-##### 8. On which days contracts are registered?
+##### 9. On which days contracts are registered? (api:15_event_09_day_contract)
 ```sparql
+#+ tags:
+#+   - events
+
 SELECT ?day (COUNT (distinct ?c)  AS ?NbContracts)
 WHERE 
-{
- ?c a grz-owl:Contract; time:dayOfWeek ?day .
-}
+{ ?c a grz-owl:Contract; time:dayOfWeek ?day }
 GROUP BY ?day
 ORDER BY ASC(?day)
 ```
-
-##### FOR DEV
-```sparql
-SELECT ?ev ?start ?end
-WHERE {
-?ev a common:EventMention .
-OPTIONAL{ ?ev sem:hasEndTimeStamp ?end }
-OPTIONAL{?ev sem:haBeginTimeStamp ?start }
-} 
 
