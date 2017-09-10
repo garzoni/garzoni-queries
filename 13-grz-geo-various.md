@@ -11,7 +11,7 @@ GROUP BY ?role
 ORDER BY DESC (COUNT (distinct ?pm))
 ```
 
-##### 02. What is the role of the persons having indication of a geographical origin? (api:13_geoVar_02_who_has_geoOrig)
+##### 02. What is the role of the persons having the indication of a geographical origin? (api:13_geoVar_02_who_has_geoOrig)
 ```sparql
 #+ tags:
 #+   - geography
@@ -27,7 +27,7 @@ ORDER BY DESC (COUNT (distinct ?pm))
 #+ tags:
 #+   - geography
 
-SELECT ?ple ?parish ?sestiere ?label ?geoNameREF COUNT (?plm)
+SELECT ?ple ?parish ?sestiere ?label ?geoNameREF (COUNT (?plm) AS ?NbPlm)
 WHERE {
   ?ple a common:Place ; core:referredBy ?plm .
   OPTIONAL {?ple common:inParish ?parish ; common:inSestiere ?sestiere .}
@@ -38,12 +38,12 @@ GROUP BY ?ple ?parish ?sestiere ?label ?geoNameREF
 ORDER BY DESC(COUNT (?plm))
 ```
 
-##### 04. Get place entities having the indication of a parish, with their number of mentions. (api:13_geoVar_04_ple_plm_withParish)
+##### 04. Get all place entities having the indication of a parish, with their number of mentions. (api:13_geoVar_04_ple_plm_withParish)
 ```sparql
 #+ tags:
 #+   - geography
 
-SELECT ?ple ?parish ?sestiere ?label ?geoNameREF COUNT (?plm)
+SELECT ?ple ?parish ?sestiere ?label ?geoNameREF (COUNT (?plm) AS ?NbPlm)
 WHERE {
   ?ple a common:Place ; core:referredBy ?plm .
   ?ple common:inParish ?parish ; common:inSestiere ?sestiere .
