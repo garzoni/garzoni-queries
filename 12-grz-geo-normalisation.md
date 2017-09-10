@@ -173,7 +173,7 @@ ORDER BY ASC(?Transcript)
 #+   - location normalisation
 
 SELECT distinct (STR(?standard) AS ?p)
-WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?y ; common:standardForm ?standard } 
+WHERE { ?pl a common:PlaceMention ; common:standardForm ?standard . ?y grz-owl:hasGeographicalOrigin ?pl } 
 ORDER BY ASC(?standard)
 ```
 
@@ -183,7 +183,7 @@ ORDER BY ASC(?standard)
 #+   - location normalisation
 
 SELECT distinct (STR(?standard) AS ?p)
-WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasResidence ?y ; common:standardForm ?standard } 
+WHERE { ?pl a common:PlaceMention ; common:standardForm ?standard . ?y grz-owl:hasResidence ?pl } 
 ORDER BY ASC(?standard)
 ```
 
@@ -193,7 +193,7 @@ ORDER BY ASC(?standard)
 #+   - location normalisation
 
 SELECT distinct (STR(?standard) AS ?p)
-WHERE { ?pl a common:PlaceMention ; ^grz-owl:hasLocation ?y ; common:standardForm ?standard } 
+WHERE { ?pl a common:PlaceMention ; common:standardForm ?standard . ?y grz-owl:hasLocation ?pl } 
 ORDER BY ASC(?standard)
 ```
 
