@@ -64,7 +64,7 @@ WHERE
 }
 ```
 
-###### 05. Idem as 4), with time window filter. (api:16_workshops_05_nb_workshop_with_wo_place_withTW)
+##### 05. Idem as 4), with time window filter. (api:16_workshops_05_nb_workshop_with_wo_place_withTW)
 ```sparql
 #+ tags:
 #+   - workshop
@@ -99,7 +99,7 @@ WHERE
 }
 ```
 
-##### 6. Give me all workshop mentions, their location information, their insigna and the year they were mentioned. (api:16_workshops_06_allInfos_workshop)
+##### 06. Give me all workshop mentions, their location information, their insigna and the year they were mentioned. (api:16_workshops_06_allInfos_workshop)
 ```sparql
 #+ tags:
 #+   - workshop
@@ -120,7 +120,7 @@ WHERE
 ORDER BY ASC(?locTranscript)
 ```
 
-##### 7. What is the distribution of workshops per parishes? (api:16_workshops_07_distrib_workshop_perParish)
+##### 07. What is the distribution of workshops per parishes? (api:16_workshops_07_distrib_workshop_perParish)
 ```sparql
 #+ tags:
 #+   - workshop
@@ -136,7 +136,7 @@ GROUP BY ?labelParish ?labelSestiere
 ORDER BY DESC (COUNT (distinct ?workshop))
 ```
 
-##### 8. What is the distribution of workshops per sestiere? (api:16_workshops_08_distrib_workshop_perSestiere)
+##### 08. What is the distribution of workshops per sestiere? (api:16_workshops_08_distrib_workshop_perSestiere)
 ```sparql
 #+ tags:
 #+   - workshop
@@ -150,7 +150,7 @@ GROUP BY  ?labelSestiere
 ORDER BY DESC (?NbWorkshop)
 ```
 
-##### 9. How many workshop have the indication if an insigna? (api:16_workshops_09_nb_workshop_withInsigna)
+##### 09. How many workshop have the indication if an insigna? (api:16_workshops_09_nb_workshop_withInsigna)
 ```sparql
 #+ tags:
 #+   - workshop
