@@ -12,7 +12,7 @@ WHERE
   {?pl ^grz-owl:hasLocation ?x .} UNION {?pl ^grz-owl:hasGeographicalOrigin ?y .}  UNION {?pl ^grz-owl:hasResidence ?z .}
   OPTIONAL { ?pl common:transcript ?trans }
   OPTIONAL { ?pl common:standardForm ?standard }
-  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere/rdfs:label ?sestiere .}
+  OPTIONAL { ?pl common:inParish ?parish. ?parish rdfs:label ?labelParish; common:inSestiere ?s . ?s rdfs:label ?sestiere .}
   BIND(xsd:string(IF(bound(?x), "workshopLoc", "geoOrigins")) AS ?temp) .
   BIND(xsd:string(IF(bound(?z), "residence", "")) AS ?temp2) .
   BIND(xsd:string(IF(?temp2 = "", ?temp, ?temp2)) AS ?qualified) .
