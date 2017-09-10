@@ -167,7 +167,7 @@ WHERE
 }
 ```
 
-##### 10. How many workshop mentions per insigna? (hint for workshop entities) (api:16_workshops_19_nb_workshop_mentions_perInsigna)
+##### 10. How many workshop mentions per insigna? (hint for workshop entities) (api:16_workshops_10_nb_workshop_mentions_perInsigna)
 ```sparql
 #+ tags:
 #+   - workshop
