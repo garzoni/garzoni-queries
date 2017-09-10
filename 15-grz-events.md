@@ -83,7 +83,7 @@ GROUP BY ?year
 ORDER BY ASC(?year)
 ```
 
-###### 6. How many flees are there, with and without denunciation date? (api:15_event_06_nb_flee_with_wo_denun)
+##### 6. How many flees are there, with and without denunciation date? (api:15_event_06_nb_flee_with_wo_denun)
 ```sparql
 #+ tags:
 #+   - events
@@ -116,8 +116,6 @@ GROUP BY ?year
 ```
 
 ##### 8. How many breaches of contract are there per year ? (api:15_event_08_nb_breaches_perYear)
-#+ tags:
-#+   - events
 ```sparql
 #+ tags:
 #+   - events
