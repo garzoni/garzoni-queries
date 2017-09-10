@@ -21,8 +21,7 @@ WHERE
 }
 GROUP BY ?role 
 ORDER BY DESC (?PersonMentionWithWorkshop)
- 
-  ```
+```
 
 ##### 03. How many masters are associated with a workshop or *not*? (api:16_workshops_03_nb_master_with_wo_workshop)
 ```sparql
