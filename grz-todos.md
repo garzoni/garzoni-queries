@@ -60,3 +60,13 @@ WHERE {
 group by ?parish ?sestiere ?sf
 order by ?parish
 ```
+
+##### FOR DEV
+```sparql
+SELECT ?ev ?start ?end
+WHERE {
+?ev a common:EventMention .
+OPTIONAL{ ?ev sem:hasEndTimeStamp ?end }
+OPTIONAL{?ev sem:haBeginTimeStamp ?start }
+} 
+
