@@ -104,7 +104,7 @@ GROUP BY ?g
 ```
 
 ##### 06. Give me the top x guarantors with the most apprentices. (api:07_guar_06_guar_with_most_app)
-````sparql
+```sparql
 #+ tags:
 #+   - guarantors
 # N.B.: update limit number 
@@ -115,7 +115,7 @@ WHERE
 GROUP BY ?g
 ORDER BY DESC (?NbApp)
 LIMIT 10
-```` 
+``` 
 
 
 
