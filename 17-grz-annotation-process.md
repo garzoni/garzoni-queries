@@ -60,7 +60,25 @@ WHERE
 GROUP BY ?date
 ORDER BY ?date
 }
+```
 
+###### Average Number of annotated contracts per month
+```sparql
+SELECT ?year ?month (AVG (?NbContracts) AS ?AvgAnnotatedContracts)
+WHERE
+{
+SELECT ?year ?month (COUNT (distinct ?c) AS ?NbContracts)
+WHERE 
+{ ?oa a oa:Annotation ; oa:motivatedBy oa:linking ; oa:hasBody ?c ; prov:wasGeneratedFrom ?activity .
+  ?activity  prov:startedAtTime ?d  .
+  ?c a grz-owl:Contract . 
+  BIND(STRBEFORE(STR(?d), "T") AS ?date) 
+  BIND(year(?d) AS ?year)
+  BIND(month(?d) AS ?month)
+}
+GROUP BY ?year ?month
+ORDER BY ?year ?month
+}
 ```
 
 ##### 3. Total number of contract per person so far.
