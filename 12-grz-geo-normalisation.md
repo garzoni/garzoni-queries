@@ -216,3 +216,19 @@ WHERE
 GROUP BY ?p
 ORDER BY ASC (?lp)
 ```
+
+##### 14. Given a transcript coming from "hasOrigin", give me the DHClinks of the contracts mentioning it.
+```sparql
+SELECT ?pl ?Standard ?parish ?sestiere 
+WHERE 
+{
+  ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?pm .
+  ?pl common:transcript ?tr . 
+  ?pm core:isMentionedIn ?c .
+  ?c 
+
+} 
+ORDER BY ASC(?Transcript)
+
+
+```
