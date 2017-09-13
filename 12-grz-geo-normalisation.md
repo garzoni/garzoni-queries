@@ -219,16 +219,19 @@ ORDER BY ASC (?lp)
 
 ##### 14. Given a transcript coming from "hasOrigin", give me the DHClinks of the contracts mentioning it.
 ```sparql
-SELECT ?pl ?Standard ?parish ?sestiere 
+SELECT ?tr ?personLabel ?DHCLink
 WHERE 
 {
-  ?pl a common:PlaceMention ; ^grz-owl:hasGeographicalOrigin ?pm .
-  ?pl common:transcript ?tr . 
-  ?pm core:isMentionedIn ?c .
-  ?c 
+  ?pl a common:PlaceMention  ; common:transcript ?tr ; ^grz-owl:hasGeographicalOrigin ?pm.
+  ?pm core:isMentionedIn ?c ; grz-owl:hasName/rdfs:label ?personLabel .
+  ?c a grz-owl:Contract; sem:hasTimeStamp ?date ; ^edm:realizes ?page .
+  ?page a meta:Page; meta:isImagedBy/iiif:service ?DHCLink .
 
+  FILTER(regex(?tr, ?test, "i"))
+
+  VALUES ?test {'a san mosà del visentin' 'abersa de val trompia' 'agaor di tapelis' 'agnilina' 'agro' 'agro' 'agro de cividal de belun' 'al frare' 'alan da treviso' 'alba' 'albrico soto brugneia' 'albrino soto brugneia' 'alige, territorio di cividal de belun' 'alira azeson soto treviso' 'almen' 'alsegro' 'alti' 'anbri da bergamo' 'andro' 'angolo' 'antegnan sul cremonese' 'aquilano' 'aquilla' 'are' 'artona' 'asisa' 'astor de val brembana sotto bergamo' 'averto' 'badae' 'badia de suneburgo' 'bagia' 'balao' 'baldo da bergamo' 'barberatto' 'barberi sotto l\'arciducha ferdinando' 'barchan milanese' 'barghe' 'bargian da bont' 'baronicn da privallo' 'basan dal cornel' 'baselge sotto spilinbergo' 'basio' 'bastici ?' 'batagia de friul' 'batagia sotto san daniel'}  
 } 
-ORDER BY ASC(?Transcript)
-
 
 ```
+
+
