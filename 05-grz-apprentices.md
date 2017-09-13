@@ -259,3 +259,42 @@ HAVING(?nbMentions > 1)
 ORDER BY DESC (?nbMentions)
 ```
 
+##### 16. Give me the list of apprentices who fled, with relative information
+I nomi degli apprendisti che fuggono
++ provenienza
++ età
++ data contratto
++ data fuga
++ data denuncia
++ professione
++ salario
++ altre financial conditions
++ paid by master or not
+```sparql
+SELECT ?app ?appLabel ?appGeoOriginTranscript ?appProfession ?masterLabel ?masterProfession  ?findConType
+
+WHERE
+{
+
+#about contract
+?contract a grz-owl:Contract ; sem:hasTimeStamp ?date ; core:hasMention ?app , ?master , ?flee ; grz-owl:hasCondition ?finCond .
+BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
+BIND(IF(?myDate != "NO DATE", year(?myDate), "NODATE") AS ?contractDate)
+
+# about event
+?flee sem:eventType grz-owl:Flee .
+
+#about apprentice
+?app a common:PersonMention ; grz-owl:hasRole grz-owl:Apprentice ; grz-owl:hasName/rdfs:label ?appLabel .
+OPTIONAL { ?app grz-owl:hasGeographicalOrigin/common:transcript ?appGeoOriginTranscript .}
+OPTIONAL { ?app grz-owl:hasProfession/common:transcript ?appProfession }
+
+# about master
+?master grz-owl:hasRole  grz-owl:Master  ; grz-owl:hasName/rdfs:label ?masterLabel .
+OPTIONAL {?master  grz-owl:hasProfession/common:transcript ?masterProfession }
+
+# about salary
+?finCond a grz-owl:FinancialCondition ; grz-owl:conditionType ?findConType .
+?findCond grz-owl:paidBy ?SalaryPaidBy ; grz-owl:paidInGoods ?SalaryInGoodOrMoney ; grz-owl:partialAmount ?SalaryPartialAmount ; grz-owl:totalAmount ?SalaryTotalAmount ; grz-owl:currencyUnit ?SalaryCurrency .
+}
+```
