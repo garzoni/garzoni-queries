@@ -260,61 +260,54 @@ ORDER BY DESC (?nbMentions)
 ```
 
 ##### 16. Give me the list of apprentices who fled, with relative information
-I nomi degli apprendisti che fuggono
-+ provenienza
-+ età
-+ data contratto
-+ data fuga
-+ data denuncia
-+ professione
-+ salario
-+ altre financial conditions
-+ paid by master or not
 ```sparql
 SELECT ?DHCLink ?contractDate ?appUuid ?appLabel ?appAge ?appAgeText ?appGeoOriginsTranscript ?appProfession ?masterLabel  ?masterProfession ?denunciationDate ?fleeStartDate ?fleeEndDate  ?SalaryInGoodOrMoney ?SalaryType ?SalaryPaidBy ?SalaryPeriodization ?SalaryPartialAmount ?SalaryTotalAmount ?SalaryCurrency
 WHERE
 {
-#about contract
-?contract a grz-owl:Contract ; sem:hasTimeStamp ?date ; grz-owl:hasCondition ?finCond ; core:hasMention ?app , ?master, ?flee .
-?contract ^edm:realizes ?page .
-?page a meta:Page; meta:isImagedBy ?x . ?x iiif:service ?DHCLink .
-BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
-BIND(IF(?myDate != "NO DATE", STR(?myDate), "NODATE") AS ?contractDate)
-
-?flee a common:EventMention ; sem:eventType grz-owl:Flee .
-OPTIONAL {?flee grz-owl:denunciationDate ?denunDate . 
-BIND (STR(?denunDate) AS ?denunciationDate)}
-OPTIONAL {?flee sem:hasBeginTimeStamp ?start.
-BIND (STR(?start) AS ?fleeStartDate)}
-OPTIONAL {?flee sem:hasEndTimeStamp ?end.
-BIND (STR(?end) AS ?fleeEndDate)}
-
-
-#about apprentice
-?app a common:PersonMention ; dhc:uuid ?appUuid ; grz-owl:hasRole grz-owl:Apprentice ; grz-owl:hasName/rdfs:label ?appLabel ; core:isMentionedIn ?contract .
-OPTIONAL { ?app grz-owl:hasGeographicalOrigin/common:transcript ?GeoOriginsTranscript .}
-OPTIONAL { ?app grz-owl:hasProfession/common:transcript ?appProf }
-OPTIONAL { ?app foaf:age ?appAge }
-OPTIONAL { ?app grz-owl:ageText ?at }
-
-# about master
-?master a common:PersonMention ; grz-owl:hasRole grz-owl:Master ; grz-owl:hasName/rdfs:label ?masterLabel .
-OPTIONAL {?master  grz-owl:hasProfession/common:transcript ?masterProf }
+  #about contract
+  ?contract a grz-owl:Contract ; sem:hasTimeStamp ?date ; grz-owl:hasCondition ?finCond ; core:hasMention ?app , ?master, ?flee .
+  ?contract ^edm:realizes ?page .
+  ?page a meta:Page; meta:isImagedBy ?x . ?x iiif:service ?DHCLink .
+  BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
+  BIND(IF(?myDate != "NO DATE", STR(?myDate), "NODATE") AS ?contractDate)
+  
+  #about flee
+  ?flee a common:EventMention ; sem:eventType grz-owl:Flee .
+  OPTIONAL {?flee grz-owl:denunciationDate ?denunDate . 
+  BIND (STR(?denunDate) AS ?denunciationDate)}
+  OPTIONAL {?flee sem:hasBeginTimeStamp ?start.
+  BIND (STR(?start) AS ?fleeStartDate)}
+  OPTIONAL {?flee sem:hasEndTimeStamp ?end.
+  BIND (STR(?end) AS ?fleeEndDate)}
 
 
-?finCond a grz-owl:FinancialCondition  ; grz-owl:conditionType ?findConType .
-OPTIONAL{?finCond grz-owl:paidBy ?PaidBy ; grz-owl:paidInGoods ?GoodOrMoney ; grz-owl:partialAmount ?PartialAmount ; grz-owl:totalAmount ?TotalAmount ; grz-owl:currencyUnit ?Currency ; grz-owl:periodization ?Periodization}
-BIND(STRAFTER(STR(?findConType), "garzoni#") AS ?SalaryType)
-BIND(STR(?GoodOrMoney) AS ?SalaryInGoodOrMoney)
-BIND(STR(?TotalAmount) AS ?SalaryTotalAmount)
-BIND(STR(?PartialAmount) AS ?SalaryPartialAmount)
-BIND(STRAFTER(STR(?Currency), "garzoni#")  AS ?SalaryCurrency)
-BIND(STRAFTER(STR(?Periodization), "garzoni#")  AS ?SalaryPeriodization)
-BIND(STRAFTER(STR(?PaidBy), "garzoni#")  AS ?SalaryPaidBy)
-BIND(STR(?GeoOriginsTranscript) AS ?appGeoOriginsTranscript)
-BIND(STR(?masterProf) AS ?masterProfession)
-BIND(STR(?appProf) AS ?appProfession)
-BIND(STR(?at) AS ?appAgeText)
+  #about apprentice
+  ?app a common:PersonMention ; dhc:uuid ?appUuid ; grz-owl:hasRole grz-owl:Apprentice ; grz-owl:hasName/rdfs:label ?appLabel ; core:isMentionedIn ?contract .
+  OPTIONAL {?app grz-owl:hasGeographicalOrigin/common:transcript ?GeoOriginsTranscript .}
+  OPTIONAL {?app grz-owl:hasProfession/common:transcript ?appProf }
+  OPTIONAL {?app foaf:age ?appAge }
+  OPTIONAL {?app grz-owl:ageText ?at }
+
+  # about master
+  ?master a common:PersonMention ; grz-owl:hasRole grz-owl:Master ; grz-owl:hasName/rdfs:label ?masterLabel .
+  OPTIONAL {?master  grz-owl:hasProfession/common:transcript ?masterProf }
+
+  # about financial conditions
+  ?finCond a grz-owl:FinancialCondition  ; grz-owl:conditionType ?findConType .
+  OPTIONAL{?finCond grz-owl:paidBy ?PaidBy ; grz-owl:paidInGoods ?GoodOrMoney ; grz-owl:partialAmount ?PartialAmount ; grz-owl:totalAmount ?TotalAmount ; grz-owl:currencyUnit ?Currency ; grz-owl:periodization ?Periodization}
+  
+  # bindings
+  BIND(STRAFTER(STR(?findConType), "garzoni#") AS ?SalaryType)
+  BIND(STR(?GoodOrMoney) AS ?SalaryInGoodOrMoney)
+  BIND(STR(?TotalAmount) AS ?SalaryTotalAmount)
+  BIND(STR(?PartialAmount) AS ?SalaryPartialAmount)
+  BIND(STRAFTER(STR(?Currency), "garzoni#")  AS ?SalaryCurrency)
+  BIND(STRAFTER(STR(?Periodization), "garzoni#")  AS ?SalaryPeriodization)
+  BIND(STRAFTER(STR(?PaidBy), "garzoni#")  AS ?SalaryPaidBy)
+  BIND(STR(?GeoOriginsTranscript) AS ?appGeoOriginsTranscript)
+  BIND(STR(?masterProf) AS ?masterProfession)
+  BIND(STR(?appProf) AS ?appProfession)
+  BIND(STR(?at) AS ?appAgeText)
 }
-limit 100
+
 ```
