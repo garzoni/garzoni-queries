@@ -232,13 +232,15 @@ ORDER BY DESC (?nbMentions)
 SELECT ?app ?appName (COUNT (distinct ?appMention) AS ?nbMentions)
 WHERE
 {
-  ?app  a common:Person ; rdfs:label ?appName ; grz-owl:hasRole ?role . ?role rdf:value ?role1, ?role2 .
+  ?app  a common:Person ; rdfs:label ?appName ; grz-owl:hasRole ?role , ?role2 . 
+  ?role rdf:value grz-owl:Apprentice .
+  ?role2 rdf:value ?otherRole .
   ?app core:referredBy ?appMention .
-  FILTER (?role1 != ?role2)
+   FILTER (?otherRole != grz-owl:Apprentice)
 }
 GROUP BY ?app ?appName
-HAVING(?nbMentions > 1)
-ORDER BY DESC (?nbMentions)
+HAVING(COUNT (distinct ?appMention) > 1)
+ORDER BY DESC (COUNT (distinct ?appMention))
 ```
 
 ##### 15. Give me the possible apprentice combinations of roles with their frequency (currently not working, to be revised) (api:05_15_app_role_combinations)
