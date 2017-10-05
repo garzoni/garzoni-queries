@@ -75,7 +75,7 @@ WHERE
 ```
 
 ```sparql
-SELECT ?contractID ?Date ?contractDuration ?masterLabel ?masterProfessionTranscript ?masterProfessionCategory ?masterGender ?appLabel ?appProfessionTranscript ?appGeoOriginsTranscript ?appAge ?appAgeText ?appDetails ?SalaryInGoodOrMoney ?SalaryType ?SalaryPaidBy ?SalaryPeriodization ?SalaryPartialAmount ?SalaryTotalAmount ?SalaryCurrency ?contractDetails ?DHCLink
+SELECT ?contractID ?Date ?contractDurationInMonths ?masterLabel ?masterProfessionTranscript ?masterProfessionCategory ?masterGender ?appLabel ?appProfessionTranscript ?appGeoOriginsTranscript ?appAge ?appAgeText ?appDetails ?SalaryInGoodOrMoney ?SalaryType ?SalaryPaidBy ?SalaryPeriodization ?SalaryPartialAmount ?SalaryTotalAmount ?SalaryCurrency ?contractDetails ?DHCLink
 WHERE
 {
     ?master a common:PersonMention ; grz-owl:hasRole grz-owl:Master ; grz-owl:hasProfession ?profMaster ; grz-owl:hasName/rdfs:label ?labelM .
@@ -119,13 +119,13 @@ WHERE
 
 
 OPTIONAL {
-       ?c grz-owl:hasMention ?event .
-       ?event a grz-owl:EventMention .
+       ?c core:hasMention ?event .
+       ?event a common:EventMention .
        OPTIONAL {?event common:duration ?contractDuration }
 } 
 
 
-  ?c ^edm:realizes ?page .
+    ?c ^edm:realizes ?page .
     ?page a meta:Page; meta:isImagedBy ?x . ?x iiif:service ?DHCLink .
     ?c sem:hasTimeStamp ?date .
     BIND(IF(?date = "0"^^<http://www.w3.org/2001/XMLSchema#gYear>,"NO DATE", xsd:dateTime(?date) ) AS ?myDate)
